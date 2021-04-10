@@ -3,3 +3,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#root {
+  background-color: navajowhite;
+  background-image: url('./assets/backdrop.jpg');
+}
