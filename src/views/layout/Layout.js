@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { LandingPage } from '../landingPage/LangindPage';
 import { WaitingRoomPage } from '../waitingRoomPage/WaitingRoomPage';
 import { GamePage } from '../gamePage/GamePage';
+import { NavPanel } from './NavPanel';
 
 export function Layout() {
   // TODO could use object format. Look at lecture slides. Possibly okay until migration to Redux
@@ -28,6 +29,9 @@ export function Layout() {
   }
 
   return (
-    <div className="container p-16 h-screen font-regular z-10">{content}</div>
+    <>
+      <NavPanel setGameState={setGameState}></NavPanel>
+      <div className="container p-16 h-screen font-regular z-10">{content}</div>
+    </>
   );
 }
