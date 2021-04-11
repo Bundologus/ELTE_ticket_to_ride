@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 export const ticketToRideData = {
-  cities: {
-    1: {
+  cities: [
+    {
       id: '1',
       city: 'Amsterdam',
       today: 'Amsterdam',
@@ -9,7 +9,7 @@ export const ticketToRideData = {
       x: 31.874999999999996,
       y: 30.58161350844278,
     },
-    2: {
+    {
       id: '2',
       city: 'Angora',
       today: 'Ankara',
@@ -17,7 +17,7 @@ export const ticketToRideData = {
       x: 85.625,
       y: 89.8686679174484,
     },
-    3: {
+    {
       id: '3',
       city: 'Athina',
       today: 'Athens',
@@ -25,7 +25,7 @@ export const ticketToRideData = {
       x: 66,
       y: 89.8686679174484,
     },
-    4: {
+    {
       id: '4',
       city: 'Barcelona',
       today: 'Barcelona',
@@ -33,7 +33,7 @@ export const ticketToRideData = {
       x: 21.625,
       y: 84.42776735459663,
     },
-    5: {
+    {
       id: '5',
       city: 'Berlin',
       today: 'Berlin',
@@ -41,7 +41,7 @@ export const ticketToRideData = {
       x: 49.125,
       y: 34.33395872420263,
     },
-    6: {
+    {
       id: '6',
       city: 'Brest',
       today: 'Brest',
@@ -49,7 +49,7 @@ export const ticketToRideData = {
       x: 13.25,
       y: 47.27954971857411,
     },
-    7: {
+    {
       id: '7',
       city: 'Brindisi',
       today: 'Brindisi',
@@ -57,7 +57,7 @@ export const ticketToRideData = {
       x: 54.37499999999999,
       y: 78.61163227016885,
     },
-    8: {
+    {
       id: '8',
       city: 'Bruxelles',
       today: 'Brussels',
@@ -65,7 +65,7 @@ export const ticketToRideData = {
       x: 29.625,
       y: 37.5234521575985,
     },
-    9: {
+    {
       id: '9',
       city: 'Bucuresti',
       today: 'Bucharest',
@@ -73,7 +73,7 @@ export const ticketToRideData = {
       x: 73.5,
       y: 64.35272045028142,
     },
-    10: {
+    {
       id: '10',
       city: 'Budapest',
       today: 'Budapest',
@@ -81,7 +81,7 @@ export const ticketToRideData = {
       x: 59.12500000000001,
       y: 54.409005628517825,
     },
-    11: {
+    {
       id: '11',
       city: 'Cadiz',
       today: 'Cadiz',
@@ -89,7 +89,7 @@ export const ticketToRideData = {
       x: 10.875,
       y: 93.62101313320825,
     },
-    12: {
+    {
       id: '12',
       city: 'Constantinople',
       today: 'Istanbul',
@@ -97,7 +97,7 @@ export const ticketToRideData = {
       x: 78.375,
       y: 81.98874296435272,
     },
-    13: {
+    {
       id: '13',
       city: 'Danzig',
       today: 'Gdansk',
@@ -105,7 +105,7 @@ export const ticketToRideData = {
       x: 60,
       y: 23.076923076923077,
     },
-    14: {
+    {
       id: '14',
       city: 'Dieppe',
       today: 'Dieppe',
@@ -113,7 +113,7 @@ export const ticketToRideData = {
       x: 21.75,
       y: 43.151969981238274,
     },
-    15: {
+    {
       id: '15',
       city: 'Edinburgh',
       today: 'Edinburgh',
@@ -121,7 +121,7 @@ export const ticketToRideData = {
       x: 16.5,
       y: 8.818011257035648,
     },
-    16: {
+    {
       id: '16',
       city: 'Erzurum',
       today: 'Erzurum',
@@ -129,7 +129,7 @@ export const ticketToRideData = {
       x: 93.25,
       y: 86.49155722326454,
     },
-    17: {
+    {
       id: '17',
       city: 'Essen',
       today: 'Essen',
@@ -137,7 +137,7 @@ export const ticketToRideData = {
       x: 39.625,
       y: 32.08255159474672,
     },
-    18: {
+    {
       id: '18',
       city: 'Frankfurt',
       today: 'Frankfurt',
@@ -145,7 +145,7 @@ export const ticketToRideData = {
       x: 38.125,
       y: 42.21388367729831,
     },
-    19: {
+    {
       id: '19',
       city: 'Kharkov',
       today: 'Kharkov',
@@ -153,7 +153,7 @@ export const ticketToRideData = {
       x: 91.625,
       y: 48.21763602251407,
     },
-    20: {
+    {
       id: '20',
       city: 'Kobenhavn',
       today: 'Copenhagen',
@@ -161,7 +161,7 @@ export const ticketToRideData = {
       x: 46.625,
       y: 17.073170731707318,
     },
-    21: {
+    {
       id: '21',
       city: 'Kyiv',
       today: 'Kiev',
@@ -169,7 +169,7 @@ export const ticketToRideData = {
       x: 78.875,
       y: 40.52532833020638,
     },
-    22: {
+    {
       id: '22',
       city: 'Lisboa',
       today: 'Lisbon',
@@ -177,7 +177,7 @@ export const ticketToRideData = {
       x: 4.625,
       y: 86.49155722326454,
     },
-    23: {
+    {
       id: '23',
       city: 'London',
       today: 'London',
@@ -185,7 +185,7 @@ export const ticketToRideData = {
       x: 22.75,
       y: 30.393996247654787,
     },
-    24: {
+    {
       id: '24',
       city: 'Madrid',
       today: 'Madrid',
@@ -193,7 +193,7 @@ export const ticketToRideData = {
       x: 10.875,
       y: 83.11444652908068,
     },
-    25: {
+    {
       id: '25',
       city: 'Marseille',
       today: 'Marseille',
@@ -201,7 +201,7 @@ export const ticketToRideData = {
       x: 34.875,
       y: 70.73170731707317,
     },
-    26: {
+    {
       id: '26',
       city: 'Moskva',
       today: 'Moscow',
@@ -209,7 +209,7 @@ export const ticketToRideData = {
       x: 93,
       y: 26.454033771106943,
     },
-    27: {
+    {
       id: '27',
       city: 'Munchen',
       today: 'Munich',
@@ -217,7 +217,7 @@ export const ticketToRideData = {
       x: 43.625,
       y: 48.405253283302066,
     },
-    28: {
+    {
       id: '28',
       city: 'Palermo',
       today: 'Palermo',
@@ -225,7 +225,7 @@ export const ticketToRideData = {
       x: 49.625,
       y: 93.80863039399625,
     },
-    29: {
+    {
       id: '29',
       city: 'Pamplona',
       today: 'Pamplona',
@@ -233,7 +233,7 @@ export const ticketToRideData = {
       x: 20.375,
       y: 71.48217636022514,
     },
-    30: {
+    {
       id: '30',
       city: 'Paris',
       today: 'Paris',
@@ -241,7 +241,7 @@ export const ticketToRideData = {
       x: 26.375,
       y: 49.71857410881801,
     },
-    31: {
+    {
       id: '31',
       city: 'Petrograd',
       today: 'St. Petersburg',
@@ -249,7 +249,7 @@ export const ticketToRideData = {
       x: 83.875,
       y: 9.568480300187618,
     },
-    32: {
+    {
       id: '32',
       city: 'Riga',
       today: 'Riga',
@@ -257,7 +257,7 @@ export const ticketToRideData = {
       x: 67.75,
       y: 10.318949343339586,
     },
-    33: {
+    {
       id: '33',
       city: 'Roma',
       today: 'Rome',
@@ -265,7 +265,7 @@ export const ticketToRideData = {
       x: 46,
       y: 74.85928705440901,
     },
-    34: {
+    {
       id: '34',
       city: 'Rostov',
       today: 'Rostov',
@@ -273,7 +273,7 @@ export const ticketToRideData = {
       x: 95.625,
       y: 55.72232645403376,
     },
-    35: {
+    {
       id: '35',
       city: 'Sarajevo',
       today: 'Sarajevo',
@@ -281,7 +281,7 @@ export const ticketToRideData = {
       x: 61.375,
       y: 72.23264540337712,
     },
-    36: {
+    {
       id: '36',
       city: 'Sevastopol',
       today: 'Sevastopol',
@@ -289,7 +289,7 @@ export const ticketToRideData = {
       x: 86.625,
       y: 66.60412757973734,
     },
-    37: {
+    {
       id: '37',
       city: 'Smolensk',
       today: 'Smolensk',
@@ -297,7 +297,7 @@ export const ticketToRideData = {
       x: 85.125,
       y: 30.0187617260788,
     },
-    38: {
+    {
       id: '38',
       city: 'Smyrna',
       today: 'Izmir',
@@ -305,7 +305,7 @@ export const ticketToRideData = {
       x: 74.125,
       y: 93.24577861163228,
     },
-    39: {
+    {
       id: '39',
       city: 'Sochi',
       today: 'Sochi',
@@ -313,7 +313,7 @@ export const ticketToRideData = {
       x: 95.125,
       y: 68.66791744840526,
     },
-    40: {
+    {
       id: '40',
       city: 'Sofia',
       today: 'Sofia',
@@ -321,7 +321,7 @@ export const ticketToRideData = {
       x: 67.625,
       y: 73.35834896810508,
     },
-    41: {
+    {
       id: '41',
       city: 'Stockholm',
       today: 'Stockholm',
@@ -329,7 +329,7 @@ export const ticketToRideData = {
       x: 56.25,
       y: 6.0037523452157595,
     },
-    42: {
+    {
       id: '42',
       city: 'Venezia',
       today: 'Venice',
@@ -337,7 +337,7 @@ export const ticketToRideData = {
       x: 45.375,
       y: 62.10131332082551,
     },
-    43: {
+    {
       id: '43',
       city: 'Warszawa',
       today: 'Warsaw',
@@ -345,7 +345,7 @@ export const ticketToRideData = {
       x: 64.625,
       y: 32.833020637898684,
     },
-    44: {
+    {
       id: '44',
       city: 'Wien',
       today: 'Vienna',
@@ -353,7 +353,7 @@ export const ticketToRideData = {
       x: 54.75,
       y: 50.84427767354597,
     },
-    45: {
+    {
       id: '45',
       city: 'Wilno',
       today: 'Vilnius',
@@ -361,7 +361,7 @@ export const ticketToRideData = {
       x: 75.125,
       y: 29.45590994371482,
     },
-    46: {
+    {
       id: '46',
       city: 'Zagrab',
       today: 'Zagreb',
@@ -369,7 +369,7 @@ export const ticketToRideData = {
       x: 53.37499999999999,
       y: 63.789868667917446,
     },
-    47: {
+    {
       id: '47',
       city: 'Zurich',
       today: 'Zurich',
@@ -377,9 +377,9 @@ export const ticketToRideData = {
       x: 37.25,
       y: 57.410881801125704,
     },
-  },
-  connections: {
-    1: {
+  ],
+  connections: [
+    {
       id: 1,
       from: '15',
       fromCity: 'Edinburgh',
@@ -394,7 +394,7 @@ export const ticketToRideData = {
       color: 'black',
       locomotive: 0,
     },
-    2: {
+    {
       id: 2,
       from: '15',
       fromCity: 'Edinburgh',
@@ -409,7 +409,7 @@ export const ticketToRideData = {
       color: 'orange',
       locomotive: 0,
     },
-    3: {
+    {
       id: 3,
       from: '23',
       fromCity: 'London',
@@ -422,7 +422,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 1,
     },
-    4: {
+    {
       id: 4,
       from: '23',
       fromCity: 'London',
@@ -435,7 +435,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 1,
     },
-    5: {
+    {
       id: 5,
       from: '23',
       fromCity: 'London',
@@ -448,7 +448,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 2,
     },
-    6: {
+    {
       id: 6,
       from: '14',
       fromCity: 'Dieppe',
@@ -461,7 +461,7 @@ export const ticketToRideData = {
       color: 'orange',
       locomotive: 0,
     },
-    7: {
+    {
       id: 7,
       from: '6',
       fromCity: 'Brest',
@@ -475,7 +475,7 @@ export const ticketToRideData = {
       color: 'black',
       locomotive: 0,
     },
-    8: {
+    {
       id: 8,
       from: '14',
       fromCity: 'Dieppe',
@@ -485,7 +485,7 @@ export const ticketToRideData = {
       color: 'purple',
       locomotive: 0,
     },
-    9: {
+    {
       id: 9,
       from: '14',
       fromCity: 'Dieppe',
@@ -498,7 +498,7 @@ export const ticketToRideData = {
       color: 'green',
       locomotive: 0,
     },
-    10: {
+    {
       id: 10,
       from: '1',
       fromCity: 'Amsterdam',
@@ -508,7 +508,7 @@ export const ticketToRideData = {
       color: 'black',
       locomotive: 0,
     },
-    11: {
+    {
       id: 11,
       from: '8',
       fromCity: 'Bruxelles',
@@ -521,7 +521,7 @@ export const ticketToRideData = {
       color: 'yellow',
       locomotive: 0,
     },
-    12: {
+    {
       id: 12,
       from: '8',
       fromCity: 'Bruxelles',
@@ -534,7 +534,7 @@ export const ticketToRideData = {
       color: 'red',
       locomotive: 0,
     },
-    13: {
+    {
       id: 13,
       from: '1',
       fromCity: 'Amsterdam',
@@ -547,7 +547,7 @@ export const ticketToRideData = {
       color: 'whote',
       locomotive: 0,
     },
-    14: {
+    {
       id: 14,
       from: '8',
       fromCity: 'Bruxelles',
@@ -560,7 +560,7 @@ export const ticketToRideData = {
       color: 'blue',
       locomotive: 0,
     },
-    15: {
+    {
       id: 15,
       from: '1',
       fromCity: 'Amsterdam',
@@ -574,7 +574,7 @@ export const ticketToRideData = {
       color: 'yellow',
       locomotive: 0,
     },
-    16: {
+    {
       id: 16,
       from: '6',
       fromCity: 'Brest',
@@ -589,7 +589,7 @@ export const ticketToRideData = {
       color: 'purple',
       locomotive: 0,
     },
-    17: {
+    {
       id: 17,
       from: '30',
       fromCity: 'Paris',
@@ -604,7 +604,7 @@ export const ticketToRideData = {
       color: 'blue',
       locomotive: 0,
     },
-    18: {
+    {
       id: 18,
       from: '30',
       fromCity: 'Paris',
@@ -619,7 +619,7 @@ export const ticketToRideData = {
       color: 'green',
       locomotive: 0,
     },
-    19: {
+    {
       id: 19,
       from: '29',
       fromCity: 'Pamplona',
@@ -633,7 +633,7 @@ export const ticketToRideData = {
       color: 'black',
       locomotive: 0,
     },
-    20: {
+    {
       id: 20,
       from: '29',
       fromCity: 'Pamplona',
@@ -647,7 +647,7 @@ export const ticketToRideData = {
       color: 'whote',
       locomotive: 0,
     },
-    21: {
+    {
       id: 21,
       from: '24',
       fromCity: 'Madrid',
@@ -661,7 +661,7 @@ export const ticketToRideData = {
       color: 'purple',
       locomotive: 0,
     },
-    22: {
+    {
       id: 22,
       from: '24',
       fromCity: 'Madrid',
@@ -675,7 +675,7 @@ export const ticketToRideData = {
       color: 'orange',
       locomotive: 0,
     },
-    23: {
+    {
       id: 23,
       from: '22',
       fromCity: 'Lisboa',
@@ -688,7 +688,7 @@ export const ticketToRideData = {
       color: 'blue',
       locomotive: 0,
     },
-    24: {
+    {
       id: 24,
       from: '24',
       fromCity: 'Madrid',
@@ -701,7 +701,7 @@ export const ticketToRideData = {
       color: 'yellow',
       locomotive: 0,
     },
-    25: {
+    {
       id: 25,
       from: '29',
       fromCity: 'Pamplona',
@@ -714,7 +714,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    26: {
+    {
       id: 26,
       from: '4',
       fromCity: 'Barcelona',
@@ -729,7 +729,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    27: {
+    {
       id: 27,
       from: '29',
       fromCity: 'Pamplona',
@@ -744,7 +744,7 @@ export const ticketToRideData = {
       color: 'red',
       locomotive: 0,
     },
-    28: {
+    {
       id: 28,
       from: '30',
       fromCity: 'Paris',
@@ -759,7 +759,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    29: {
+    {
       id: 29,
       from: '30',
       fromCity: 'Paris',
@@ -773,7 +773,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    30: {
+    {
       id: 30,
       from: '47',
       fromCity: 'Zurich',
@@ -786,7 +786,7 @@ export const ticketToRideData = {
       color: 'purple',
       locomotive: 0,
     },
-    31: {
+    {
       id: 31,
       from: '30',
       fromCity: 'Paris',
@@ -800,7 +800,7 @@ export const ticketToRideData = {
       color: 'whote',
       locomotive: 0,
     },
-    32: {
+    {
       id: 32,
       from: '30',
       fromCity: 'Paris',
@@ -814,7 +814,7 @@ export const ticketToRideData = {
       color: 'orange',
       locomotive: 0,
     },
-    33: {
+    {
       id: 33,
       from: '17',
       fromCity: 'Essen',
@@ -827,7 +827,7 @@ export const ticketToRideData = {
       color: 'green',
       locomotive: 0,
     },
-    34: {
+    {
       id: 34,
       from: '18',
       fromCity: 'Frankfurt',
@@ -840,7 +840,7 @@ export const ticketToRideData = {
       color: 'purple',
       locomotive: 0,
     },
-    35: {
+    {
       id: 35,
       from: '47',
       fromCity: 'Zurich',
@@ -853,7 +853,7 @@ export const ticketToRideData = {
       color: 'yellow',
       locomotive: 0,
     },
-    36: {
+    {
       id: 36,
       from: '47',
       fromCity: 'Zurich',
@@ -866,7 +866,7 @@ export const ticketToRideData = {
       color: 'green',
       locomotive: 0,
     },
-    37: {
+    {
       id: 37,
       from: '27',
       fromCity: 'Munchen',
@@ -879,7 +879,7 @@ export const ticketToRideData = {
       color: 'blue',
       locomotive: 0,
     },
-    38: {
+    {
       id: 38,
       from: '25',
       fromCity: 'Marseille',
@@ -894,7 +894,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    39: {
+    {
       id: 39,
       from: '42',
       fromCity: 'Venezia',
@@ -907,7 +907,7 @@ export const ticketToRideData = {
       color: 'black',
       locomotive: 0,
     },
-    40: {
+    {
       id: 40,
       from: '18',
       fromCity: 'Frankfurt',
@@ -921,7 +921,7 @@ export const ticketToRideData = {
       color: 'black',
       locomotive: 0,
     },
-    41: {
+    {
       id: 41,
       from: '18',
       fromCity: 'Frankfurt',
@@ -935,7 +935,7 @@ export const ticketToRideData = {
       color: 'red',
       locomotive: 0,
     },
-    42: {
+    {
       id: 42,
       from: '17',
       fromCity: 'Essen',
@@ -948,7 +948,7 @@ export const ticketToRideData = {
       color: 'blue',
       locomotive: 0,
     },
-    43: {
+    {
       id: 43,
       from: '17',
       fromCity: 'Essen',
@@ -962,7 +962,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 1,
     },
-    44: {
+    {
       id: 44,
       from: '17',
       fromCity: 'Essen',
@@ -976,7 +976,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 1,
     },
-    45: {
+    {
       id: 45,
       from: '20',
       fromCity: 'Kobenhavn',
@@ -990,7 +990,7 @@ export const ticketToRideData = {
       color: 'yellow',
       locomotive: 0,
     },
-    46: {
+    {
       id: 46,
       from: '20',
       fromCity: 'Kobenhavn',
@@ -1004,7 +1004,7 @@ export const ticketToRideData = {
       color: 'whote',
       locomotive: 0,
     },
-    47: {
+    {
       id: 47,
       from: '27',
       fromCity: 'Munchen',
@@ -1018,7 +1018,7 @@ export const ticketToRideData = {
       color: 'orange',
       locomotive: 0,
     },
-    48: {
+    {
       id: 48,
       from: '42',
       fromCity: 'Venezia',
@@ -1031,7 +1031,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    49: {
+    {
       id: 49,
       from: '33',
       fromCity: 'Roma',
@@ -1044,7 +1044,7 @@ export const ticketToRideData = {
       color: 'whote',
       locomotive: 0,
     },
-    50: {
+    {
       id: 50,
       from: '33',
       fromCity: 'Roma',
@@ -1059,7 +1059,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 1,
     },
-    51: {
+    {
       id: 51,
       from: '7',
       fromCity: 'Brindisi',
@@ -1073,7 +1073,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 1,
     },
-    52: {
+    {
       id: 52,
       from: '7',
       fromCity: 'Brindisi',
@@ -1088,7 +1088,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 1,
     },
-    53: {
+    {
       id: 53,
       from: '28',
       fromCity: 'Palermo',
@@ -1105,7 +1105,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 2,
     },
-    54: {
+    {
       id: 54,
       from: '3',
       fromCity: 'Athina',
@@ -1118,7 +1118,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 1,
     },
-    55: {
+    {
       id: 55,
       from: '5',
       fromCity: 'Berlin',
@@ -1133,7 +1133,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    56: {
+    {
       id: 56,
       from: '5',
       fromCity: 'Berlin',
@@ -1148,7 +1148,7 @@ export const ticketToRideData = {
       color: 'purple',
       locomotive: 0,
     },
-    57: {
+    {
       id: 57,
       from: '5',
       fromCity: 'Berlin',
@@ -1163,7 +1163,7 @@ export const ticketToRideData = {
       color: 'yellow',
       locomotive: 0,
     },
-    58: {
+    {
       id: 58,
       from: '5',
       fromCity: 'Berlin',
@@ -1177,7 +1177,7 @@ export const ticketToRideData = {
       color: 'green',
       locomotive: 0,
     },
-    59: {
+    {
       id: 59,
       from: '13',
       fromCity: 'Danzig',
@@ -1190,7 +1190,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    60: {
+    {
       id: 60,
       from: '13',
       fromCity: 'Danzig',
@@ -1204,7 +1204,7 @@ export const ticketToRideData = {
       color: 'black',
       locomotive: 0,
     },
-    61: {
+    {
       id: 61,
       from: '43',
       fromCity: 'Warszawa',
@@ -1219,7 +1219,7 @@ export const ticketToRideData = {
       color: 'blue',
       locomotive: 0,
     },
-    62: {
+    {
       id: 62,
       from: '44',
       fromCity: 'Wien',
@@ -1232,7 +1232,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    63: {
+    {
       id: 63,
       from: '44',
       fromCity: 'Wien',
@@ -1242,7 +1242,7 @@ export const ticketToRideData = {
       color: 'red',
       locomotive: 0,
     },
-    64: {
+    {
       id: 64,
       from: '44',
       fromCity: 'Wien',
@@ -1252,7 +1252,7 @@ export const ticketToRideData = {
       color: 'whote',
       locomotive: 0,
     },
-    65: {
+    {
       id: 65,
       from: '46',
       fromCity: 'Zagrab',
@@ -1265,7 +1265,7 @@ export const ticketToRideData = {
       color: 'orange',
       locomotive: 0,
     },
-    66: {
+    {
       id: 66,
       from: '46',
       fromCity: 'Zagrab',
@@ -1279,7 +1279,7 @@ export const ticketToRideData = {
       color: 'red',
       locomotive: 0,
     },
-    67: {
+    {
       id: 67,
       from: '10',
       fromCity: 'Budapest',
@@ -1293,7 +1293,7 @@ export const ticketToRideData = {
       color: 'purple',
       locomotive: 0,
     },
-    68: {
+    {
       id: 68,
       from: '35',
       fromCity: 'Sarajevo',
@@ -1308,7 +1308,7 @@ export const ticketToRideData = {
       color: 'green',
       locomotive: 0,
     },
-    69: {
+    {
       id: 69,
       from: '35',
       fromCity: 'Sarajevo',
@@ -1321,7 +1321,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    70: {
+    {
       id: 70,
       from: '40',
       fromCity: 'Sofia',
@@ -1335,7 +1335,7 @@ export const ticketToRideData = {
       color: 'purple',
       locomotive: 0,
     },
-    71: {
+    {
       id: 71,
       from: '40',
       fromCity: 'Sofia',
@@ -1349,7 +1349,7 @@ export const ticketToRideData = {
       color: 'blue',
       locomotive: 0,
     },
-    72: {
+    {
       id: 72,
       from: '12',
       fromCity: 'Constantinople',
@@ -1362,7 +1362,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    73: {
+    {
       id: 73,
       from: '40',
       fromCity: 'Sofia',
@@ -1375,7 +1375,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    74: {
+    {
       id: 74,
       from: '10',
       fromCity: 'Budapest',
@@ -1390,7 +1390,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    75: {
+    {
       id: 75,
       from: '9',
       fromCity: 'Bucuresti',
@@ -1404,7 +1404,7 @@ export const ticketToRideData = {
       color: 'yellow',
       locomotive: 0,
     },
-    76: {
+    {
       id: 76,
       from: '10',
       fromCity: 'Budapest',
@@ -1421,7 +1421,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    77: {
+    {
       id: 77,
       from: '9',
       fromCity: 'Bucuresti',
@@ -1436,7 +1436,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    78: {
+    {
       id: 78,
       from: '43',
       fromCity: 'Warszawa',
@@ -1451,7 +1451,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    79: {
+    {
       id: 79,
       from: '21',
       fromCity: 'Kyiv',
@@ -1464,7 +1464,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    80: {
+    {
       id: 80,
       from: '43',
       fromCity: 'Warszawa',
@@ -1478,7 +1478,7 @@ export const ticketToRideData = {
       color: 'red',
       locomotive: 0,
     },
-    81: {
+    {
       id: 81,
       from: '32',
       fromCity: 'Riga',
@@ -1493,7 +1493,7 @@ export const ticketToRideData = {
       color: 'green',
       locomotive: 0,
     },
-    82: {
+    {
       id: 82,
       from: '41',
       fromCity: 'Stockholm',
@@ -1512,7 +1512,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    83: {
+    {
       id: 83,
       from: '32',
       fromCity: 'Riga',
@@ -1527,7 +1527,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    84: {
+    {
       id: 84,
       from: '45',
       fromCity: 'Wilno',
@@ -1542,7 +1542,7 @@ export const ticketToRideData = {
       color: 'blue',
       locomotive: 0,
     },
-    85: {
+    {
       id: 85,
       from: '45',
       fromCity: 'Wilno',
@@ -1556,7 +1556,7 @@ export const ticketToRideData = {
       color: 'yellow',
       locomotive: 0,
     },
-    86: {
+    {
       id: 86,
       from: '37',
       fromCity: 'Smolensk',
@@ -1570,7 +1570,7 @@ export const ticketToRideData = {
       color: 'red',
       locomotive: 0,
     },
-    87: {
+    {
       id: 87,
       from: '21',
       fromCity: 'Kyiv',
@@ -1585,7 +1585,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    88: {
+    {
       id: 88,
       from: '19',
       fromCity: 'Kharkov',
@@ -1598,7 +1598,7 @@ export const ticketToRideData = {
       color: 'green',
       locomotive: 0,
     },
-    89: {
+    {
       id: 89,
       from: '34',
       fromCity: 'Rostov',
@@ -1613,7 +1613,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    90: {
+    {
       id: 90,
       from: '9',
       fromCity: 'Bucuresti',
@@ -1628,7 +1628,7 @@ export const ticketToRideData = {
       color: 'whote',
       locomotive: 0,
     },
-    91: {
+    {
       id: 91,
       from: '34',
       fromCity: 'Rostov',
@@ -1641,7 +1641,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    92: {
+    {
       id: 92,
       from: '36',
       fromCity: 'Sevastopol',
@@ -1654,7 +1654,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 1,
     },
-    93: {
+    {
       id: 93,
       from: '36',
       fromCity: 'Sevastopol',
@@ -1669,7 +1669,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 2,
     },
-    94: {
+    {
       id: 94,
       from: '36',
       fromCity: 'Sevastopol',
@@ -1684,7 +1684,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 2,
     },
-    95: {
+    {
       id: 95,
       from: '39',
       fromCity: 'Sochi',
@@ -1698,7 +1698,7 @@ export const ticketToRideData = {
       color: 'red',
       locomotive: 0,
     },
-    96: {
+    {
       id: 96,
       from: '16',
       fromCity: 'Erzurum',
@@ -1712,7 +1712,7 @@ export const ticketToRideData = {
       color: 'black',
       locomotive: 0,
     },
-    97: {
+    {
       id: 97,
       from: '2',
       fromCity: 'Angora',
@@ -1725,7 +1725,7 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-    98: {
+    {
       id: 98,
       from: '2',
       fromCity: 'Angora',
@@ -1739,7 +1739,7 @@ export const ticketToRideData = {
       color: 'orange',
       locomotive: 0,
     },
-    99: {
+    {
       id: 99,
       from: '37',
       fromCity: 'Smolensk',
@@ -1752,7 +1752,7 @@ export const ticketToRideData = {
       color: 'orange',
       locomotive: 0,
     },
-    100: {
+    {
       id: 100,
       from: '31',
       fromCity: 'Petrograd',
@@ -1767,7 +1767,7 @@ export const ticketToRideData = {
       color: 'whote',
       locomotive: 0,
     },
-    101: {
+    {
       id: 101,
       from: '26',
       fromCity: 'Moskva',
@@ -1782,9 +1782,9 @@ export const ticketToRideData = {
       color: 'gray',
       locomotive: 0,
     },
-  },
-  destinations: {
-    1: {
+  ],
+  destinations: [
+    {
       id: '1',
       from: '3',
       to: '2',
@@ -1792,7 +1792,7 @@ export const ticketToRideData = {
       toCity: 'Angora',
       value: '5',
     },
-    2: {
+    {
       id: '2',
       from: '10',
       to: '40',
@@ -1800,7 +1800,7 @@ export const ticketToRideData = {
       toCity: 'Sofia',
       value: '5',
     },
-    3: {
+    {
       id: '3',
       from: '18',
       to: '20',
@@ -1808,7 +1808,7 @@ export const ticketToRideData = {
       toCity: 'Kobenhavn',
       value: '5',
     },
-    4: {
+    {
       id: '4',
       from: '34',
       to: '16',
@@ -1816,7 +1816,7 @@ export const ticketToRideData = {
       toCity: 'Erzurum',
       value: '5',
     },
-    5: {
+    {
       id: '5',
       from: '40',
       to: '38',
@@ -1824,7 +1824,7 @@ export const ticketToRideData = {
       toCity: 'Smyrna',
       value: '5',
     },
-    6: {
+    {
       id: '6',
       from: '21',
       to: '31',
@@ -1832,7 +1832,7 @@ export const ticketToRideData = {
       toCity: 'Petrograd',
       value: '6',
     },
-    7: {
+    {
       id: '7',
       from: '47',
       to: '7',
@@ -1840,7 +1840,7 @@ export const ticketToRideData = {
       toCity: 'Brindisi',
       value: '6',
     },
-    8: {
+    {
       id: '8',
       from: '47',
       to: '10',
@@ -1848,7 +1848,7 @@ export const ticketToRideData = {
       toCity: 'Budapest',
       value: '6',
     },
-    9: {
+    {
       id: '9',
       from: '43',
       to: '37',
@@ -1856,7 +1856,7 @@ export const ticketToRideData = {
       toCity: 'Smolensk',
       value: '6',
     },
-    10: {
+    {
       id: '10',
       from: '46',
       to: '7',
@@ -1864,7 +1864,7 @@ export const ticketToRideData = {
       toCity: 'Brindisi',
       value: '6',
     },
-    11: {
+    {
       id: '11',
       from: '30',
       to: '46',
@@ -1872,7 +1872,7 @@ export const ticketToRideData = {
       toCity: 'Zagrab',
       value: '7',
     },
-    12: {
+    {
       id: '12',
       from: '6',
       to: '25',
@@ -1880,7 +1880,7 @@ export const ticketToRideData = {
       toCity: 'Marseille',
       value: '7',
     },
-    13: {
+    {
       id: '13',
       from: '23',
       to: '5',
@@ -1888,7 +1888,7 @@ export const ticketToRideData = {
       toCity: 'Berlin',
       value: '7',
     },
-    14: {
+    {
       id: '14',
       from: '15',
       to: '30',
@@ -1896,7 +1896,7 @@ export const ticketToRideData = {
       toCity: 'Paris',
       value: '7',
     },
-    15: {
+    {
       id: '15',
       from: '1',
       to: '29',
@@ -1904,7 +1904,7 @@ export const ticketToRideData = {
       toCity: 'Pamplona',
       value: '7',
     },
-    16: {
+    {
       id: '16',
       from: '33',
       to: '38',
@@ -1912,7 +1912,7 @@ export const ticketToRideData = {
       toCity: 'Smyrna',
       value: '8',
     },
-    17: {
+    {
       id: '17',
       from: '28',
       to: '12',
@@ -1920,7 +1920,7 @@ export const ticketToRideData = {
       toCity: 'Constantinople',
       value: '8',
     },
-    18: {
+    {
       id: '18',
       from: '35',
       to: '36',
@@ -1928,7 +1928,7 @@ export const ticketToRideData = {
       toCity: 'Sevastopol',
       value: '8',
     },
-    19: {
+    {
       id: '19',
       from: '24',
       to: '14',
@@ -1936,7 +1936,7 @@ export const ticketToRideData = {
       toCity: 'Dieppe',
       value: '8',
     },
-    20: {
+    {
       id: '20',
       from: '4',
       to: '8',
@@ -1944,7 +1944,7 @@ export const ticketToRideData = {
       toCity: 'Bruxelles',
       value: '8',
     },
-    21: {
+    {
       id: '21',
       from: '30',
       to: '44',
@@ -1952,7 +1952,7 @@ export const ticketToRideData = {
       toCity: 'Wien',
       value: '8',
     },
-    22: {
+    {
       id: '22',
       from: '4',
       to: '27',
@@ -1960,7 +1960,7 @@ export const ticketToRideData = {
       toCity: 'Munchen',
       value: '8',
     },
-    23: {
+    {
       id: '23',
       from: '6',
       to: '42',
@@ -1968,7 +1968,7 @@ export const ticketToRideData = {
       toCity: 'Venezia',
       value: '8',
     },
-    24: {
+    {
       id: '24',
       from: '37',
       to: '34',
@@ -1976,7 +1976,7 @@ export const ticketToRideData = {
       toCity: 'Rostov',
       value: '8',
     },
-    25: {
+    {
       id: '25',
       from: '25',
       to: '17',
@@ -1984,7 +1984,7 @@ export const ticketToRideData = {
       toCity: 'Essen',
       value: '8',
     },
-    26: {
+    {
       id: '26',
       from: '21',
       to: '39',
@@ -1992,7 +1992,7 @@ export const ticketToRideData = {
       toCity: 'Sochi',
       value: '8',
     },
-    27: {
+    {
       id: '27',
       from: '24',
       to: '47',
@@ -2000,7 +2000,7 @@ export const ticketToRideData = {
       toCity: 'Zurich',
       value: '8',
     },
-    28: {
+    {
       id: '28',
       from: '5',
       to: '9',
@@ -2008,7 +2008,7 @@ export const ticketToRideData = {
       toCity: 'Bucuresti',
       value: '8',
     },
-    29: {
+    {
       id: '29',
       from: '8',
       to: '13',
@@ -2016,7 +2016,7 @@ export const ticketToRideData = {
       toCity: 'Danzig',
       value: '9',
     },
-    30: {
+    {
       id: '30',
       from: '5',
       to: '33',
@@ -2024,7 +2024,7 @@ export const ticketToRideData = {
       toCity: 'Roma',
       value: '9',
     },
-    31: {
+    {
       id: '31',
       from: '2',
       to: '19',
@@ -2032,7 +2032,7 @@ export const ticketToRideData = {
       toCity: 'Kharkov',
       value: '10',
     },
-    32: {
+    {
       id: '32',
       from: '32',
       to: '9',
@@ -2040,7 +2040,7 @@ export const ticketToRideData = {
       toCity: 'Bucuresti',
       value: '10',
     },
-    33: {
+    {
       id: '33',
       from: '17',
       to: '21',
@@ -2048,7 +2048,7 @@ export const ticketToRideData = {
       toCity: 'Kyiv',
       value: '10',
     },
-    34: {
+    {
       id: '34',
       from: '42',
       to: '12',
@@ -2056,7 +2056,7 @@ export const ticketToRideData = {
       toCity: 'Constantinople',
       value: '10',
     },
-    35: {
+    {
       id: '35',
       from: '23',
       to: '44',
@@ -2064,7 +2064,7 @@ export const ticketToRideData = {
       toCity: 'Wien',
       value: '10',
     },
-    36: {
+    {
       id: '36',
       from: '3',
       to: '45',
@@ -2072,7 +2072,7 @@ export const ticketToRideData = {
       toCity: 'Wilno',
       value: '11',
     },
-    37: {
+    {
       id: '37',
       from: '41',
       to: '44',
@@ -2080,7 +2080,7 @@ export const ticketToRideData = {
       toCity: 'Wien',
       value: '11',
     },
-    38: {
+    {
       id: '38',
       from: '5',
       to: '26',
@@ -2088,7 +2088,7 @@ export const ticketToRideData = {
       toCity: 'Moskva',
       value: '12',
     },
-    39: {
+    {
       id: '39',
       from: '1',
       to: '45',
@@ -2096,7 +2096,7 @@ export const ticketToRideData = {
       toCity: 'Wilno',
       value: '12',
     },
-    40: {
+    {
       id: '40',
       from: '18',
       to: '37',
@@ -2104,9 +2104,9 @@ export const ticketToRideData = {
       toCity: 'Smolensk',
       value: '13',
     },
-  },
-  longDestinations: {
-    41: {
+  ],
+  longDestinations: [
+    {
       id: '41',
       from: '22',
       to: '13',
@@ -2114,7 +2114,7 @@ export const ticketToRideData = {
       toCity: 'Danzig',
       value: '20',
     },
-    42: {
+    {
       id: '42',
       from: '6',
       to: '31',
@@ -2122,7 +2122,7 @@ export const ticketToRideData = {
       toCity: 'Petrograd',
       value: '20',
     },
-    43: {
+    {
       id: '43',
       from: '28',
       to: '26',
@@ -2130,7 +2130,7 @@ export const ticketToRideData = {
       toCity: 'Moskva',
       value: '20',
     },
-    44: {
+    {
       id: '44',
       from: '20',
       to: '16',
@@ -2138,7 +2138,7 @@ export const ticketToRideData = {
       toCity: 'Erzurum',
       value: '21',
     },
-    45: {
+    {
       id: '45',
       from: '15',
       to: '3',
@@ -2146,7 +2146,7 @@ export const ticketToRideData = {
       toCity: 'Athina',
       value: '21',
     },
-    46: {
+    {
       id: '46',
       from: '11',
       to: '41',
@@ -2154,5 +2154,5 @@ export const ticketToRideData = {
       toCity: 'Stockholm',
       value: '21',
     },
-  },
+  ],
 };

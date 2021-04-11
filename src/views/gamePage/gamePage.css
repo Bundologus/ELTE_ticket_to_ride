@@ -1,0 +1,24 @@
+.board {
+  background-image: image('assets/map.jpg');
+}
+
+@media (min-width: 1024px) {
+  .board {
+    width: 768px;
+    max-height: 511.57px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .board {
+    width: 960px;
+    max-height: 639.45px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .board {
+    width: 1152px;
+    max-height: 769.35;
+  }
+}

@@ -1,3 +1,5 @@
+const { colors } = require('tailwindcss/defaultTheme');
+
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
@@ -23,16 +25,18 @@ module.exports = {
         'ttr-red': '#e03f0a',
         'ttr-white': '#f0efec',
         'ttr-yellow': '#f4d256',
-        'cart-black': '#282f25',
-        'cart-blue': '#009cc1',
-        'cart-green': '#02aa50',
-        'cart-red': '#e91c26',
-        'cart-yellow': '#fee138',
+        'player-black': '#282f25',
+        'player-blue': '#009cc1',
+        'player-green': '#02aa50',
+        'player-red': '#e91c26',
+        'player-yellow': '#fee138',
       },
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['active'],
+    },
   },
   plugins: [require('@tailwindcss/forms')],
 };

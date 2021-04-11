@@ -8,7 +8,7 @@ export function LandingPage({
   setPlayerCount,
   gameID,
   setGameID,
-  setGameState,
+  setAppState,
 }) {
   const [hostName, setHostName] = useState('');
   const [hostNameOk, setHostNameOk] = useState(true);
@@ -16,9 +16,11 @@ export function LandingPage({
   const [guestNameOk, setGuestNameOk] = useState(true);
   const [gameIdOk, setGameIdOk] = useState(true);
 
+  setGameID('');
+
   const hostSubmitHandler = () => {
     if (!hostName) setHostNameOk(false);
-    else setGameState('WAITING_FOR_PLAYERS');
+    else setAppState('WAITING_FOR_PLAYERS');
   };
 
   const guestSubmitHandler = () => {
@@ -29,11 +31,11 @@ export function LandingPage({
       `guestName: ${guestName} - ${guestNameOk} \ngameID: ${gameID} - ${gameIdOk}`,
     );
 
-    if (gameID && guestName) setGameState('WAITING_FOR_PLAYERS');
+    if (gameID && guestName) setAppState('WAITING_FOR_PLAYERS');
   };
 
   return (
-    <>
+    <div className="container px-16 h-screen font-regular z-10">
       <div className="container h-1/3 md:h-1/2 pb-24">
         <h1 className="w-80 mx-auto h-full flex flex-col justify-end content-end">
           <span className="block w-full font-regular text-lg">Welcome to</span>
@@ -51,7 +53,7 @@ export function LandingPage({
         <div className="w-full px-0 h-1/3 md:pr-2 md:w-1/2 md:inline-block flow-root">
           <form
             onSubmit={(e) => e.preventDefault()}
-            className="rounded-xl border-2 border-green-500 bg-green-200 bg-opacity-50 w-full h-full p-6 py-4 text-green-900"
+            className="rounded-xl border-2 border-green-500 bg-green-200 bg-opacity-80 w-full h-full p-6 py-4 text-green-900"
           >
             <h2 className="font-smallCaps text-2xl mb-3 ">New Game</h2>
             <div>
@@ -92,7 +94,7 @@ export function LandingPage({
             </div>
             <button
               type="submit"
-              className="block rounded-md border-2 border-gray-600 mt-8 mx-auto p-1 px-5 w-32 bg-green-600 text-white font-bold text-xl"
+              className="block rounded-md border-2 border-gray-600 mt-8 bg-green-600 hover:bg-green-500 mx-auto p-1 px-5 w-32 text-white font-bold text-xl"
               onClick={() => hostSubmitHandler()}
             >
               Start!
@@ -102,7 +104,7 @@ export function LandingPage({
         <div className="w-full px-0 h-1/3 md:pl-2 md:w-1/2 md:inline-block flow-root">
           <form
             onSubmit={(e) => e.preventDefault()}
-            className="rounded-xl border-2 border-blue-500 bg-blue-200 bg-opacity-50 w-full h-full p-6 py-4 text-blue-900"
+            className="rounded-xl border-2 border-blue-500 bg-blue-200 bg-opacity-80 w-full h-full p-6 py-4 text-blue-900"
           >
             <h2 className="font-smallCaps text-2xl mb-3">Join Game</h2>
             <div>
@@ -148,7 +150,7 @@ export function LandingPage({
             </div>
             <button
               type="submit"
-              className="block rounded-md border-2 border-gray-600 mt-8 mx-auto p-1 px-5 w-32 bg-blue-600 text-white font-bold text-xl"
+              className="block rounded-md border-2 border-gray-600 bg-blue-600 hover:bg-blue-500 mt-8 mx-auto p-1 px-5 w-32 text-white font-bold text-xl"
               onClick={() => guestSubmitHandler()}
             >
               Join!
@@ -156,6 +158,6 @@ export function LandingPage({
           </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }
