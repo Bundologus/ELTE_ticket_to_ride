@@ -11,21 +11,25 @@ export function LandingPage({
   setGameState,
 }) {
   const [hostName, setHostName] = useState('');
-  const [hostNameOk, setHostNameOkay] = useState(true);
+  const [hostNameOk, setHostNameOk] = useState(true);
   const [guestName, setGuestName] = useState('');
   const [guestNameOk, setGuestNameOk] = useState(true);
   const [gameIdOk, setGameIdOk] = useState(true);
 
   const hostSubmitHandler = () => {
-    if (hostName === null || hostName === '') setHostNameOkay(false);
+    if (!hostName) setHostNameOk(false);
     else setGameState('WAITING_FOR_PLAYERS');
   };
 
   const guestSubmitHandler = () => {
-    if (guestName === null || guestName === '') setGuestNameOk(false);
-    if (gameID === null || gameID === '') setGameIdOk(false);
+    if (!guestName) setGuestNameOk(false);
+    if (!gameID) setGameIdOk(false);
 
-    if (gameIdOk && guestNameOk) setGameState('WAITING_FOR_PLAYERS');
+    console.log(
+      `guestName: ${guestName} - ${guestNameOk} \ngameID: ${gameID} - ${gameIdOk}`,
+    );
+
+    if (gameID && guestName) setGameState('WAITING_FOR_PLAYERS');
   };
 
   return (
@@ -45,7 +49,10 @@ export function LandingPage({
       </div>
       <div className="container md:px-60">
         <div className="w-full px-0 h-1/3 md:pr-2 md:w-1/2 md:inline-block flow-root">
-          <form className="rounded-xl border-2 border-green-500 bg-green-200 bg-opacity-50 w-full h-full p-6 py-4 text-green-900">
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="rounded-xl border-2 border-green-500 bg-green-200 bg-opacity-50 w-full h-full p-6 py-4 text-green-900"
+          >
             <h2 className="font-smallCaps text-2xl mb-3 ">New Game</h2>
             <div>
               <label>
@@ -55,15 +62,16 @@ export function LandingPage({
                   className={classNames(
                     'w-full mb-3 rounded-md border-1 border-opacity-50 border-gray-500  bg-white bg-opacity-80',
                     {
-                      'border-red-600 border-2 border-opacity-100': !hostNameOk,
+                      'border-red-600 border-2 border-opacity-100 focus:border-red-600 focus:ring-red-600': !hostNameOk,
                     },
                   )}
                   value={hostName}
                   onChange={(e) => {
                     setHostName(e.target.value);
                     setPlayerName(e.target.value);
+                    setHostNameOk(true);
                   }}
-                  reqired
+                  required
                 ></input>
               </label>
             </div>
@@ -83,6 +91,7 @@ export function LandingPage({
               </label>
             </div>
             <button
+              type="submit"
               className="block rounded-md border-2 border-gray-600 mt-8 mx-auto p-1 px-5 w-32 bg-green-600 text-white font-bold text-xl"
               onClick={() => hostSubmitHandler()}
             >
@@ -91,7 +100,10 @@ export function LandingPage({
           </form>
         </div>
         <div className="w-full px-0 h-1/3 md:pl-2 md:w-1/2 md:inline-block flow-root">
-          <form className="rounded-xl border-2 border-blue-500 bg-blue-200 bg-opacity-50 w-full h-full p-6 py-4 text-blue-900">
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="rounded-xl border-2 border-blue-500 bg-blue-200 bg-opacity-50 w-full h-full p-6 py-4 text-blue-900"
+          >
             <h2 className="font-smallCaps text-2xl mb-3">Join Game</h2>
             <div>
               <label>
@@ -101,15 +113,16 @@ export function LandingPage({
                   className={classNames(
                     'w-full mb-3 rounded-md border-1 border-opacity-50 border-gray-500  bg-white bg-opacity-80',
                     {
-                      'border-red-600 border-2 border-opacity-100': !guestNameOk,
+                      'border-red-600 border-2 border-opacity-100 focus:border-red-600 focus:ring-red-600': !guestNameOk,
                     },
                   )}
                   value={guestName}
                   onChange={(e) => {
                     setGuestName(e.target.value);
                     setPlayerName(e.target.value);
+                    setGuestNameOk(true);
                   }}
-                  reqired
+                  required
                 ></input>
               </label>
             </div>
@@ -121,15 +134,20 @@ export function LandingPage({
                   className={classNames(
                     'rounded-md border-1 border-opacity-50 border-gray-500 bg-white bg-opacity-80 ml-3',
                     {
-                      'border-red-600 border-2 border-opacity-100': !gameIdOk,
+                      'border-red-600 border-2 border-opacity-100 focus:border-red-600 focus:ring-red-600': !gameIdOk,
                     },
                   )}
                   value={gameID}
-                  onChange={(e) => setGameID(e.target.value)}
+                  onChange={(e) => {
+                    setGameID(e.target.value);
+                    setGameIdOk(true);
+                  }}
+                  required
                 ></input>
               </label>
             </div>
             <button
+              type="submit"
               className="block rounded-md border-2 border-gray-600 mt-8 mx-auto p-1 px-5 w-32 bg-blue-600 text-white font-bold text-xl"
               onClick={() => guestSubmitHandler()}
             >
