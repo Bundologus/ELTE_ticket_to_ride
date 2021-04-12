@@ -1,5 +1,3 @@
-const { colors } = require('tailwindcss/defaultTheme');
-
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
@@ -10,26 +8,30 @@ module.exports = {
     fontFamily: {
       regular: ['IM Fell English', 'serif'],
       smallCaps: ['IM Fell Great Primer SC', 'serif'],
+      number: ['Old Standard TT', 'serif'],
     },
     extend: {
       backgroundImage: {
-        'ttr-rainbow-grad':
-          'linear-gradient(125deg, rgba(172,102,183,1) 0%, rgba(10,121,192,1) 25%, rgba(164,203,72,1) 50%, rgba(244,210,86,1) 75%, rgba(197,128,50,1) 100%)',
+        'ttr-locomotive':
+          'linear-gradient(45deg, rgba(219,119,213,1) 5%, rgba(19,171,223,1) 21%, rgba(137,195,75,1) 42%, rgba(251,225,77,1) 63%, rgba(235,144,73,1) 84%, rgba(233,28,38,1) 100%)',
       },
       colors: {
-        'ttr-black': '#392f2f',
-        'ttr-blue': '#0a79c0',
-        'ttr-green': '#a4cb48',
-        'ttr-orange': '#c58032',
-        'ttr-purple': '#ac66b7',
-        'ttr-red': '#e03f0a',
-        'ttr-white': '#f0efec',
-        'ttr-yellow': '#f4d256',
+        'ttr-black': '#9d9291',
+        'ttr-blue': '#13abdf',
+        'ttr-green': '#89c34b',
+        'ttr-orange': '#eb9049',
+        'ttr-pink': '#db77d5',
+        'ttr-red': '#d14338',
+        'ttr-white': '#f4f3e2',
+        'ttr-yellow': '#fbe14d',
         'player-black': '#282f25',
-        'player-blue': '#009cc1',
-        'player-green': '#02aa50',
-        'player-red': '#e91c26',
-        'player-yellow': '#fee138',
+        'player-blue': '#005796',
+        'player-green': '#066b35',
+        'player-red': '#b11017',
+        'player-yellow': '#d09d01',
+      },
+      lineHeight: {
+        custom: '2.85rem',
       },
     },
   },

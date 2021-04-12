@@ -1,5 +1,5 @@
-.board {
-  background-image: image('assets/map.jpg');
+#board-backdrop {
+  background-image: url('../../assets/board_backdrop.jpg');
 }
 
 @media (min-width: 1024px) {
@@ -18,7 +18,7 @@
 
 @media (min-width: 1536px) {
   .board {
-    width: 1152px;
-    max-height: 769.35;
+    width: 1128px;
+    max-height: 767.2px;
   }
 }
