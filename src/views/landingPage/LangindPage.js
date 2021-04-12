@@ -35,12 +35,12 @@ export function LandingPage({
   };
 
   return (
-    <div className="container h-screen font-regular z-10 grid grid-cols-2 grid-rows-2 pt-10 md:pt-14 md:px-16">
+    <div className="container h-screen font-regular z-10 grid grid-cols-2 grid-rows-2 pt-10 md:pt-14 md:px-16 lg:py-14">
       <div
-        className="row-span-2 col-start-1 m-4 flex flex-col justify-center lg:row-span-1 lg:col-span-2 lg:self-end lg:pb-4 xl:pb-24"
+        className="row-span-2 col-start-1 m-4 flex flex-col justify-center lg:row-span-1 lg:col-span-2 lg:self-end lg:pb-4 xl:pb-12 2xl:pb-24"
         id="wellcomeText"
       >
-        <h1 className="mx-auto flex flex-col rounded-xl border-2 border-yellow-400 border-opacity-100 bg-yellow-200 bg-opacity-80 p-3 lg:slef-end lg:p-6 xl:justify-end xl:content-end xl:w-80">
+        <h1 className="mx-auto flex flex-col rounded-xl border-2 border-yellow-400 border-opacity-100 bg-yellow-200 bg-opacity-80 p-3 lg:slef-end lg:p-6 lg:bg-opacity-0 lg:border-0 xl:w-80">
           <span className="block font-regular text-lg">Welcome to</span>
           <span className="block text-center font-smallCaps text-5xl">
             Ticket to Ride
@@ -51,7 +51,7 @@ export function LandingPage({
         </h1>
       </div>
       <div
-        className="m-2 mb-1 lg:-mt-4 xl:px-0 xl:h-1/3 xl:pr-2 xl:inline-block 2xl:w-1/2"
+        className="m-2 mb-1 lg:-mt-4 xl:mr-2 xl:w-4/5 xl:justify-self-end 2xl:w-2/3"
         id="newGameForm"
       >
         <form
@@ -106,7 +106,7 @@ export function LandingPage({
         </form>
       </div>
       <div
-        className="m-2 mt-1 lg:-mt-4 xl:px-0 xl:h-1/3 xl:pr-2 xl:inline-block xl:w-1/2"
+        className="m-2 mt-1 lg:-mt-4 xl:ml-2 xl:w-4/5 xl:justify-self-start 2xl:w-2/3"
         id="joinGameForm"
       >
         <form
