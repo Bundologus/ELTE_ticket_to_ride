@@ -35,7 +35,7 @@ export function LandingPage({
   };
 
   return (
-    <div className="container h-screen font-regular z-10 grid grid-cols-2 grid-rows-2 pt-10 md:px-16">
+    <div className="container h-screen font-regular z-10 grid grid-cols-2 grid-rows-2 pt-10 md:pt-12 md:px-16">
       <div
         className="row-span-2 col-start-1 m-4 flex flex-col justify-center lg:pb-24"
         id="wellcomeText"
@@ -51,7 +51,7 @@ export function LandingPage({
         </h1>
       </div>
       <div
-        className="m-2 mb-1 md:px-0 md:h-1/3 lg:w-full md:pr-2 md:w-1/2 md:inline-block"
+        className="m-2 mb-1 lg:px-0 lg:h-1/3 lg:w-full lg:pr-2 xl:w-1/2 lg:inline-block"
         id="newGameForm"
       >
         <form
@@ -62,13 +62,13 @@ export function LandingPage({
             New Game
           </h2>
           <label>
-            <div className="invisible absolute md:relative md:visible">
+            <div className="invisible absolute lg:relative lg:visible">
               Your name:
             </div>
             <input
               type="text"
               className={classNames(
-                'w-full rounded-md border-1 border-opacity-50 border-gray-500 bg-white bg-opacity-80 placeholder-green-500 md:placeholder-transparent mb-2 text-sm md:text-base md:mb-3',
+                'w-full rounded-md border-1 border-opacity-50 border-gray-500 bg-white bg-opacity-80 placeholder-green-500  mb-2 text-sm lg:placeholder-transparent lg:text-base lg:mb-3',
                 {
                   'border-red-600 border-2 border-opacity-100 placeholder-red-500 focus:border-red-600 focus:ring-red-600': !hostNameOk,
                 },
@@ -83,10 +83,10 @@ export function LandingPage({
               required
             ></input>
           </label>
-          <label className="ml-0.5 text-sm md:text-base">
+          <label className="ml-0.5 text-sm lg:text-base">
             Player count:
             <select
-              className="rounded-md border-1 border-opacity-50 border-gray-500 bg-white bg-opacity-80 text-sm md:text-base font-number ml-4"
+              className="rounded-md border-1 border-opacity-50 border-gray-500 bg-white bg-opacity-80 font-number ml-4 text-sm lg:text-base"
               value={playerCount}
               onChange={(e) => setPlayerCount(e.target.value)}
             >
@@ -98,7 +98,7 @@ export function LandingPage({
           </label>
           <button
             type="submit"
-            className="rounded-md border-2 border-gray-600 bg-green-600 hover:bg-green-500 text-white font-bold p-1 px-5 text-lg h-9 absolute top-2 right-3 md:mt-8 md:w-32 md:mx-auto md:relative"
+            className="rounded-md border-2 border-gray-600 bg-green-600 hover:bg-green-500 text-white font-bold p-1 px-5 text-lg h-9 absolute top-2 right-3 lg:mt-8 lg:w-32 lg:mx-auto lg:relative"
             onClick={() => hostSubmitHandler()}
           >
             Start!
@@ -106,7 +106,7 @@ export function LandingPage({
         </form>
       </div>
       <div
-        className="m-2 mt-1 md:px-0 md:h-1/3 lg:w-full md:pr-2 md:w-1/2 md:inline-block"
+        className="m-2 mt-1 lg:px-0 lg:h-1/3 lg:w-full lg:pr-2 xl:w-1/2 lg:inline-block"
         id="joinGameForm"
       >
         <form
@@ -117,13 +117,13 @@ export function LandingPage({
             Join Game
           </h2>
           <label>
-            <div className="invisible absolute md:relative md:visible">
+            <div className="invisible absolute lg:relative lg:visible">
               Your name:
             </div>
             <input
               type="text"
               className={classNames(
-                'w-full rounded-md border-1 border-opacity-50 border-gray-500 bg-white bg-opacity-80 placeholder-blue-500 md:placeholder-transparent mb-2 text-sm md:text-base md:mb-3',
+                'w-full rounded-md border-1 border-opacity-50 border-gray-500 bg-white bg-opacity-80 placeholder-blue-500 lg:placeholder-transparent mb-2 text-sm lg:text-base lg:mb-3',
                 {
                   'border-red-600 border-2 border-opacity-100 placeholder-red-500 focus:border-red-600 focus:ring-red-600': !guestNameOk,
                 },
@@ -139,13 +139,13 @@ export function LandingPage({
             ></input>
           </label>
           <label>
-            <div className="invisible absolute md:relative md:visible">
+            <div className="invisible absolute lg:relative lg:visible">
               Game ID:
             </div>
             <input
               type="text"
               className={classNames(
-                'rounded-md border-1 border-opacity-50 border-gray-500 bg-white bg-opacity-80 w-full placeholder-blue-500 text-sm md:text-base md:placeholder-transparent md:w-auto md:ml-3',
+                'rounded-md border-1 border-opacity-50 border-gray-500 bg-white bg-opacity-80 w-full placeholder-blue-500 text-sm lg:text-base lg:placeholder-transparent lg:w-auto lg:ml-3',
                 {
                   'border-red-600 border-2 border-opacity-100 focus:border-red-600 focus:ring-red-600': !gameIdOk,
                 },
@@ -161,7 +161,7 @@ export function LandingPage({
           </label>
           <button
             type="submit"
-            className="rounded-md border-2 border-gray-600 bg-blue-600 hover:bg-blue-500 text-white font-bold p-1 px-5 text-lg h-9 absolute top-2 right-3 md:mt-8 md:w-32 md:mx-auto md:relative"
+            className="rounded-md border-2 border-gray-600 bg-blue-600 hover:bg-blue-500 text-white font-bold p-1 px-5 text-lg h-9 absolute top-2 right-3 lg:mt-8 lg:w-32 lg:mx-auto lg:relative"
             onClick={() => guestSubmitHandler()}
           >
             Join!
