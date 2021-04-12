@@ -100,7 +100,7 @@ export function GamePage({ playerList, playerCount }) {
   }); */
 
   return (
-    <div className="container pt-16 pb-3 h-screen font-regular z-10">
+    <div className="container h-screen font-regular z-10 pt-10 pb-3 md:pt-14 md:px-16 lg:py-14">
       <div
         className="container h-full p-4 pt-2 rounded-2xl shadow-md bg-cover"
         id="board-backdrop"
