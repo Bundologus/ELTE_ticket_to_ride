@@ -6,6 +6,9 @@
 @tailwind utilities;
 
 #root {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
   background-color: navajowhite;
   background-image: url('./assets/backdrop_SP.jpg');
   color: #444;
