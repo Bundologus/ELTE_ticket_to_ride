@@ -100,12 +100,19 @@ export function GamePage({ playerList, playerCount }) {
   }); */
 
   return (
-    <div className="container h-screen font-regular z-10 pt-10 pb-3 md:pt-14 md:px-16 lg:py-14">
+    <div className="container h-screen font-regular z-10 p-2 pt-12 md:pt-14 md:px-16 lg:py-14">
       <div
-        className="container h-full p-4 pt-2 rounded-2xl shadow-md bg-cover"
+        className="container h-full p-2 lg:p-4 lg:pt-2 shadow-md bg-cover rounded-md lg:rounded-2xl"
         id="board-backdrop"
       >
         <div className="container h-full grid grid-cols-8 grid-rows-5">
+          <div className="contents" id="map">
+            <img
+              className="board col-span-6 row-span-4 flex content-center justify-center items-center p-2 rounded-md"
+              src="/assets/map.jpg"
+              alt="map"
+            ></img>
+          </div>
           <div className="contents" id="stat-cards">
             <div className="row-start-1 col-start-1">
               <PlayerCard player={playerList[1]} cartSVG={cartSVG}></PlayerCard>
@@ -124,13 +131,6 @@ export function GamePage({ playerList, playerCount }) {
             <div className="row-start-5 col-start-1 grid grid-rows-5 p-2 pl-0 pr-3 text-ttr-white filter drop-shadow-md">
               {scoreBoard}
             </div>
-          </div>
-          <div className="contents" id="map">
-            <img
-              className="board col-span-6 row-span-4 flex content-center justify-center items-center p-2 rounded-md"
-              src="/assets/map.jpg"
-              alt="map"
-            ></img>
           </div>
           <div className="contents" id="deck-and-roster">
             <div className="col-span-6 p-2">
