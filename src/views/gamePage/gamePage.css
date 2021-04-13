@@ -3,7 +3,6 @@
 }
 
 .board {
-  border: solid red;
   width: 449px;
   height: 299.012848px;
   background-image: url(../../assets/map.jpg);
@@ -13,8 +12,8 @@
 
 @media (min-width: 1024px) {
   .board {
-    width: 768px;
-    height: 511.57px;
+    width: 576px;
+    height: 383.588887px;
   }
 }
 
