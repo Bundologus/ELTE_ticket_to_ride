@@ -176,7 +176,7 @@ export function GamePage({ playerList, playerCount }) {
             </div>
           </div>
           <div className="contents" id="player-hand">
-            <div className="col-start-8 row-start-1 row-span-5 text-ttr-white rounded-lg my-3 ml-3 border-8 border-b-0 border-player-green bg-player-green">
+            <div className="col-start-8 row-start-1 row-span-5 text-ttr-white bg-player-green rounded-l-md -mr-4 py-1 pl-1.5 pr-4 lg:rounded-lg lg:my-3 lg:ml-3">
               <HandCard player={playerList[0]}></HandCard>
             </div>
           </div>
