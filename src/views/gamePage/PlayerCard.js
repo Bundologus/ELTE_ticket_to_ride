@@ -1,9 +1,9 @@
 export function PlayerCard({ player, cartSVG }) {
   return (
     <div
-      className={`ml-0 bg-player-${player.color} text-ttr-white shadow-md rounded-md p-1 py-0.5 -mr-4 lg:rounded-lg lg:m-3 lg:py-2 lg:px-3`}
+      className={`bg-player-${player.color} text-ttr-white shadow-md rounded-r-md -ml-4 p-1 pl-3.5 pt-0.5 lg:ml-0 lg:rounded-lg lg:m-3 lg:py-2 lg:px-3`}
     >
-      <h2 className="font-smallCaps font-semibold filter drop-shadow-md text-xs lg:text-xl lg:mb-3">
+      <h2 className="font-smallCaps font-semibold filter drop-shadow-md text-xs whitespace-nowrap overflow-ellipsis lg:text-xl lg:mb-3">
         {player.name}
       </h2>
       <div className="flex items-center filter drop-shadow-md lg:mb-3">

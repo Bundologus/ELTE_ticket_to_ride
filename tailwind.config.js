@@ -30,8 +30,16 @@ module.exports = {
         'player-red': '#b11017',
         'player-yellow': '#d09d01',
       },
+      fontSize: {
+        '2xs': ['.65rem', '.8rem'],
+      },
       lineHeight: {
         custom: '2.85rem',
+      },
+      spacing: {
+        15: '3.75rem',
+        108: '27rem',
+        112: '28rem',
       },
     },
   },

@@ -67,12 +67,10 @@ export function LandingPage({
             </div>
             <input
               type="text"
-              className={classNames(
-                'w-full rounded-md border-1 border-opacity-50 border-gray-500 bg-white bg-opacity-80 placeholder-green-400  mb-2 text-sm lg:placeholder-transparent lg:text-base lg:mb-3',
-                {
-                  'border-red-600 border-2 border-opacity-100 placeholder-red-400 focus:border-red-600 focus:ring-red-600': !hostNameOk,
-                },
-              )}
+              className={classNames({
+                'w-full rounded-md border-1 border-opacity-50 border-gray-500 bg-white bg-opacity-80 placeholder-green-400  mb-2 text-sm lg:placeholder-transparent lg:text-base lg:mb-3': true,
+                'border-red-600 border-2 border-opacity-100 placeholder-red-400 focus:border-red-600 focus:ring-red-600': !hostNameOk,
+              })}
               value={hostName}
               onChange={(e) => {
                 setHostName(e.target.value);

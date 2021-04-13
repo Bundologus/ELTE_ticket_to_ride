@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import classNames from 'classnames';
 import { ticketToRideData as gameData } from '../../assets/ticket-to-ride-data';
 import './gamePage.css';
 import { PlayerCard } from './PlayerCard';
@@ -22,12 +23,14 @@ export function GamePage({ playerList, playerCount }) {
     'pink',
     'green',
   ]);
+  const [deckPulled, setDeckPulled] = useState(false);
 
   const cartSVG = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-16 w-24 absolute top-1/3 left-5 transform -rotate-45 -translate-y-1"
-      viewBox="0 0 50 30"
+      /* className="h-16 w-24 absolute top-1/3 left-5 transform -rotate-45 -translate-y-1" */
+      className="transform -rotate-0 h-12 w-12"
+      viewBox="0 0 47 18"
       fill="currentColor"
     >
       <path d="M10 14.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0zM15.9 14.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0z" />
@@ -39,8 +42,9 @@ export function GamePage({ playerList, playerCount }) {
   const locomotiveSVG = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-16 w-24 absolute top-1/4 left-3.5 transform -rotate-45 -translate-y-0.5"
-      viewBox="0 0 40 25"
+      /* className="h-16 w-24 absolute top-1/4 left-3.5 transform -rotate-45 -translate-y-0.5" */
+      className="block transform -rotate-0 h-12 w-12 lg:h-16 lg:w-24"
+      viewBox="0 0 36 21"
       fill="currentColor"
     >
       <path d="M10 17.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0zM15.9 17.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0z" />
@@ -52,7 +56,7 @@ export function GamePage({ playerList, playerCount }) {
   const rosterCards = roster.map((color) => {
     return (
       <button
-        className={`relative bg-ttr-${color} rounded-md w-28 h-32 ml-5 shadow-xl`}
+        className={`relative bg-ttr-${color} inline-flex flex-row justify-center content-center overflow-hidden rounded-md shadow-xl w-12 h-12 ml-1.5 lg:w-28 lg:h-32 lg:ml-5`}
       >
         {color === 'locomotive' ? locomotiveSVG : cartSVG}
       </button>
@@ -70,12 +74,12 @@ export function GamePage({ playerList, playerCount }) {
       return (
         <div
           key={player.id}
-          className={`bg-player-${player.color} p-2 rounded-md`}
+          className={`bg-player-${player.color} px-1 py-0 rounded-md text-2xs -ml-4 pl-3.5 w-9/12 flex justify-start content-center items-center lg:w-auto lg:p-2`}
         >
-          <p className="inline-block truncate w-4/5 filter drop-shadow-md">
+          <p className="inline-block truncate w-3/4 filter drop-shadow-md">
             {player.name}
           </p>
-          <p className="inline-block truncate w-1/5 filter drop-shadow-md">
+          <p className="inline-block truncate w-1/4 filter drop-shadow-md">
             {' '}
             - <span className="font-number">{player.score}</span>
           </p>
@@ -100,15 +104,15 @@ export function GamePage({ playerList, playerCount }) {
   }); */
 
   return (
-    <div className="container h-screen font-regular z-10 p-2 pt-12 md:pt-14 md:px-16 lg:py-14">
+    <div className="container h-screen font-regular z-10 pt-10 md:pt-14 md:px-16 lg:py-14">
       <div
-        className="container h-full p-2 lg:p-4 lg:pt-2 shadow-md bg-cover rounded-md lg:rounded-2xl"
+        className="container relative h-full p-1.5 lg:p-4 lg:pt-2 shadow-md bg-cover rounded-none lg:rounded-2xl"
         id="board-backdrop"
       >
-        <div className="container h-full grid grid-cols-8 grid-rows-5">
+        <div className="container static h-full grid grid-cols-8 grid-rows-5">
           <div className="contents" id="map">
             <img
-              className="board col-span-6 row-span-4 flex content-center justify-center items-center p-2 rounded-md"
+              className="board col-span-6 row-span-5 flex content-center justify-center items-center pt-0 p-2 rounded-md lg:row-span-4"
               src="/assets/map.jpg"
               alt="map"
             ></img>
@@ -128,34 +132,46 @@ export function GamePage({ playerList, playerCount }) {
             </div>
           </div>
           <div className="contents" id="score-board">
-            <div className="row-start-5 col-start-1 grid grid-rows-5 p-2 pl-0 pr-3 text-ttr-white filter drop-shadow-md">
+            <div className="row-start-5 col-start-1 col-span-1 row-span-1 grid grid-rows-5 text-ttr-white filter drop-shadow-md p-0 lg:py-2 lg:pr-3">
               {scoreBoard}
             </div>
           </div>
           <div className="contents" id="deck-and-roster">
-            <div className="col-span-6 p-2">
-              <div className="rounded-lg flex flex-row items-center content-around p-6">
-                <button className=" ml-3 filter drop-shadow-md w-28 h-32 rounded-md bg-yellow-500 p-2 py-4 text-ttr-white">
+            <div className="fixed flex-none w-full bottom-0 right-0 lg:col-span-6 lg:p-2">
+              <div
+                className={classNames(
+                  'relative rounded-t-md bg-red-900 mx-auto w-108 h-16 flex flex-row items-center content-around justify-between transform transition-transform p-2 lg:p-6',
+                  { 'translate-y-15': !deckPulled },
+                )}
+                onBlur={(e) => {
+                  setDeckPulled(false);
+                }}
+              >
+                <button
+                  className="absolute -top-4 right-1/2 transform translate-x-1/2 h-4 w-16 bg-yellow-500 border-2 border-b-0 border-white rounded-t-md focus:outline-none"
+                  onClick={() => setDeckPulled(!deckPulled)}
+                />
+                <button className="filter drop-shadow-md rounded-md bg-yellow-500 text-ttr-white w-12 h-12 p-1 lg:w-28 lg:h-32 lg:ml-3 lg:p-2 lg:py-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-24 w-24"
+                    className="h-10 w-10 lg:h-24 lg:w-24"
                     viewBox="0 0 26 26"
                     fill="currentColor"
                   >
                     <path d="M13 19l-3-16c1-1 5-1 6 0l-3 16zM14 21a1 1 0 01-2 2a1 1 0 012-2z" />
                   </svg>
                 </button>
-                <button className=" ml-24 mr-12 filter drop-shadow-md w-28 h-32 rounded-md bg-blue-500 p-2 py-3.5 text-ttr-white">
+                <button className="filter drop-shadow-md rounded-md bg-blue-500 text-ttr-white w-12 h-12 p-1 ml-6 mr-3 lg:w-28 lg:h-32 lg:ml-24 lg:mr-12 lg:p-2 lg:py-3.5">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-24 w-24"
+                    className="h-10 w-10 lg:h-24 lg:w-24"
                     viewBox="0 0 26 26"
                     fill="currentColor"
                   >
                     <path d="M3 21l11.43-11.43-.71-.7 1.42-1.43-2.14-2.18c1.2-1.19 3.09-1.19 4.27 0l3.6 3.61-1.42 1.41h2.84l.71.71-3.55 3.59-.71-.71v-2.88l-1.47 1.42-.71-.71-11.43 11.43-2.13-2.13z" />
                   </svg>
                 </button>
-                {rosterCards}
+                <div className="h-12">{rosterCards}</div>
               </div>
             </div>
           </div>
