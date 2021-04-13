@@ -35,7 +35,7 @@ export function LandingPage({
   };
 
   return (
-    <div className="container h-screen font-regular z-10 grid grid-cols-2 grid-rows-2 pt-10 md:pt-14 md:px-16 lg:py-14">
+    <div className="container h-screen font-regular z-10 grid grid-cols-2 grid-rows-2 pt-10 md:px-16 lg:py-14">
       <div
         className="row-span-2 col-start-1 m-4 flex flex-col justify-center lg:row-span-1 lg:col-span-2 lg:self-end lg:pb-4 xl:pb-12 2xl:pb-24"
         id="wellcomeText"

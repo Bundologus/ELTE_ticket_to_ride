@@ -1,6 +1,6 @@
 export function NavPanel({ appState, setAppState }) {
   return (
-    <div className="fixed top-0 left-0 w-screen bg-yellow-500 flex justify-between shadow-xl h:10 p-1 lg:h-14 md:p-2">
+    <div className="fixed top-0 left-0 w-screen bg-yellow-500 flex justify-between shadow-xl h:10 p-1 lg:h-14 lg:p-2">
       <button onClick={() => setAppState("MAIN_PAGE'")}>
         <img src="logo_light.png" className="h-8 lg:h-10" alt="logo"></img>
       </button>

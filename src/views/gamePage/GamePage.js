@@ -92,30 +92,33 @@ export function GamePage({ playerList, playerCount }) {
     else setActivePlayer(activePlayer + 1);
   };
 
-  /*   const cityMarkers = gameData.cities.map((city) => {
+  const cityMarkers = gameData.cities.map((city) => {
     const style = { top: city.y + '%', left: city.x + '%' };
     return (
       <div
-        className="absolute rounded-full bg-purple-700 w-10 h-10"
+        className="absolute rounded-full border-2 border-purple-700 w-3 h-3 transform -translate-y-1/2 -translate-x-1/2"
         style={style}
         alt={city.city}
       ></div>
     );
-  }); */
+  });
 
   return (
-    <div className="container h-screen font-regular z-10 pt-10 md:pt-14 md:px-16 lg:py-14">
+    <div className="container h-screen font-regular z-10 pt-10 lg:pt-14 md:px-16 lg:py-14">
       <div
-        className="container relative h-full p-1.5 lg:p-4 lg:pt-2 shadow-md bg-cover rounded-none lg:rounded-2xl"
+        className="container relative overflow-hidden h-full p-1.5 lg:p-4 lg:pt-2 shadow-md bg-cover rounded-none lg:rounded-2xl"
         id="board-backdrop"
       >
-        <div className="container static h-full grid grid-cols-8 grid-rows-5">
+        <div className="container relative h-full grid grid-cols-8 grid-rows-5">
           <div className="contents" id="map">
-            <img
-              className="board col-span-6 row-span-5 flex content-center justify-center items-center pt-0 p-2 rounded-md lg:row-span-4"
+            {/* <img
+              className="board relative col-span-6 row-span-5 flex content-center justify-center items-center mt-0 mb-2 mx-auto rounded-md lg:row-span-4"
               src="/assets/map.jpg"
               alt="map"
-            ></img>
+            ></img> */}
+            <div className="board relative col-span-6 row-span-5 flex content-center justify-center items-center mt-0 mb-2 mx-auto rounded-md lg:row-span-4">
+              {cityMarkers}
+            </div>
           </div>
           <div className="contents" id="stat-cards">
             <div className="row-start-1 col-start-1">

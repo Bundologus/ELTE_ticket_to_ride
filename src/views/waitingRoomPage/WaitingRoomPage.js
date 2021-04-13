@@ -11,7 +11,7 @@ export function WaitingRoomPage({
   }
 
   return (
-    <div className="container h-screen font-regular z-10 pt-10 md:pt-14 md:px-16 lg:py-14">
+    <div className="container h-screen font-regular z-10 pt-10 md:px-16 lg:py-14">
       <div className="h-full flex flex-col justify-center content-evenly lg:content-center p-4">
         <div className="block mx-auto rounded-md border-2 border-yellow-400 border-opacity-100 bg-yellow-200 bg-opacity-80 p-2 md:p-6">
           <h1 className="block text-lg text-center mb-1 mt-2 lg:mb-8 lg:mt-0 lg:text-2xl">

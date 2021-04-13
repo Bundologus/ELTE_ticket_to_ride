@@ -2,6 +2,15 @@
   background-image: url('../../assets/board_backdrop.jpg');
 }
 
+.board {
+  border: solid red;
+  width: 449px;
+  height: 299.012848px;
+  background-image: url(../../assets/map.jpg);
+  background-size: contain;
+  box-sizing: content-box;
+}
+
 @media (min-width: 1024px) {
   .board {
     width: 768px;
