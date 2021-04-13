@@ -14,7 +14,7 @@
 @media (min-width: 1024px) {
   .board {
     width: 768px;
-    max-height: 511.57px;
+    height: 511.57px;
   }
 }
 

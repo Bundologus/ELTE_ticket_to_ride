@@ -29,7 +29,7 @@ export function GamePage({ playerList, playerCount }) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       /* className="h-16 w-24 absolute top-1/3 left-5 transform -rotate-45 -translate-y-1" */
-      className="transform -rotate-0 h-12 w-12"
+      className="transform -rotate-45 h-12 w-12"
       viewBox="0 0 47 18"
       fill="currentColor"
     >
@@ -43,7 +43,7 @@ export function GamePage({ playerList, playerCount }) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       /* className="h-16 w-24 absolute top-1/4 left-3.5 transform -rotate-45 -translate-y-0.5" */
-      className="block transform -rotate-0 h-12 w-12 lg:h-16 lg:w-24"
+      className="block transform -rotate-45 h-12 w-12 lg:h-16 lg:w-24"
       viewBox="0 0 36 21"
       fill="currentColor"
     >
