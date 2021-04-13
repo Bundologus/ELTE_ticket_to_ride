@@ -30,7 +30,7 @@ export function GamePage({ playerList, playerCount }) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       /* className="h-16 w-24 absolute top-1/3 left-5 transform -rotate-45 -translate-y-1" */
-      className="transform -rotate-45 h-12 w-12 lg:h-20 lg:w-16"
+      className="transform -rotate-45 h-12 w-12 lg:h-20 lg:w-16 xl:h-28 xl:w-22"
       viewBox="0 0 47 18"
       fill="currentColor"
     >
@@ -44,7 +44,7 @@ export function GamePage({ playerList, playerCount }) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       /* className="h-16 w-24 absolute top-1/4 left-3.5 transform -rotate-45 -translate-y-0.5" */
-      className="block transform -rotate-45 h-12 w-12 lg:h-20 lg:w-16"
+      className="block transform -rotate-45 h-12 w-12 lg:h-20 lg:w-16 xl:h-28 xl:w-22"
       viewBox="0 0 36 21"
       fill="currentColor"
     >
@@ -58,7 +58,7 @@ export function GamePage({ playerList, playerCount }) {
     return (
       <button
         key={color + '-roster-' + Math.floor(Math.random() * 100000)}
-        className={`relative bg-ttr-${color} inline-flex flex-row justify-center content-center overflow-hidden rounded-md shadow-xl w-12 h-12 ml-1.5 lg:w-16 lg:h-20 lg:ml-2`}
+        className={`relative bg-ttr-${color} inline-flex flex-row justify-center content-center overflow-hidden rounded-md shadow-xl w-12 h-12 ml-1.5 lg:w-16 lg:h-20 lg:ml-2 xl:h-28 xl:w-22`}
       >
         {color === 'locomotive' ? locomotiveSVG : cartSVG}
       </button>
@@ -81,23 +81,17 @@ export function GamePage({ playerList, playerCount }) {
       return (
         <div
           key={'player-' + player.id}
-          className={`bg-player-${player.color} px-1 py-0 rounded-md text-2xs -ml-4 pl-3.5 w-9/12 flex justify-start content-center items-center lg:w-auto lg:p-2`}
+          className={`bg-player-${player.color} px-1 py-0 rounded-md text-2xs -ml-4 pl-3.5 w-9/12 flex justify-start content-center items-center lg:w-full lg:p-2 lg:text-xs xl:text-base`}
         >
-          <p className="inline-block truncate w-3/4 filter drop-shadow-md">
+          <p className="inline-block truncate w-9/12 filter drop-shadow-md">
             {player.name}
           </p>
-          <p className="inline-block truncate w-1/4 filter drop-shadow-md">
-            {' '}
-            - <span className="font-number">{player.score}</span>
+          <p className="inline-block truncate w-3/12 filter drop-shadow-md text-right">
+            <span className="font-number">{player.score}</span>
           </p>
         </div>
       );
     });
-
-  const nextPlayer = () => {
-    if (activePlayer === playerCount - 1) setActivePlayer(0);
-    else setActivePlayer(activePlayer + 1);
-  };
 
   return (
     <div className="container h-screen font-regular z-10 pt-10 md:px-16 lg:pt-16 lg:pb-2">
@@ -132,7 +126,7 @@ export function GamePage({ playerList, playerCount }) {
             <div className="fixed w-full bottom-0 right-0 lg:relative lg:col-span-5">
               <div
                 className={classNames(
-                  'relative rounded-t-md bg-red-900 mx-auto w-108 h-16 flex flex-row items-center content-around justify-between transform transition-transform p-2 lg:pb-0 lg:transform-none lg:h-full lg:w-full lg:max-w-xl lg:bg-opacity-0 lg:items-end',
+                  'relative rounded-t-md bg-red-900 mx-auto w-108 h-16 flex flex-row items-center content-around justify-between transform transition-transform p-2 lg:pb-0 lg:transform-none lg:h-full lg:w-full lg:max-w-xl lg:bg-opacity-0 lg:items-end lg:px-4 xl:max-w-3xl',
                   { 'translate-y-15': !deckPulled },
                 )}
                 onBlur={(e) => {
@@ -143,27 +137,27 @@ export function GamePage({ playerList, playerCount }) {
                   className="absolute -top-4 right-1/2 transform translate-x-1/2 h-4 w-16 bg-yellow-500 border-2 border-b-0 border-white rounded-t-md focus:outline-none lg:hidden"
                   onClick={() => setDeckPulled(!deckPulled)}
                 />
-                <button className="filter drop-shadow-md rounded-md bg-yellow-500 text-ttr-white w-12 h-12 p-1 lg:w-16 lg:h-20 lg:ml-3 lg:p-2">
+                <button className="filter drop-shadow-md rounded-md bg-yellow-500 text-ttr-white w-12 h-12 p-1 lg:w-16 lg:h-20 lg:p-2 xl:h-28 xl:w-22 xl:p-1">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-10 w-10 lg:h-12 lg:w-12"
+                    className="h-10 w-10 lg:h-12 lg:w-12 xl:h-20 xl:w-20"
                     viewBox="0 0 26 26"
                     fill="currentColor"
                   >
                     <path d="M13 19l-3-16c1-1 5-1 6 0l-3 16zM14 21a1 1 0 01-2 2a1 1 0 012-2z" />
                   </svg>
                 </button>
-                <button className="filter drop-shadow-md rounded-md bg-blue-500 text-ttr-white w-12 h-12 p-1 ml-6 mr-3 lg:w-16 lg:h-20 lg:ml-10 lg:mr-3 lg:p-2">
+                <button className="filter drop-shadow-md rounded-md bg-blue-500 text-ttr-white w-12 h-12 p-1 ml-6 mr-3 lg:w-16 lg:h-20 lg:ml-10 lg:mr-3 lg:p-2 xl:h-28 xl:w-22 xl:p-1">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-10 w-10 lg:h-12 lg:w-12"
+                    className="h-10 w-10 lg:h-12 lg:w-12 xl:h-20 xl:w-20"
                     viewBox="0 0 25 26"
                     fill="currentColor"
                   >
                     <path d="M3 20l11.43-11.43-.71-.7 1.42-1.43-2.14-2.18c1.2-1.19 3.09-1.19 4.27 0l3.6 3.61-1.42 1.41h2.84l.71.71-3.55 3.59-.71-.71v-2.88l-1.47 1.42-.71-.71-11.43 11.43-2.13-2.13z" />
                   </svg>
                 </button>
-                <div className="h-12 lg:h-20">{rosterCards}</div>
+                <div className="h-12 lg:h-20 xl:h-28">{rosterCards}</div>
               </div>
             </div>
           </div>
