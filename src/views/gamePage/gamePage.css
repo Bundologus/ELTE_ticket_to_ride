@@ -19,14 +19,14 @@
 
 @media (min-width: 1280px) {
   .board {
-    width: 960px;
-    max-height: 639.45px;
+    width: 750px;
+    height: 499.464668px;
   }
 }
 
 @media (min-width: 1536px) {
   .board {
     width: 1128px;
-    max-height: 767.2px;
+    height: 767.2px;
   }
 }
