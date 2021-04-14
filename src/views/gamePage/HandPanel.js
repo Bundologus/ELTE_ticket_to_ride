@@ -14,7 +14,7 @@ export function HandPanel({ player }) {
       return (
         <div
           key={color + '-hand'}
-          className={`rounded-md bg-ttr-${color} flex content-center justify-center items-center w-5 h-5 mb-1 lg:w-8 lg:h-8 lg:mb-1.5 xl:w-11 xl:h-11 xl:text-xl`}
+          className={`rounded-md bg-ttr-${color} flex content-center justify-center items-center w-5 h-5 mb-1 lg:w-8 lg:h-8 lg:mb-1.5 xl:w-11 xl:h-11 xl:text-xl 2xl:w-14 2xl:h-14 2xl:text-2xl`}
         >
           <p className="block text-center">{count}</p>
         </div>
@@ -34,13 +34,13 @@ export function HandPanel({ player }) {
             (route.id > 40 ? 'bg-gray-800' : 'bg-gray-500')
           }
         >
-          <h3 className="text-2xs font-semibold lg:text-xs xl:text-base">
+          <h3 className="text-2xs font-semibold lg:text-xs xl:text-base 2xl:text-lg">
             {route.fromCity}
           </h3>
-          <h3 className="text-2xs font-semibold lg:text-xs xl:text-base">
+          <h3 className="text-2xs font-semibold lg:text-xs xl:text-base 2xl:text-lg">
             {route.toCity}
           </h3>
-          <p className="absolute top-0 right-0 bg-gray-200 rounded-b-full rounded-tl-full rounded-tr-lg font-number font-bold text-gray-800 text-center  text-xs h-4 w-6 lg:w-7 lg:h-7 lg:text-lg xl:w-8 xl:h-8 xl:text-xl xl:leading-9">
+          <p className="absolute top-0 right-0 bg-gray-200 rounded-b-full rounded-tl-full rounded-tr-lg font-number font-bold text-gray-800 text-center text-xs h-4 w-6 lg:w-7 lg:h-7 lg:text-lg xl:w-8 xl:h-8 xl:text-xl xl:leading-9 2xl:w-10 2xl:h-10 2xl:leading-custom">
             {route.value}
           </p>
         </div>
@@ -56,14 +56,14 @@ export function HandPanel({ player }) {
           {player.name}
         </h2>
       </div>
-      <h2 className="font-smallCaps font-semibold drop-shadow-md text-2xs whitespace-nowrap mb-1 lg:text-base xl:text-xl">
+      <h2 className="font-smallCaps font-semibold drop-shadow-md text-2xs whitespace-nowrap mb-1 lg:text-base xl:text-xl 2xl:text-2xl">
         Your hand
       </h2>
       <div className="bg-gray-300 bg-opacity-20 rounded-md mb-2 p-0.5 py-1 lg:p-1.5">
         <div className="flex items-center filter drop-shadow-md mb-1.5 lg:mb-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-8 ml-0.5 lg:h-8 lg:w-16"
+            className="h-4 w-8 ml-0.5 lg:h-8 lg:w-16 2xl:h-10 2xl:w-20"
             viewBox="0 0 50 18"
             fill="currentColor"
           >
@@ -71,7 +71,7 @@ export function HandPanel({ player }) {
             <path d="M34 14.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0zM39.9 14.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0z" />
             <path d="M5 2a1 1.3 0 00-1 1V11.5h-1.5v-1h-.5v3h.5v-1h1.5L4 13a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0h1a2.5 2.5 0 014.9 0H30a2.5 2.5 0 014.9 0h1.1a2.5 2.5 0 014.9 0H42a1 1 0 001-1v-.5h1.5v1h.5v-3h-.5v1h-1.5L43 3a1 1.3 0 00-1-1H5z" />
           </svg>
-          <p className="block filter font-number text-xs ml-1 lg:ml-1 lg:text-base xl:text-xl">
+          <p className="block filter font-number text-xs ml-1 lg:ml-1 lg:text-base xl:text-xl 2xl:text-2xl">
             x {player.carts}
           </p>
         </div>

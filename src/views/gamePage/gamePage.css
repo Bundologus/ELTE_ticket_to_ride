@@ -26,7 +26,10 @@
 
 @media (min-width: 1536px) {
   .board {
-    width: 1128px;
-    height: 767.2px;
+    width: 965px;
+    height: 642.64454px;
+  }
+  #board-backdrop {
+    max-height: 828px;
   }
 }
