@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
 export function LandingPage({
-  playerName,
   setPlayerName,
   playerCount,
   setPlayerCount,
@@ -169,3 +169,8 @@ export function LandingPage({
     </div>
   );
 }
+
+LandingPage.propTypes = {
+  playerCount: PropTypes.number,
+  gameID: PropTypes.number,
+};

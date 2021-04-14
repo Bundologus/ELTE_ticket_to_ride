@@ -5,6 +5,7 @@ import './gamePage.css';
 import { PlayerCard } from './PlayerCard';
 import { HandPanel } from './HandPanel';
 import { GameBoard } from './GameBoard';
+import { act } from '@testing-library/react';
 
 export function GamePage({ playerList, playerCount }) {
   const [gameState, setGameState] = useState('running');
@@ -25,6 +26,7 @@ export function GamePage({ playerList, playerCount }) {
     'green',
   ]);
   const [deckPulled, setDeckPulled] = useState(false);
+  const [activeConnection, setActiveConnection] = useState(1);
 
   const cartSVG = (
     <svg
@@ -101,7 +103,10 @@ export function GamePage({ playerList, playerCount }) {
       >
         <div className="container relative h-full grid grid-cols-8 grid-rows-5 lg:grid-cols-7">
           <div className="contents" id="map">
-            <GameBoard gameData={gameData}></GameBoard>
+            <GameBoard
+              gameData={gameData}
+              activeConnection={activeConnection}
+            ></GameBoard>
           </div>
           <div className="contents" id="stat-cards">
             <div className="row-start-1 col-start-1">
@@ -171,21 +176,32 @@ export function GamePage({ playerList, playerCount }) {
         </div>
         <div
           id="demoPanel"
-          className="fixed right-1 bottom-0 rounded-t-md bg-gray-700 text-ttr-white py-0.5 px-1.5 border-2 border-b-0 border-gray-300 transition-transform transform transl"
+          className="fixed right-1 bottom-0 rounded-t-md bg-gray-700 text-ttr-white py-0.5 px-1.5 border-2 border-b-0 border-gray-300 transition-transform transform text-xs lg:text-xl lg:py-1.5 lg:px-3"
           onClick={() => {
             document
               .getElementById('demoPanel')
               .classList.toggle('translate-y-3/4');
           }}
         >
-          <h1 className="text-sm">Demó panel</h1>
+          <h1 className="text-sm lg:text-2xl">Demó panel</h1>
           <button
-            className="bg-gray-400 text-black text-xs w-full rounded-sm mb-0.5 hover:bg-gray-300 pt-0.5"
+            className="bg-gray-400 text-black w-full rounded-sm mb-0.5 hover:bg-gray-300 pt-0.5"
             onClick={(e) => {
               e.stopPropagation();
             }}
           >
             Kör kezdés
+          </button>
+          <button
+            className="bg-gray-400 text-black w-full rounded-sm mb-0.5 hover:bg-gray-300 pt-0.5"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (activeConnection < 101)
+                setActiveConnection(activeConnection + 1);
+              else setActiveConnection(1);
+            }}
+          >
+            Következő connection
           </button>
         </div>
       </div>

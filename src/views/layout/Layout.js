@@ -3,6 +3,7 @@ import { LandingPage } from '../landingPage/LangindPage';
 import { WaitingRoomPage } from '../waitingRoomPage/WaitingRoomPage';
 import { GamePage } from '../gamePage/GamePage';
 import { NavPanel } from './NavPanel';
+import { testPlayers } from '../../domain/playerType';
 
 export function Layout() {
   // TODO could use object format. Look at lecture slides. Possibly okay until migration to Redux
@@ -13,7 +14,7 @@ export function Layout() {
   /* const [playerName, setPlayerName] = useState('Bundologus'); */
   const [playerCount, setPlayerCount] = useState('3');
   const [gameID, setGameID] = useState('');
-  const [playerList, setPlayerList] = useState();
+  const [playerList, setPlayerList] = useState(testPlayers);
 
   let content = (
     <LandingPage

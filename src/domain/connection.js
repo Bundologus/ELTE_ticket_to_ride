@@ -1,9 +1,9 @@
-import PropTypes, { arrayOf } from 'prop-types';
-import { City } from './city';
+import PropTypes from 'prop-types';
 
 export const TrackElement = PropTypes.shape({
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
+  rotation: PropTypes.number,
 });
 
 export const TrackElementList = PropTypes.arrayOf(TrackElement);
