@@ -36,10 +36,14 @@ module.exports = {
       lineHeight: {
         custom: '2.85rem',
       },
+      screens: {
+        '3xl': '2048px',
+      },
       spacing: {
         15: '3.75rem',
         18: '4.5rem',
         22: '5.5rem',
+        50: '12.5rem',
         108: '27rem',
         112: '28rem',
       },

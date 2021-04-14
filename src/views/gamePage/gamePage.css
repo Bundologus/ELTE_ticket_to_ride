@@ -33,3 +33,13 @@
     max-height: 828px;
   }
 }
+
+@media (min-width: 2048px) {
+  .board {
+    width: 1172px;
+    height: 780.496788px;
+  }
+  #board-backdrop {
+    max-height: 1000px;
+  }
+}
