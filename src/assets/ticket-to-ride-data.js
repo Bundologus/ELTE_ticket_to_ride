@@ -1783,7 +1783,7 @@ export const ticketToRideData = {
       locomotive: 0,
     },
   ],
-  destinations: [
+  routes: [
     {
       id: '1',
       from: '3',
@@ -2105,7 +2105,7 @@ export const ticketToRideData = {
       value: '13',
     },
   ],
-  longDestinations: [
+  longRoutes: [
     {
       id: '41',
       from: '22',

@@ -11,14 +11,9 @@ export function GameBoard({ gameData }) {
     );
   });
 
-  console.log('map rendered');
+  const routeMarkers = gameData.console.log('map rendered');
   return (
     <>
-      {/* <img
-        className="relative col-span-6 row-span-5 mt-0 mb-2 mx-auto rounded-md h-full lg:row-span-4 lg:col-span-5 lg:mb-0"
-        src="/assets/map.jpg"
-        alt="map"
-      ></img> */}
       <div className="board relative col-span-6 row-span-5 mt-0 mb-2 mx-auto rounded-md lg:row-span-4 lg:col-span-5 lg:mb-0">
         {cityMarkers}
       </div>

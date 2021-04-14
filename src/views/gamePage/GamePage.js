@@ -169,13 +169,25 @@ export function GamePage({ playerList, playerCount }) {
             </div>
           </div>
         </div>
-        {/* <div
+        <div
           id="demoPanel"
-          className="fixed right-1 bottom-0 rounded-t-sm bg-gray-700 text-ttr-white py-0.5 px-1.5"
+          className="fixed right-1 bottom-0 rounded-t-md bg-gray-700 text-ttr-white py-0.5 px-1.5 border-2 border-b-0 border-gray-300 transition-transform transform transl"
+          onClick={() => {
+            document
+              .getElementById('demoPanel')
+              .classList.toggle('translate-y-3/4');
+          }}
         >
           <h1 className="text-sm">Demó panel</h1>
-          <button>Kör kezdés</button>
-        </div> */}
+          <button
+            className="bg-gray-400 text-black text-xs w-full rounded-sm mb-0.5 hover:bg-gray-300 pt-0.5"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            Kör kezdés
+          </button>
+        </div>
       </div>
     </div>
   );
