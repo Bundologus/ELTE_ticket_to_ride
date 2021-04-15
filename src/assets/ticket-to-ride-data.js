@@ -7,7 +7,7 @@ export const ticketToRideData = {
       today: 'Amsterdam',
       country: 'Holland',
       x: 31.874999999999996,
-      y: 30.58161350844278,
+      y: 30.90061350844278,
     },
     {
       id: '2',

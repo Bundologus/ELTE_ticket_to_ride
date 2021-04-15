@@ -10,6 +10,11 @@
   box-sizing: content-box;
 }
 
+.built-border {
+  border-width: 3px;
+  border-color: #00000055 #00000055 #ffffff55 #ffffff55;
+}
+
 @media (min-width: 1024px) {
   .board {
     width: 576px;

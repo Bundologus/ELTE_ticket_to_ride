@@ -46,8 +46,3 @@ export function WaitingRoomPage({
     </div>
   );
 }
-
-WaitingRoomPage.propTypes = {
-  gameID: PropTypes.number,
-  playerName: PropTypes.string.isRequired,
-};

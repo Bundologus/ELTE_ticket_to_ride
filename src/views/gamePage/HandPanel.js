@@ -1,4 +1,12 @@
-export function HandPanel({ player }) {
+import { PlayerType } from '../../domain/playerType';
+import PropTypes from 'prop-types';
+
+export function HandPanel({
+  player,
+  activeCities,
+  setActiveCities,
+  setHoverCities,
+}) {
   const trainCards = Object.entries(player.trainCards)
     .sort((tc1, tc2) => {
       let tc1name = tc1[0];
@@ -27,12 +35,26 @@ export function HandPanel({ player }) {
     })
     .map((route) => {
       return (
-        <div
+        <button
           key={'route-' + route.id}
           className={
-            'relative grid grid-rows-2 mb-1 rounded-md p-1 py-0.5 lg:p-1.5 ' +
+            'relative focus:ring-0 focus:outline-none w-full text-left grid grid-rows-2 mb-1 rounded-md p-1 py-0.5 lg:p-1.5 ' +
             (route.id > 40 ? 'bg-gray-800' : 'bg-gray-500')
           }
+          onMouseEnter={() => setHoverCities([route.from, route.to])}
+          onMouseLeave={() => setHoverCities([])}
+          onClick={() => {
+            if (
+              activeCities.length === 0 ||
+              activeCities[0] !== route.from ||
+              activeCities[1] !== route.to
+            )
+              setActiveCities([route.from, route.to]);
+            else {
+              setActiveCities([]);
+              setHoverCities([]);
+            }
+          }}
         >
           <h3 className="text-2xs font-semibold lg:text-xs xl:text-base 2xl:text-lg 3xl:text-xl">
             {route.fromCity}
@@ -43,7 +65,7 @@ export function HandPanel({ player }) {
           <p className="absolute top-0 right-0 bg-gray-200 rounded-b-full rounded-tl-full rounded-tr-lg font-number font-bold text-gray-800 text-center text-xs h-4 w-6 lg:w-7 lg:h-7 lg:text-lg xl:w-8 xl:h-8 xl:text-xl xl:leading-9 2xl:w-10 2xl:h-10 2xl:leading-custom">
             {route.value}
           </p>
-        </div>
+        </button>
       );
     });
 
@@ -83,8 +105,49 @@ export function HandPanel({ player }) {
         className="bg-gray-800 bg-opacity-30 overflow-y-auto rounded-md p-0.5 pt-1 pb-0 lg:p-2 lg:pb-1"
         id="routecard-box"
       >
+        <button
+          key={'route-' + player.longRouteCard.id}
+          className={
+            'relative focus:ring-0 focus:outline-none w-full text-left grid grid-rows-2 mb-1 rounded-md p-1 py-0.5 lg:p-1.5 ' +
+            (player.longRouteCard.id > 40 ? 'bg-gray-800' : 'bg-gray-500')
+          }
+          onMouseEnter={() =>
+            setHoverCities([player.longRouteCard.from, player.longRouteCard.to])
+          }
+          onMouseLeave={() => setHoverCities([])}
+          onClick={() => {
+            if (
+              activeCities.length === 0 ||
+              activeCities[0] !== player.longRouteCard.from ||
+              activeCities[1] !== player.longRouteCard.to
+            )
+              setActiveCities([
+                player.longRouteCard.from,
+                player.longRouteCard.to,
+              ]);
+            else {
+              setActiveCities([]);
+              setHoverCities([]);
+            }
+          }}
+        >
+          <h3 className="text-2xs font-semibold lg:text-xs xl:text-base 2xl:text-lg 3xl:text-xl">
+            {player.longRouteCard.fromCity}
+          </h3>
+          <h3 className="text-2xs font-semibold lg:text-xs xl:text-base 2xl:text-lg 3xl:text-xl">
+            {player.longRouteCard.toCity}
+          </h3>
+          <p className="absolute top-0 right-0 bg-gray-200 rounded-b-full rounded-tl-full rounded-tr-lg font-number font-bold text-gray-800 text-center text-xs h-4 w-6 lg:w-7 lg:h-7 lg:text-lg xl:w-8 xl:h-8 xl:text-xl xl:leading-9 2xl:w-10 2xl:h-10 2xl:leading-custom">
+            {player.longRouteCard.value}
+          </p>
+        </button>
         {routeCards}
       </div>
     </div>
   );
 }
+
+HandPanel.propTypes = {
+  player: PlayerType,
+  activeCities: PropTypes.arrayOf(PropTypes.string),
+};

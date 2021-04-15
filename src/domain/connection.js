@@ -10,9 +10,9 @@ export const TrackElementList = PropTypes.arrayOf(TrackElement);
 
 export const Connection = PropTypes.shape({
   id: PropTypes.number.isRequired,
-  from: PropTypes.number.isRequired,
+  from: PropTypes.string.isRequired,
   fromCity: PropTypes.string.isRequired,
-  to: PropTypes.number.isRequired,
+  to: PropTypes.string.isRequired,
   toCity: PropTypes.string.isRequired,
   elements: TrackElementList.isRequired,
   color: PropTypes.string.isRequired,

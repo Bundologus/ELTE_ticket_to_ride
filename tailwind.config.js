@@ -15,8 +15,23 @@ module.exports = {
         'ttr-locomotive':
           'linear-gradient(45deg, rgba(219,119,213,1) 5%, rgba(19,171,223,1) 21%, rgba(137,195,75,1) 42%, rgba(251,225,77,1) 63%, rgba(235,144,73,1) 84%, rgba(233,28,38,1) 100%)',
       },
+      borderStyle: {
+        outset: 'outset',
+      },
+      boxShadow: {
+        'glow-black-sm': '0 0 8px #282f25',
+        'glow-blue-sm': '0 0 8px #005796',
+        'glow-green-sm': '0 0 8px #066b35',
+        'glow-red-sm': '0 0 8px #b11017',
+        'glow-yellow-sm': '0 0 8px #d09d01',
+        'glow-black': '0 0 15px #282f25',
+        'glow-blue': '0 0 15px #005796',
+        'glow-green': '0 0 15px #066b35',
+        'glow-red': '0 0 15px #b11017',
+        'glow-yellow': '0 0 15px #d09d01',
+      },
       colors: {
-        'ttr-black': '#9d9291',
+        'ttr-black': '#827d7c',
         'ttr-blue': '#13abdf',
         'ttr-green': '#89c34b',
         'ttr-orange': '#eb9049',

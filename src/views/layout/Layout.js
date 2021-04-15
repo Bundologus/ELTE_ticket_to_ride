@@ -14,7 +14,8 @@ export function Layout() {
   /* const [playerName, setPlayerName] = useState('Bundologus'); */
   const [playerCount, setPlayerCount] = useState('3');
   const [gameID, setGameID] = useState('');
-  const [playerList, setPlayerList] = useState(testPlayers);
+  const [playerList, setPlayerList] = useState(testPlayers.slice(1, 5));
+  const [localPlayer, setLocalPlayer] = useState(testPlayers[0]);
 
   let content = (
     <LandingPage
@@ -38,7 +39,12 @@ export function Layout() {
     );
   } else if (appState === 'IN_GAME') {
     content = (
-      <GamePage playerList={playerList} playerCount={playerCount}></GamePage>
+      <GamePage
+        opponentList={playerList}
+        localPlayer={localPlayer}
+        setLocalPlayer={setLocalPlayer}
+        playerCount={playerCount}
+      ></GamePage>
     );
   }
 

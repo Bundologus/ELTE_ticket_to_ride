@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { RouteList } from './route';
+import { Route, RouteList } from './route';
 
 export const TrainCardsHand = PropTypes.shape({
   black: PropTypes.number,
@@ -23,7 +23,10 @@ export const PlayerType = PropTypes.shape({
   trainCards: TrainCardsHand,
   routeCardCount: PropTypes.number,
   routeCards: RouteList,
+  longRouteCard: Route,
 });
+
+export const PlayerListType = PropTypes.arrayOf(PlayerType);
 
 export const testPlayers = [
   {
@@ -70,15 +73,15 @@ export const testPlayers = [
         toCity: 'Zurich',
         value: '8',
       },
-      {
-        id: '42',
-        from: '6',
-        to: '31',
-        fromCity: 'Brest',
-        toCity: 'Petrograd',
-        value: '20',
-      },
     ],
+    longRouteCard: {
+      id: '42',
+      from: '6',
+      to: '31',
+      fromCity: 'Brest',
+      toCity: 'Petrograd',
+      value: '20',
+    },
   },
   {
     id: 1,
@@ -100,6 +103,7 @@ export const testPlayers = [
     },
     routeCardCount: 2,
     routeCards: [{}],
+    longRouteCard: {},
   },
   {
     id: 2,
@@ -121,6 +125,7 @@ export const testPlayers = [
     },
     routeCardCount: 4,
     routeCards: [{}],
+    longRouteCard: {},
   },
   {
     id: 3,
@@ -142,6 +147,7 @@ export const testPlayers = [
     },
     routeCardCount: 5,
     routeCards: [{}],
+    longRouteCard: {},
   },
   {
     id: 4,
@@ -163,5 +169,6 @@ export const testPlayers = [
     },
     routeCardCount: 3,
     routeCards: [{}],
+    longRouteCard: {},
   },
 ];
