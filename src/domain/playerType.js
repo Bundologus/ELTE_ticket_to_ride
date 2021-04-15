@@ -56,6 +56,7 @@ export const testPlayers = [
         fromCity: 'Athina',
         toCity: 'Angora',
         value: '5',
+        finished: false,
       },
       {
         id: '26',
@@ -64,6 +65,7 @@ export const testPlayers = [
         fromCity: 'Kyiv',
         toCity: 'Sochi',
         value: '8',
+        finished: false,
       },
       {
         id: '27',
@@ -72,6 +74,7 @@ export const testPlayers = [
         fromCity: 'Madrid',
         toCity: 'Zurich',
         value: '8',
+        finished: false,
       },
     ],
     longRouteCard: {
@@ -81,6 +84,7 @@ export const testPlayers = [
       fromCity: 'Brest',
       toCity: 'Petrograd',
       value: '20',
+      finished: false,
     },
   },
   {
@@ -102,8 +106,8 @@ export const testPlayers = [
       locomotive: 0,
     },
     routeCardCount: 2,
-    routeCards: [{}],
-    longRouteCard: {},
+    routeCards: [],
+    longRouteCard: null,
   },
   {
     id: 2,
@@ -124,8 +128,8 @@ export const testPlayers = [
       locomotive: 0,
     },
     routeCardCount: 4,
-    routeCards: [{}],
-    longRouteCard: {},
+    routeCards: [],
+    longRouteCard: null,
   },
   {
     id: 3,
@@ -146,8 +150,8 @@ export const testPlayers = [
       locomotive: 0,
     },
     routeCardCount: 5,
-    routeCards: [{}],
-    longRouteCard: {},
+    routeCards: [],
+    longRouteCard: null,
   },
   {
     id: 4,
@@ -168,7 +172,7 @@ export const testPlayers = [
       locomotive: 0,
     },
     routeCardCount: 3,
-    routeCards: [{}],
-    longRouteCard: {},
+    routeCards: [],
+    longRouteCard: null,
   },
 ];

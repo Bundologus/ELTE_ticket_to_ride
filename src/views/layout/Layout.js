@@ -6,10 +6,9 @@ import { NavPanel } from './NavPanel';
 import { testPlayers } from '../../domain/playerType';
 
 export function Layout() {
-  // TODO could use object format. Look at lecture slides. Possibly okay until migration to Redux
-  /* const [appState, setAppState] = useState('MAIN_PAGE'); */
+  const [appState, setAppState] = useState('MAIN_PAGE');
   /* const [appState, setAppState] = useState('WAITING_FOR_PLAYERS'); */
-  const [appState, setAppState] = useState('IN_GAME');
+  /* const [appState, setAppState] = useState('IN_GAME'); */
   const [playerName, setPlayerName] = useState('');
   /* const [playerName, setPlayerName] = useState('Bundologus'); */
   const [playerCount, setPlayerCount] = useState('3');

@@ -30,6 +30,9 @@ export function GamePage({
   const [drawingRoutes, setDrawingRoutes] = useState(false);
   const [drawnRoutes, setDrawnRoutes] = useState([]);
   const [selectedRoutes, setSelectedRoutes] = useState([]);
+  const [actionsLeft, setActionsLeft] = useState(2);
+  const [connectionHover, setConnectionHover] = useState('');
+  const [builtConnections, setBuiltConnections] = useState([]);
 
   const colors = [
     'black',
@@ -71,13 +74,35 @@ export function GamePage({
     </svg>
   );
 
-  const rosterCards = roster.map((color) => {
+  const rosterCards = roster.map((color, ci) => {
+    const available =
+      (color !== 'locomotive' && actionsLeft > 0) ||
+      (color === 'locomotive' && actionsLeft === 2);
     return (
       <button
-        key={color + '-roster-' + Math.floor(Math.random() * 100000)}
-        className={`relative focus:outline-none bg-ttr-${color} inline-flex flex-row justify-center content-center overflow-hidden rounded-md shadow-xl w-12 h-12 ml-1.5 transform transition-transform hover:-translate-y-1 lg:hover:-translate-y-2 lg:w-16 lg:h-20 lg:ml-2 xl:h-28 xl:w-22 2xl:h-36 2xl:w-28 3xl:h-40 3xl:w-32 3xl:p-2.5`}
+        key={color + '-roster-' + ci}
+        className={classNames(
+          `relative focus:outline-none bg-ttr-${color} inline-flex flex-row justify-center content-center overflow-hidden rounded-md shadow-xl w-12 h-12 ml-1.5 lg:w-16 lg:h-20 lg:ml-2 xl:h-28 xl:w-22 2xl:h-36 2xl:w-28 3xl:h-40 3xl:w-32 3xl:p-2.5`,
+          {
+            'transform transition-transform hover:-translate-y-1 lg:hover:-translate-y-2': available,
+            'cursor-not-allowed': !available,
+          },
+        )}
+        disabled={!available}
         onClick={(e) => {
-          e.preventDefault();
+          if (actionsLeft) {
+            e.preventDefault();
+            if (color === 'locomotive') setActionsLeft(0);
+            else setActionsLeft(actionsLeft - 1);
+
+            let nlp = JSON.parse(JSON.stringify(localPlayer));
+            addCartToHand(color, nlp);
+            setLocalPlayer(nlp);
+            let newRoster = JSON.parse(JSON.stringify(roster));
+            newRoster.splice(ci, 1);
+            newRoster.push(colors[Math.floor((Math.random() * 10000) % 9)]);
+            setRoster(newRoster);
+          }
         }}
       >
         {color === 'locomotive' ? locomotiveSVG : cartSVG}
@@ -151,6 +176,7 @@ export function GamePage({
     }
     setDrawnCarts(cs);
     setDrawingCarts(true);
+    setActionsLeft(0);
   }
 
   function drawRoutes() {
@@ -165,8 +191,49 @@ export function GamePage({
       });
       if (rNew) rcs.push(r);
     }
+    console.log(`drawRoutes()->rcs: ${rcs}`);
     setDrawnRoutes(rcs);
     setDrawingRoutes(true);
+    setActionsLeft(0);
+  }
+
+  function addCartToHand(c, player) {
+    if (c === 'black') {
+      player.trainCardCount += 1;
+      player.trainCards.black += 1;
+    } else if (c === 'blue') {
+      player.trainCardCount += 1;
+      player.trainCards.blue += 1;
+    } else if (c === 'green') {
+      player.trainCardCount += 1;
+      player.trainCards.green += 1;
+    } else if (c === 'orange') {
+      player.trainCardCount += 1;
+      player.trainCards.orange += 1;
+    } else if (c === 'pink') {
+      player.trainCardCount += 1;
+      player.trainCards.pink += 1;
+    } else if (c === 'red') {
+      player.trainCardCount += 1;
+      player.trainCards.red += 1;
+    } else if (c === 'white') {
+      player.trainCardCount += 1;
+      player.trainCards.white += 1;
+    } else if (c === 'yellow') {
+      player.trainCardCount += 1;
+      player.trainCards.yellow += 1;
+    } else if (c === 'locomotive') {
+      player.trainCardCount += 1;
+      player.trainCards.locomotive += 1;
+    }
+  }
+
+  function isConnectionBuilt(id) {
+    let result = 0;
+    builtConnections.forEach((cb) => {
+      if (cb[0] === id) ++result;
+    });
+    return result;
   }
 
   return (
@@ -182,6 +249,19 @@ export function GamePage({
               activeCities={activeCities}
               hoverCities={hoverCities}
               playerColor={localPlayer.color}
+              actionsLeft={actionsLeft}
+              setActionsLeft={setActionsLeft}
+              connectionHover={connectionHover}
+              setConnectionHover={setConnectionHover}
+              builtConnections={builtConnections}
+              setBuiltConnections={(connection, playerColor) => {
+                if (!isConnectionBuilt(connection.id)) {
+                  let newCB = JSON.parse(JSON.stringify(builtConnections));
+                  newCB.push([connection.id, playerColor]);
+                  setBuiltConnections(newCB);
+                }
+              }}
+              isConnectionBuilt={isConnectionBuilt}
             ></GameBoard>
           </div>
           <div className="contents" id="stat-cards">
@@ -222,9 +302,16 @@ export function GamePage({
                   onClick={() => setDeckPulled(!deckPulled)}
                 />
                 <button
-                  className="filter drop-shadow-md rounded-md border-b-2 xl:border-b-4 border-yellow-200 bg-yellow-500 text-ttr-white focus:outline-none transform transition-transform hover:-translate-y-1 lg:hover:-translate-y-2 w-12 h-12 p-1 lg:w-16 lg:h-20 lg:p-2 xl:h-28 xl:w-22 xl:p-1 2xl:h-36 2xl:w-28 2xl:px-2 3xl:h-40 3xl:w-32 3xl:p-2.5"
+                  className={classNames(
+                    'filter drop-shadow-md rounded-md border-b-2 xl:border-b-4 border-yellow-200 bg-yellow-500 text-ttr-white focus:outline-none w-12 h-12 p-1 lg:w-16 lg:h-20 lg:p-2 xl:h-28 xl:w-22 xl:p-1 2xl:h-36 2xl:w-28 2xl:px-2 3xl:h-40 3xl:w-32 3xl:p-2.5',
+                    {
+                      'transform transition-transform hover:-translate-y-1 lg:hover:-translate-y-2':
+                        actionsLeft === 2,
+                      'cursor-not-allowed': actionsLeft < 2,
+                    },
+                  )}
                   onClick={() => {
-                    drawRoutes();
+                    if (actionsLeft === 2) drawRoutes();
                   }}
                 >
                   <svg
@@ -237,9 +324,16 @@ export function GamePage({
                   </svg>
                 </button>
                 <button
-                  className="filter drop-shadow-md rounded-md border-b-2 xl:border-b-4 border-blue-200 bg-blue-500 text-ttr-white focus:outline-none transform transition-transform hover:-translate-y-1 lg:hover:-translate-y-2 w-12 h-12 p-1 ml-6 mr-3 lg:w-16 lg:h-20 lg:ml-10 lg:mr-3 lg:p-2 xl:h-28 xl:w-22 xl:p-1 2xl:h-36 2xl:w-28 2xl:px-2 3xl:h-40 3xl:w-32 3xl:p-2.5"
+                  className={classNames(
+                    'filter drop-shadow-md rounded-md border-b-2 xl:border-b-4 border-blue-200 bg-blue-500 text-ttr-white focus:outline-none w-12 h-12 p-1 ml-6 mr-3 lg:w-16 lg:h-20 lg:ml-10 lg:mr-3 lg:p-2 xl:h-28 xl:w-22 xl:p-1 2xl:h-36 2xl:w-28 2xl:px-2 3xl:h-40 3xl:w-32 3xl:p-2.5',
+                    {
+                      'transform transition-transform hover:-translate-y-1 lg:hover:-translate-y-2':
+                        actionsLeft === 2,
+                      'cursor-not-allowed': actionsLeft < 2,
+                    },
+                  )}
                   onClick={() => {
-                    drawCarts();
+                    if (actionsLeft === 2) drawCarts();
                   }}
                 >
                   <svg
@@ -258,14 +352,15 @@ export function GamePage({
             </div>
           </div>
           <div className="contents" id="player-hand">
-            <div className="col-start-8 row-start-1 row-span-5 text-ttr-white bg-player-green rounded-l-md -mr-4 py-1 pl-0.5 pr-3 lg:pl-1.5 lg:pr-2.5 lg:rounded-l-lg lg:col-start-7 2xl:pr-3 2xl:pl-2 3xl:pr-3.5 3xl:pl-2.5">
-              <HandPanel
-                player={localPlayer}
-                activeCities={activeCities}
-                setActiveCities={setActiveCities}
-                setHoverCities={setHoverCities}
-              ></HandPanel>
-            </div>
+            <HandPanel
+              player={localPlayer}
+              activeCities={activeCities}
+              setActiveCities={setActiveCities}
+              setHoverCities={setHoverCities}
+              actionsLeft={actionsLeft}
+              setActionsLeft={setActionsLeft}
+              setConnectionHover={setConnectionHover}
+            ></HandPanel>
           </div>
         </div>
         <div className="contents" id="drawnCardModal">
@@ -288,41 +383,19 @@ export function GamePage({
                   let nlp = JSON.parse(JSON.stringify(localPlayer));
                   if (drawingCarts) {
                     drawnCarts.forEach((c) => {
-                      if (c === 'black') {
-                        nlp.trainCardCount += 1;
-                        nlp.trainCards.black += 1;
-                      } else if (c === 'blue') {
-                        nlp.trainCardCount += 1;
-                        nlp.trainCards.blue += 1;
-                      } else if (c === 'green') {
-                        nlp.trainCardCount += 1;
-                        nlp.trainCards.green += 1;
-                      } else if (c === 'orange') {
-                        nlp.trainCardCount += 1;
-                        nlp.trainCards.orange += 1;
-                      } else if (c === 'pink') {
-                        nlp.trainCardCount += 1;
-                        nlp.trainCards.pink += 1;
-                      } else if (c === 'red') {
-                        nlp.trainCardCount += 1;
-                        nlp.trainCards.red += 1;
-                      } else if (c === 'white') {
-                        nlp.trainCardCount += 1;
-                        nlp.trainCards.white += 1;
-                      } else if (c === 'yellow') {
-                        nlp.trainCardCount += 1;
-                        nlp.trainCards.yellow += 1;
-                      } else if (c === 'locomotive') {
-                        nlp.trainCardCount += 1;
-                        nlp.trainCards.locomotive += 1;
-                      }
+                      addCartToHand(c, nlp);
                     });
                     setLocalPlayer(nlp);
                     setDrawnCarts([]);
                     setDrawingCarts(false);
                   } else if (drawingRoutes) {
                     for (const sr of selectedRoutes) {
-                      nlp.routeCards.push(gameData.routes[sr]);
+                      let str = JSON.stringify(gameData.routes[sr - 1]);
+                      console.log(str);
+                      let newCard = JSON.parse(str);
+                      console.log('parsed okay');
+                      newCard.finished = false;
+                      nlp.routeCards.push(newCard);
                       nlp.routeCardCount += 1;
                     }
                     setLocalPlayer(nlp);
@@ -375,44 +448,49 @@ export function GamePage({
               };
               for (let i = 0; i < 4; ++i) {
                 let c = colors[Math.floor((Math.random() * 10000) % 9)];
-                if (c === 'black') {
-                  nlp.trainCardCount += 1;
-                  nlp.trainCards.black += 1;
-                } else if (c === 'blue') {
-                  nlp.trainCardCount += 1;
-                  nlp.trainCards.blue += 1;
-                } else if (c === 'green') {
-                  nlp.trainCardCount += 1;
-                  nlp.trainCards.green += 1;
-                } else if (c === 'orange') {
-                  nlp.trainCardCount += 1;
-                  nlp.trainCards.orange += 1;
-                } else if (c === 'pink') {
-                  nlp.trainCardCount += 1;
-                  nlp.trainCards.pink += 1;
-                } else if (c === 'red') {
-                  nlp.trainCardCount += 1;
-                  nlp.trainCards.red += 1;
-                } else if (c === 'white') {
-                  nlp.trainCardCount += 1;
-                  nlp.trainCards.white += 1;
-                } else if (c === 'yellow') {
-                  nlp.trainCardCount += 1;
-                  nlp.trainCards.yellow += 1;
-                } else if (c === 'locomotive') {
-                  nlp.trainCardCount += 1;
-                  nlp.trainCards.locomotive += 1;
-                }
+                addCartToHand(c, nlp);
               }
 
               nlp.longRouteCard =
                 gameData.longRoutes[Math.floor((Math.random() * 10000) % 6)];
+              nlp.longRouteCard.finished = false;
               nlp.routeCardCount = 1;
               setLocalPlayer(nlp);
               drawRoutes();
             }}
           >
             Első kör
+          </button>
+          <button
+            className="bg-gray-400 text-black w-full rounded-sm mb-0.5 hover:bg-gray-300 pt-0.5"
+            onClick={(e) => {
+              e.preventDefault();
+              let finishedRoute = {
+                id: '21',
+                from: '30',
+                to: '44',
+                fromCity: 'Paris',
+                toCity: 'Wien',
+                value: '8',
+                finished: true,
+                path: [47, 35, 29],
+              };
+
+              let nlp = JSON.parse(JSON.stringify(localPlayer));
+              nlp.routeCards.push(finishedRoute);
+              nlp.routeCardCount += 1;
+              setLocalPlayer(nlp);
+              let newCB = JSON.parse(JSON.stringify(builtConnections));
+              finishedRoute.path.forEach((connectionId) => {
+                if (!isConnectionBuilt(connectionId)) {
+                  newCB.push([connectionId, localPlayer.color]);
+                }
+              });
+              setBuiltConnections(newCB);
+              setConnectionHover(finishedRoute.path);
+            }}
+          >
+            Bejezett Cél
           </button>
         </div>
       </div>

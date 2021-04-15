@@ -7,6 +7,7 @@ export const Route = PropTypes.shape({
   fromCity: PropTypes.string.isRequired,
   toCity: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
+  finished: PropTypes.bool,
 });
 
 export const RouteList = PropTypes.arrayOf(Route);
