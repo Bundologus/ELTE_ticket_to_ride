@@ -4,11 +4,16 @@ import { WaitingRoomPage } from '../waitingRoomPage/WaitingRoomPage';
 import { GamePage } from '../gamePage/GamePage';
 import { NavPanel } from './NavPanel';
 import { testPlayers } from '../../domain/playerType';
+import {
+  IN_GAME,
+  MAIN_PAGE,
+  WAITING_FOR_PLAYERS,
+} from '../../constants/appConstants';
 
 export function Layout() {
-  const [appState, setAppState] = useState('MAIN_PAGE');
-  /* const [appState, setAppState] = useState('WAITING_FOR_PLAYERS'); */
-  /* const [appState, setAppState] = useState('IN_GAME'); */
+  const [appState, setAppState] = useState(MAIN_PAGE);
+  /* const [appState, setAppState] = useState(WAITING_FOR_PLAYERS); */
+  /* const [appState, setAppState] = useState(IN_GAME); */
   const [playerName, setPlayerName] = useState('');
   /* const [playerName, setPlayerName] = useState('Bundologus'); */
   const [playerCount, setPlayerCount] = useState('3');
@@ -27,7 +32,7 @@ export function Layout() {
       setAppState={setAppState}
     ></LandingPage>
   );
-  if (appState === 'WAITING_FOR_PLAYERS') {
+  if (appState === WAITING_FOR_PLAYERS) {
     content = (
       <WaitingRoomPage
         gameID={gameID}
@@ -36,7 +41,7 @@ export function Layout() {
         playerName={playerName}
       ></WaitingRoomPage>
     );
-  } else if (appState === 'IN_GAME') {
+  } else if (appState === IN_GAME) {
     content = (
       <GamePage
         opponentList={playerList}
@@ -49,7 +54,7 @@ export function Layout() {
 
   return (
     <>
-      <NavPanel appState={appState} setAppState={setAppState}></NavPanel>
+      <NavPanel setAppState={setAppState}></NavPanel>
       {content}
     </>
   );
