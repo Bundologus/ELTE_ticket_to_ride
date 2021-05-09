@@ -544,7 +544,7 @@ export const ticketToRideData = {
         { x: 34, y: 34.146341463414636, rotation: -45 },
         { x: 36.5, y: 37.89868667917448, rotation: -45 },
       ],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
@@ -644,7 +644,7 @@ export const ticketToRideData = {
         { x: 15.375, y: 76.73545966228893, rotation: 45 },
         { x: 13.125, y: 80.86303939962477, rotation: 38 },
       ],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
@@ -797,7 +797,7 @@ export const ticketToRideData = {
         { x: 33, y: 46.34146341463415, rotation: 60 },
         { x: 35.875, y: 43.52720450281426, rotation: 55 },
       ],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
@@ -1001,7 +1001,7 @@ export const ticketToRideData = {
         { x: 51.125, y: 11.632270168855536, rotation: 50 },
         { x: 54, y: 8.442776735459661, rotation: 60 },
       ],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
@@ -1041,7 +1041,7 @@ export const ticketToRideData = {
         { x: 49.125, y: 73.73358348968105, rotation: 85 },
         { x: 52.37500000000001, y: 75.79737335834896, rotation: -40 },
       ],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
@@ -1249,7 +1249,7 @@ export const ticketToRideData = {
       to: '10',
       toCity: 'Budapest',
       elements: [{ x: 56.25, y: 54.03377110694184, rotation: -58 }],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
@@ -1625,7 +1625,7 @@ export const ticketToRideData = {
         { x: 82.25, y: 59.849906191369605, rotation: -65 },
         { x: 85.125, y: 63.22701688555347, rotation: -40 },
       ],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
@@ -1764,7 +1764,7 @@ export const ticketToRideData = {
         { x: 91.625, y: 17.636022514071296, rotation: -28 },
         { x: 92.625, y: 23.076923076923077, rotation: -5 },
       ],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
