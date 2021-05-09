@@ -1,15 +1,18 @@
-import { v4 as uuidv4 } from 'uuid';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectGame } from '../../state/players/selector';
+import { MAIN_PAGE, IN_GAME } from '../../constants/appConstants';
+import { startGame } from '../../state/game/actions';
 
-export function WaitingRoomPage({
-  gameID,
-  setGameID,
-  setAppState,
-  playerName,
-}) {
-  if (!gameID) {
-    setGameID(uuidv4());
-  }
+export function WaitingRoomPage({ setAppState, playerName }) {
+  const {
+    maxPlayers,
+    activePlayerId,
+    gameId,
+    gameState,
+    lastPlayer,
+  } = useSelector(selectGame);
+  const dispatch = useDispatch();
+  const handleGameStart = () => dispatch(startGame);
 
   return (
     <div className="container h-screen font-regular z-10 pt-10 md:px-16 lg:py-14">
@@ -22,7 +25,7 @@ export function WaitingRoomPage({
             Your game's id is:
           </p>
           <p className="block font-smallCaps font-semibold text-center text-3xl mb-3 lg:text-5xl lg:mb-6">
-            {gameID}
+            {gameId}
           </p>
           <p className="block text-center lg:text-xl">
             Waiting for the rest of the players...
@@ -31,13 +34,16 @@ export function WaitingRoomPage({
         <div className="flex align-middle justify-center mx-auto">
           <button
             className="rounded-md bg-gray-600 border-gray-900 border-2 hover:bg-gray-500 text-white justify-self-right mt-5 mr-3 w-24 lg:px-5 lg:w-28 text-lg lg:text-2xl"
-            onClick={(e) => setAppState('MAIN_PAGE')}
+            onClick={(e) => setAppState(MAIN_PAGE)}
           >
             Back
           </button>
           <button
             className="rounded-md bg-green-600 border-green-900 border-2 hover:bg-green-500 text-white justify-self-left mt-5 ml-3 w-24 lg:px-5 lg:w-28 text-lg lg:text-2xl"
-            onClick={(e) => setAppState('IN_GAME')}
+            onClick={(e) => {
+              setAppState(IN_GAME);
+              handleGameStart();
+            }}
           >
             Start!
           </button>

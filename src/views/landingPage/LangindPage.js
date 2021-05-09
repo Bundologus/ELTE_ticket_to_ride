@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import classNames from 'classnames';
+import { WAITING_FOR_PLAYERS } from '../../constants/appConstants';
 
 export function LandingPage({
   setPlayerName,
@@ -19,7 +20,7 @@ export function LandingPage({
 
   const hostSubmitHandler = () => {
     if (!hostName) setHostNameOk(false);
-    else setAppState('WAITING_FOR_PLAYERS');
+    else setAppState(WAITING_FOR_PLAYERS);
   };
 
   const guestSubmitHandler = () => {
@@ -30,7 +31,7 @@ export function LandingPage({
       `guestName: ${guestName} - ${guestNameOk} \ngameID: ${gameID} - ${gameIdOk}`,
     );
 
-    if (gameID && guestName) setAppState('WAITING_FOR_PLAYERS');
+    if (gameID && guestName) setAppState(WAITING_FOR_PLAYERS);
   };
 
   return (
