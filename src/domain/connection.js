@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { PlayerType } from './playerType';
 
 export const TrackElement = PropTypes.shape({
   x: PropTypes.number.isRequired,
@@ -17,6 +18,8 @@ export const Connection = PropTypes.shape({
   elements: TrackElementList.isRequired,
   color: PropTypes.string.isRequired,
   locomotive: PropTypes.number.isRequired,
+  built: PropTypes.bool,
+  owner: PlayerType,
 });
 
 export const ConnectionList = PropTypes.arrayOf(Connection);
