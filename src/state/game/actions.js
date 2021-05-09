@@ -13,7 +13,7 @@ export function createGame(hostPlayer, maxPlayers) {
   };
 }
 
-export function startGame() {
+export function startGame(gameId) {
   return {
     type: START_GAME,
     payload: {},

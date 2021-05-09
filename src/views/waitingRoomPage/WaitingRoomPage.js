@@ -1,28 +1,39 @@
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MAIN_PAGE, IN_GAME } from '../../constants/appConstants';
+import { selectStarterHand } from '../../state/board/selector';
 import { startGame } from '../../state/game/actions';
 
-export function WaitingRoomPage({ setAppState, playerName }) {
-  const [localPlayerId, setLocalPlayerId] = useState();
-  const gameState = useSelector((state) => state.game);
+export function WaitingRoomPage({
+  setAppState,
+  localPlayerId,
+  setLocalPlayerId,
+}) {
+  const game = useSelector((state) => state.game);
+  const players = useSelector((state) => state.players);
 
   const dispatch = useDispatch();
 
-  const gameStartHandler = () => dispatch(startGame);
+  const gameStartHandler = () => {
+    players.forEach((player) => {
+      const starterHand = useSelector(selectStarterHand);
+      // TODO ohno... this ^^^^^^^^^ is a problem
+      //dispatch(dealStarterHand(player.id, ))
+    });
+    dispatch(startGame(game.gameId));
+  };
 
   return (
     <div className="container h-screen font-regular z-10 pt-10 md:px-16 lg:py-14">
       <div className="h-full flex flex-col justify-center content-evenly lg:content-center p-4">
         <div className="block mx-auto rounded-md border-2 border-yellow-400 border-opacity-100 bg-yellow-200 bg-opacity-80 p-2 md:p-6">
           <h1 className="block text-lg text-center mb-1 mt-2 lg:mb-8 lg:mt-0 lg:text-2xl">
-            Wellcome to the Waiting Room, {playerName}!
+            Wellcome to the Waiting Room, {players[0].name}!
           </h1>
           <p className="block text-center lg:text-lg lg:mb-1">
             Your game's id is:
           </p>
           <p className="block font-smallCaps font-semibold text-center text-3xl mb-3 lg:text-5xl lg:mb-6">
-            {gameState.gameId}
+            {game.gameId}
           </p>
           <p className="block text-center lg:text-xl">
             Waiting for the rest of the players...

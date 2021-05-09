@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { WAITING_FOR_PLAYERS } from '../../constants/appConstants';
 import { createGame } from '../../state/game/actions';
 
-export function LandingPage({ setAppState }) {
+export function LandingPage({ setAppState, setLocalPlayerId }) {
   const [hostNameOk, setHostNameOk] = useState(true);
   const [playerNameOk, setPlayerNameOk] = useState(true);
   const [gameIdOk, setGameIdOk] = useState(true);
@@ -24,6 +24,7 @@ export function LandingPage({ setAppState }) {
       dispatch(
         createGame(hostNameRef.current.value, playerCountRef.current.value),
       );
+      setLocalPlayerId(0);
     }
   };
 

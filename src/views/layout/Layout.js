@@ -11,6 +11,7 @@ import {
 
 export function Layout() {
   const [appState, setAppState] = useState(MAIN_PAGE);
+  const [localPlayerId, setLocalPlayerId] = useState(0);
   /* const [appState, setAppState] = useState(WAITING_FOR_PLAYERS); */
   /* const [appState, setAppState] = useState(IN_GAME); */
   /* const [playerName, setPlayerName] = useState(''); */
@@ -19,11 +20,22 @@ export function Layout() {
   /* const [playerList, setPlayerList] = useState(testPlayers.slice(1, 5)); */
   /* const [localPlayer, setLocalPlayer] = useState(testPlayers[0]); */
 
-  let content = <LandingPage setAppState={setAppState}></LandingPage>;
+  let content = (
+    <LandingPage
+      setAppState={setAppState}
+      setLocalPlayerId={setLocalPlayerId}
+    ></LandingPage>
+  );
   if (appState === WAITING_FOR_PLAYERS) {
-    content = <WaitingRoomPage setAppState={setAppState}></WaitingRoomPage>;
+    content = (
+      <WaitingRoomPage
+        setAppState={setAppState}
+        localPlayerId={localPlayerId}
+        setLocalPlayerId={setLocalPlayerId}
+      ></WaitingRoomPage>
+    );
   } else if (appState === IN_GAME) {
-    content = <GamePage></GamePage>;
+    content = <GamePage localPlayerId={localPlayerId}></GamePage>;
   }
 
   return (
