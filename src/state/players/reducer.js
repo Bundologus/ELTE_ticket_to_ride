@@ -17,7 +17,7 @@ import {
 
 const initialState = testPlayers.slice(0, 2);
 
-export function gameReducer(state = initialState, action) {
+export function playersReducer(state = initialState, action) {
   const { type, payload } = action;
   let newState;
   switch (type) {
