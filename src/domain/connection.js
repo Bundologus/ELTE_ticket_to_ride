@@ -19,7 +19,6 @@ export const Connection = PropTypes.shape({
   color: PropTypes.string.isRequired,
   locomotive: PropTypes.number.isRequired,
   built: PropTypes.bool,
-  owner: PlayerType,
 });
 
 export const ConnectionList = PropTypes.arrayOf(Connection);

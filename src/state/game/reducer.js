@@ -16,8 +16,8 @@ const initialState = {
   maxPlayers: 5,
   activePlayerId: 0,
   gameId: '',
-  gameState: null,
-  lastPlayer: null,
+  gameState: GAME_WAITING,
+  lastPlayerId: null,
 };
 
 export function gameReducer(state = initialState, action) {
@@ -57,6 +57,7 @@ function initNewGame(state, payload) {
     activePlayerId: 0,
     gameId: uuidv4(),
     gameState: GAME_WAITING,
+    lastPlayerId: null,
   };
 }
 
@@ -66,7 +67,7 @@ function setFirstRound(state) {
     activePlayerId: 0,
     gameId: state.gameId,
     gameState: GAME_RUNNING,
-    lastPlayer: state.activePlayerId,
+    lastPlayerId: state.activePlayerId,
   };
 }
 
@@ -76,21 +77,21 @@ function setLastRound(state) {
     activePlayerId: getNextPlayer(state),
     gameId: state.gameId,
     gameState: GAME_LAST_ROUND,
-    lastPlayer: state.activePlayerId,
+    lastPlayerId: state.activePlayerId,
   };
 }
 
 function setNextPlayer(state) {
   if (
     state.gameState === GAME_LAST_ROUND &&
-    state.acitvePlayer === state.lastPlayer
+    state.acitvePlayer === state.lastPlayerId
   ) {
     return {
       maxPlayers: state.maxPlayers,
       activePlayerId: state.activePlayerId,
       gameId: state.gameId,
       gameState: GAME_ENDED,
-      lastPlayer: state.lastPlayer,
+      lastPlayerId: state.lastPlayerId,
     };
   } else {
     return {
@@ -98,7 +99,7 @@ function setNextPlayer(state) {
       activePlayerId: getNextPlayer(state),
       gameId: state.gameId,
       gameState: state.gameState,
-      lastPlayer: state.lastPlayer,
+      lastPlayerId: state.lastPlayerId,
     };
   }
 }

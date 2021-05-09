@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { ConnectionList } from './connection';
 import { Route, RouteList } from './route';
 
 export const TrainCardsHand = PropTypes.shape({
@@ -25,6 +26,7 @@ export const PlayerType = PropTypes.shape({
   routeCards: RouteList,
   longRouteCard: Route,
   playerState: PropTypes.string,
+  builtConnections: ConnectionList,
 });
 
 export const PlayerListType = PropTypes.arrayOf(PlayerType);
@@ -87,6 +89,7 @@ export const testPlayers = [
       value: '20',
       finished: false,
     },
+    builtConnections: [],
   },
   {
     id: 1,
@@ -109,6 +112,7 @@ export const testPlayers = [
     routeCardCount: 2,
     routeCards: [],
     longRouteCard: null,
+    builtConnections: [],
   },
   {
     id: 2,
@@ -131,6 +135,7 @@ export const testPlayers = [
     routeCardCount: 4,
     routeCards: [],
     longRouteCard: null,
+    builtConnections: [],
   },
   {
     id: 3,
@@ -153,6 +158,7 @@ export const testPlayers = [
     routeCardCount: 5,
     routeCards: [],
     longRouteCard: null,
+    builtConnections: [],
   },
   {
     id: 4,
@@ -175,5 +181,6 @@ export const testPlayers = [
     routeCardCount: 3,
     routeCards: [],
     longRouteCard: null,
+    builtConnections: [],
   },
 ];

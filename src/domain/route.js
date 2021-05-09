@@ -10,7 +10,6 @@ export const Route = PropTypes.shape({
   toCity: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   finished: PropTypes.bool,
-  owner: PlayerType,
   connections: ConnectionList,
 });
 

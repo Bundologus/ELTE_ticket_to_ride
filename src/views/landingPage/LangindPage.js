@@ -1,37 +1,37 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { WAITING_FOR_PLAYERS } from '../../constants/appConstants';
+import { createGame } from '../../state/game/actions';
 
-export function LandingPage({
-  setPlayerName,
-  playerCount,
-  setPlayerCount,
-  gameID,
-  setGameID,
-  setAppState,
-}) {
-  const [hostName, setHostName] = useState('');
+export function LandingPage({ setAppState }) {
   const [hostNameOk, setHostNameOk] = useState(true);
-  const [guestName, setGuestName] = useState('');
-  const [guestNameOk, setGuestNameOk] = useState(true);
+  const [playerNameOk, setPlayerNameOk] = useState(true);
   const [gameIdOk, setGameIdOk] = useState(true);
 
-  setGameID('');
+  const hostNameRef = useRef(null);
+  const playerNameRef = useRef(null);
+  const playerCountRef = useRef(null);
+  const gameIdRef = useRef(null);
 
-  const hostSubmitHandler = () => {
-    if (!hostName) setHostNameOk(false);
-    else setAppState(WAITING_FOR_PLAYERS);
+  const dispatch = useDispatch();
+
+  const createGameHandler = (e) => {
+    e.preventDefault();
+
+    if (hostNameRef.current.value !== '') {
+      setAppState(WAITING_FOR_PLAYERS);
+      dispatch(
+        createGame(hostNameRef.current.value, playerCountRef.current.value),
+      );
+    }
   };
 
-  const guestSubmitHandler = () => {
-    if (!guestName) setGuestNameOk(false);
-    if (!gameID) setGameIdOk(false);
-
-    console.log(
-      `guestName: ${guestName} - ${guestNameOk} \ngameID: ${gameID} - ${gameIdOk}`,
-    );
-
-    if (gameID && guestName) setAppState(WAITING_FOR_PLAYERS);
+  const joinGameHandler = (e) => {
+    e.preventDefault();
+    // setAppState(WAITING_FOR_PLAYERS);
+    // TODO join game action
+    console.log('joining should happen');
   };
 
   return (
@@ -55,7 +55,12 @@ export function LandingPage({
         id="newGameForm"
       >
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(e) => createGameHandler(e)}
+          onChange={() => {
+            setHostNameOk(
+              hostNameRef !== null && hostNameRef.current.value !== '',
+            );
+          }}
           className="relative rounded-xl border-2 border-green-500 bg-green-200 bg-opacity-80 text-green-900 w-full h-full p-3 md:py-2 lg:h-auto lg:p-6 lg:py-4"
         >
           <h2 className="font-smallCaps text-xl mb-2.5 lg:text-2xl lg:mb-3">
@@ -71,22 +76,16 @@ export function LandingPage({
                 'w-full rounded-md border-1 border-opacity-50 border-gray-500 bg-white bg-opacity-80 placeholder-green-400  mb-2 text-sm lg:placeholder-transparent lg:text-base lg:mb-3': true,
                 'border-red-600 border-2 border-opacity-100 placeholder-red-400 focus:border-red-600 focus:ring-red-600': !hostNameOk,
               })}
-              value={hostName}
-              onChange={(e) => {
-                setHostName(e.target.value);
-                setPlayerName(e.target.value);
-                setHostNameOk(true);
-              }}
               placeholder="Your name"
               required
+              ref={hostNameRef}
             ></input>
           </label>
           <label className="ml-0.5 text-sm lg:text-base lg:block lg:mb-12">
             Player count:
             <select
               className="rounded-md border-1 border-opacity-50 border-gray-500 bg-white bg-opacity-80 font-number ml-4 text-sm lg:text-base"
-              value={playerCount}
-              onChange={(e) => setPlayerCount(e.target.value)}
+              ref={playerCountRef}
             >
               <option value="2">2</option>
               <option value="3">3</option>
@@ -97,7 +96,6 @@ export function LandingPage({
           <button
             type="submit"
             className="rounded-md border-2 border-gray-600 bg-green-600 hover:bg-green-500 text-white font-bold p-1 px-5 text-lg h-9 absolute right-3 top-2 md:top-1 lg:top-auto lg:bottom-4 lg:right-5 lg:w-32 xl:mt-8"
-            onClick={() => hostSubmitHandler()}
           >
             Start!
           </button>
@@ -108,7 +106,13 @@ export function LandingPage({
         id="joinGameForm"
       >
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(e) => joinGameHandler(e)}
+          onChange={() => {
+            setPlayerNameOk(
+              playerNameRef !== null && playerNameRef.current.value !== '',
+            );
+            setGameIdOk(gameIdRef !== null && gameIdRef.current.value !== '');
+          }}
           className="relative rounded-xl border-2 border-blue-500 bg-blue-200 bg-opacity-80 text-blue-900 w-full h-full p-3 md:py-2 lg:h-auto lg:p-6 lg:py-4"
         >
           <h2 className="ont-smallCaps text-xl mb-2.5 lg:text-2xl lg:mb-3">
@@ -123,17 +127,12 @@ export function LandingPage({
               className={classNames(
                 'w-full rounded-md border-1 border-opacity-50 border-gray-500 bg-white bg-opacity-80 placeholder-blue-400 mb-2 text-sm lg:placeholder-transparent lg:text-base lg:mb-3',
                 {
-                  'border-red-600 border-2 border-opacity-100 placeholder-red-400 focus:border-red-600 focus:ring-red-600': !guestNameOk,
+                  'border-red-600 border-2 border-opacity-100 placeholder-red-400 focus:border-red-600 focus:ring-red-600': !playerNameOk,
                 },
               )}
-              value={guestName}
-              onChange={(e) => {
-                setGuestName(e.target.value);
-                setPlayerName(e.target.value);
-                setGuestNameOk(true);
-              }}
               placeholder="Your name"
               required
+              ref={playerNameRef}
             ></input>
           </label>
           <label className="lg:flex lg:justify-between lg:justify-items-stretch lg:items-center lg:mb-12">
@@ -148,19 +147,14 @@ export function LandingPage({
                   'border-red-600 border-2 border-opacity-100 focus:border-red-600 placeholder-red-400 focus:ring-red-600': !gameIdOk,
                 },
               )}
-              value={gameID}
-              onChange={(e) => {
-                setGameID(e.target.value);
-                setGameIdOk(true);
-              }}
               placeholder="Game ID"
               required
+              ref={gameIdRef}
             ></input>
           </label>
           <button
             type="submit"
             className="rounded-md border-2 border-gray-600 bg-blue-600 hover:bg-blue-500 text-white font-bold p-1 px-5 text-lg h-9 absolute right-3 top-2 md:top-1 lg:top-auto lg:bottom-4 lg:right-5 lg:w-32 xl:mt-8"
-            onClick={() => guestSubmitHandler()}
           >
             Join!
           </button>

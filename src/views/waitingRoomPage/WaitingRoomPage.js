@@ -1,18 +1,15 @@
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectGame } from '../../state/players/selector';
 import { MAIN_PAGE, IN_GAME } from '../../constants/appConstants';
 import { startGame } from '../../state/game/actions';
 
 export function WaitingRoomPage({ setAppState, playerName }) {
-  const {
-    maxPlayers,
-    activePlayerId,
-    gameId,
-    gameState,
-    lastPlayer,
-  } = useSelector(selectGame);
+  const [localPlayerId, setLocalPlayerId] = useState();
+  const gameState = useSelector((state) => state.game);
+
   const dispatch = useDispatch();
-  const handleGameStart = () => dispatch(startGame);
+
+  const gameStartHandler = () => dispatch(startGame);
 
   return (
     <div className="container h-screen font-regular z-10 pt-10 md:px-16 lg:py-14">
@@ -25,7 +22,7 @@ export function WaitingRoomPage({ setAppState, playerName }) {
             Your game's id is:
           </p>
           <p className="block font-smallCaps font-semibold text-center text-3xl mb-3 lg:text-5xl lg:mb-6">
-            {gameId}
+            {gameState.gameId}
           </p>
           <p className="block text-center lg:text-xl">
             Waiting for the rest of the players...
@@ -42,7 +39,7 @@ export function WaitingRoomPage({ setAppState, playerName }) {
             className="rounded-md bg-green-600 border-green-900 border-2 hover:bg-green-500 text-white justify-self-left mt-5 ml-3 w-24 lg:px-5 lg:w-28 text-lg lg:text-2xl"
             onClick={(e) => {
               setAppState(IN_GAME);
-              handleGameStart();
+              gameStartHandler();
             }}
           >
             Start!
