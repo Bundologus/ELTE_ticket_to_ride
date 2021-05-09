@@ -24,6 +24,7 @@ export const PlayerType = PropTypes.shape({
   routeCardCount: PropTypes.number,
   routeCards: RouteList,
   longRouteCard: Route,
+  playerState: PropTypes.string,
 });
 
 export const PlayerListType = PropTypes.arrayOf(PlayerType);
