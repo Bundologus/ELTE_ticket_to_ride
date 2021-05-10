@@ -1,9 +1,0 @@
-export const CART_COLOR_BLACK = 'black';
-export const CART_COLOR_BLUE = 'blue';
-export const CART_COLOR_GREEN = 'green';
-export const CART_COLOR_ORANGE = 'orange';
-export const CART_COLOR_PINK = 'pink';
-export const CART_COLOR_RED = 'red';
-export const CART_COLOR_WHITE = 'white';
-export const CART_COLOR_YELLOW = 'yellow';
-export const CART_COLOR_LOCOMOTIVE = 'locomotive';

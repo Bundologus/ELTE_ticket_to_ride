@@ -7,21 +7,19 @@ import { HandPanel } from './HandPanel';
 import { GameBoard } from './GameBoard';
 import { PlayerListType, PlayerType } from '../../domain/playerType';
 import { ScoreBoard } from './ScoreBoard';
+import { COLOR_LIST } from '../../constants/boardConstants';
+import { useDispatch, useSelector } from 'react-redux';
+import { drawFromRoster } from '../../state/players/actions';
+import { selectActivePlayer } from '../../state/players/selector';
+import { PLAYER_BEGIN, PLAYER_DRAW_TRAIN } from '../../constants/gameConstants';
 
-export function GamePage({
-  opponentList,
-  localPlayer,
-  setLocalPlayer,
-  playerCount,
-}) {
+export function GamePage({ opponentList, localPlayerId, setLocalPlayerId }) {
   const [gameState, setGameState] = useState('running');
-  const [roster, setRoster] = useState([
-    'green',
-    'white',
-    'locomotive',
-    'pink',
-    'green',
-  ]);
+
+  const game = useSelector((state) => state.game);
+  const players = useSelector((state) => state.players);
+  const activePlayer = useSelector(selectActivePlayer);
+
   const [activeCities, setActiveCities] = useState([]);
   const [hoverCities, setHoverCities] = useState([]);
   const [deckPulled, setDeckPulled] = useState(false);
@@ -34,137 +32,13 @@ export function GamePage({
   const [connectionHover, setConnectionHover] = useState('');
   const [builtConnections, setBuiltConnections] = useState([]);
 
-  const colors = [
-    'black',
-    'blue',
-    'green',
-    'orange',
-    'pink',
-    'red',
-    'white',
-    'yellow',
-    'locomotive',
-  ];
+  const dispatch = useDispatch();
 
-  const cartSVG = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      /* className="h-16 w-24 absolute top-1/3 left-5 transform -rotate-45 -translate-y-1" */
-      className="transform -rotate-45 h-12 w-12 lg:h-20 lg:w-16 xl:h-28 xl:w-22 2xl:h-36 2xl:w-28"
-      viewBox="0 0 47 18"
-      fill="currentColor"
-    >
-      <path d="M10 14.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0zM15.9 14.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0z" />
-      <path d="M34 14.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0zM39.9 14.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0z" />
-      <path d="M5 2a1 1.3 0 00-1 1V11.5h-1.5v-1h-.5v3h.5v-1h1.5L4 13a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0h1a2.5 2.5 0 014.9 0H30a2.5 2.5 0 014.9 0h1.1a2.5 2.5 0 014.9 0H42a1 1 0 001-1v-.5h1.5v1h.5v-3h-.5v1h-1.5L43 3a1 1.3 0 00-1-1H5z" />
-    </svg>
-  );
+  const colors = COLOR_LIST;
 
-  const locomotiveSVG = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      /* className="h-16 w-24 absolute top-1/4 left-3.5 transform -rotate-45 -translate-y-0.5" */
-      className="block transform -rotate-45 h-12 w-12 lg:h-20 lg:w-16 xl:h-28 xl:w-22 2xl:h-36 2xl:w-28 -translate-y-0.5 lg:-translate-y-1"
-      viewBox="0 0 36 21"
-      fill="currentColor"
-    >
-      <path d="M10 17.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0zM15.9 17.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0z" />
-      <path d="M28 17.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0z" />
-      <path d="M4 4a1 1.3 0 00-1 1h1V14.5h-1.5v-1h-.5v3h.5v-1h1.5L4 16a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0h1a2.5 2.5 0 014.9 0H24a2.5 2.5 0 014.9 0h2.1a1 1 0 001-1v-.5h1.5v1h.5v-3h-.5v1h-1.5L32 9a1 1.3 0 00-1-1h-4v-4l1-1v-1h-4v1l1 1v4h-3v-1a1 1 0 00-2 0v1H14V5A1 1 0 0013 4H4z" />
-    </svg>
-  );
-
-  const rosterCards = roster.map((color, ci) => {
-    const available =
-      (color !== 'locomotive' && actionsLeft > 0) ||
-      (color === 'locomotive' && actionsLeft === 2);
-    return (
-      <button
-        key={color + '-roster-' + ci}
-        className={classNames(
-          `relative focus:outline-none bg-ttr-${color} inline-flex flex-row justify-center content-center overflow-hidden rounded-md shadow-xl w-12 h-12 ml-1.5 lg:w-16 lg:h-20 lg:ml-2 xl:h-28 xl:w-22 2xl:h-36 2xl:w-28 3xl:h-40 3xl:w-32 3xl:p-2.5`,
-          {
-            'transform transition-transform hover:-translate-y-1 lg:hover:-translate-y-2': available,
-            'cursor-not-allowed': !available,
-          },
-        )}
-        disabled={!available}
-        onClick={(e) => {
-          if (actionsLeft) {
-            e.preventDefault();
-            if (color === 'locomotive') setActionsLeft(0);
-            else setActionsLeft(actionsLeft - 1);
-
-            let nlp = JSON.parse(JSON.stringify(localPlayer));
-            addCartToHand(color, nlp);
-            setLocalPlayer(nlp);
-            let newRoster = JSON.parse(JSON.stringify(roster));
-            newRoster.splice(ci, 1);
-            newRoster.push(colors[Math.floor((Math.random() * 10000) % 9)]);
-            setRoster(newRoster);
-          }
-        }}
-      >
-        {color === 'locomotive' ? locomotiveSVG : cartSVG}
-      </button>
-    );
-  });
-
-  const drawingCartCards = drawnCarts.map((color) => {
-    return (
-      <div
-        key={color + '-roster-' + Math.floor(Math.random() * 100000)}
-        className={`relative bg-ttr-${color} inline-flex flex-row justify-center content-center overflow-hidden rounded-md shadow-xl w-12 h-12 mx-2.5 lg:w-16 lg:h-20 lg:mx-4 xl:h-28 xl:w-22 2xl:h-36 2xl:w-28 3xl:h-40 3xl:w-32 3xl:p-2.5`}
-      >
-        {color === 'locomotive' ? locomotiveSVG : cartSVG}
-      </div>
-    );
-  });
-
-  const drawingRouteCards = drawnRoutes.map((routeId) => {
-    let routeData = gameData.routes[routeId];
-    routeData.isSelected = false;
-    selectedRoutes.forEach((sr) => {
-      if (sr === routeData.id) {
-        routeData.isSelected = true;
-      }
-    });
-
-    return (
-      <button
-        key={'drawnRoute-' + routeData.id}
-        className={classNames(
-          'relative focus:ring-0 focus:outline-none text-ttr-white w-24 2xl:w-40 text-left inline-grid grid-rows-2 mb-1 mx-2 rounded-md p-1.5 py-1 lg:p-1.5 transform transition-tranform hover:-translate-y-0.5 xl:-hover:-translate-y-2',
-          {
-            'bg-gray-800': routeData.id > 40,
-            'bg-gray-500': routeData.id <= 40,
-            'border-2 border-gray-400': routeData.isSelected,
-          },
-        )}
-        onClick={() => {
-          let newSet = new Set(selectedRoutes);
-
-          if (newSet.has(routeData.id)) {
-            newSet.delete(routeData.id);
-          } else {
-            newSet.add(routeData.id);
-          }
-
-          setSelectedRoutes(newSet);
-        }}
-      >
-        <h3 className="text-2xs font-semibold lg:text-xs xl:text-base 2xl:text-lg 3xl:text-xl">
-          {routeData.fromCity}
-        </h3>
-        <h3 className="text-2xs font-semibold lg:text-xs xl:text-base 2xl:text-lg 3xl:text-xl">
-          {routeData.toCity}
-        </h3>
-        <p className="absolute top-0 right-0 bg-gray-200 rounded-b-full rounded-tl-full rounded-tr-lg font-number font-bold text-gray-800 text-center text-xs h-4 w-6 lg:w-7 lg:h-7 lg:text-lg xl:w-8 xl:h-8 xl:text-xl xl:leading-9 2xl:w-10 2xl:h-10 2xl:leading-custom">
-          {routeData.value}
-        </p>
-      </button>
-    );
-  });
+  function rosterDrawHandler(color, position) {
+    dispatch(drawFromRoster(activePlayer.id, color, position));
+  }
 
   function drawCarts() {
     /* TODO weighted randomization, remaining deck tracking */
@@ -236,6 +110,120 @@ export function GamePage({
     return result;
   }
 
+  /***************************************************/
+  /**                                               **/
+  /**               VIEW ELEMENTS >>>>>>            **/
+  /**                                               **/
+  /***************************************************/
+
+  const cartSVG = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      /* className="h-16 w-24 absolute top-1/3 left-5 transform -rotate-45 -translate-y-1" */
+      className="transform -rotate-45 h-12 w-12 lg:h-20 lg:w-16 xl:h-28 xl:w-22 2xl:h-36 2xl:w-28"
+      viewBox="0 0 47 18"
+      fill="currentColor"
+    >
+      <path d="M10 14.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0zM15.9 14.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0z" />
+      <path d="M34 14.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0zM39.9 14.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0z" />
+      <path d="M5 2a1 1.3 0 00-1 1V11.5h-1.5v-1h-.5v3h.5v-1h1.5L4 13a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0h1a2.5 2.5 0 014.9 0H30a2.5 2.5 0 014.9 0h1.1a2.5 2.5 0 014.9 0H42a1 1 0 001-1v-.5h1.5v1h.5v-3h-.5v1h-1.5L43 3a1 1.3 0 00-1-1H5z" />
+    </svg>
+  );
+
+  const locomotiveSVG = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      /* className="h-16 w-24 absolute top-1/4 left-3.5 transform -rotate-45 -translate-y-0.5" */
+      className="block transform -rotate-45 h-12 w-12 lg:h-20 lg:w-16 xl:h-28 xl:w-22 2xl:h-36 2xl:w-28 -translate-y-0.5 lg:-translate-y-1"
+      viewBox="0 0 36 21"
+      fill="currentColor"
+    >
+      <path d="M10 17.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0zM15.9 17.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0z" />
+      <path d="M28 17.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0z" />
+      <path d="M4 4a1 1.3 0 00-1 1h1V14.5h-1.5v-1h-.5v3h.5v-1h1.5L4 16a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0h1a2.5 2.5 0 014.9 0H24a2.5 2.5 0 014.9 0h2.1a1 1 0 001-1v-.5h1.5v1h.5v-3h-.5v1h-1.5L32 9a1 1.3 0 00-1-1h-4v-4l1-1v-1h-4v1l1 1v4h-3v-1a1 1 0 00-2 0v1H14V5A1 1 0 0013 4H4z" />
+    </svg>
+  );
+
+  const rosterCards = game.roster.map((color, position) => {
+    const available =
+      (color !== 'locomotive' &&
+        (game.gameState === PLAYER_BEGIN ||
+          game.gameState === PLAYER_DRAW_TRAIN)) ||
+      (color === 'locomotive' && game.gameState === PLAYER_BEGIN); // TODO && activePlayer.id === localPlayerId
+    return (
+      <button
+        key={color + '-roster-' + position}
+        className={classNames(
+          `relative focus:outline-none bg-ttr-${color} inline-flex flex-row justify-center content-center overflow-hidden rounded-md shadow-xl w-12 h-12 ml-1.5 lg:w-16 lg:h-20 lg:ml-2 xl:h-28 xl:w-22 2xl:h-36 2xl:w-28 3xl:h-40 3xl:w-32 3xl:p-2.5`,
+          {
+            'transform transition-transform hover:-translate-y-1 lg:hover:-translate-y-2': available,
+            'cursor-not-allowed': !available,
+          },
+        )}
+        disabled={!available}
+        onClick={(e) => rosterDrawHandler(color, position)}
+      >
+        {color === 'locomotive' ? locomotiveSVG : cartSVG}
+      </button>
+    );
+  });
+
+  const drawingCartCards = drawnCarts.map((color) => {
+    return (
+      <div
+        key={color + '-roster-' + Math.floor(Math.random() * 100000)}
+        className={`relative bg-ttr-${color} inline-flex flex-row justify-center content-center overflow-hidden rounded-md shadow-xl w-12 h-12 mx-2.5 lg:w-16 lg:h-20 lg:mx-4 xl:h-28 xl:w-22 2xl:h-36 2xl:w-28 3xl:h-40 3xl:w-32 3xl:p-2.5`}
+      >
+        {color === 'locomotive' ? locomotiveSVG : cartSVG}
+      </div>
+    );
+  });
+
+  const drawingRouteCards = drawnRoutes.map((routeId) => {
+    let routeData = gameData.routes[routeId];
+    routeData.isSelected = false;
+    selectedRoutes.forEach((sr) => {
+      if (sr === routeData.id) {
+        routeData.isSelected = true;
+      }
+    });
+
+    return (
+      <button
+        key={'drawnRoute-' + routeData.id}
+        className={classNames(
+          'relative focus:ring-0 focus:outline-none text-ttr-white w-24 2xl:w-40 text-left inline-grid grid-rows-2 mb-1 mx-2 rounded-md p-1.5 py-1 lg:p-1.5 transform transition-tranform hover:-translate-y-0.5 xl:-hover:-translate-y-2',
+          {
+            'bg-gray-800': routeData.id > 40,
+            'bg-gray-500': routeData.id <= 40,
+            'border-2 border-gray-400': routeData.isSelected,
+          },
+        )}
+        onClick={() => {
+          let newSet = new Set(selectedRoutes);
+
+          if (newSet.has(routeData.id)) {
+            newSet.delete(routeData.id);
+          } else {
+            newSet.add(routeData.id);
+          }
+
+          setSelectedRoutes(newSet);
+        }}
+      >
+        <h3 className="text-2xs font-semibold lg:text-xs xl:text-base 2xl:text-lg 3xl:text-xl">
+          {routeData.fromCity}
+        </h3>
+        <h3 className="text-2xs font-semibold lg:text-xs xl:text-base 2xl:text-lg 3xl:text-xl">
+          {routeData.toCity}
+        </h3>
+        <p className="absolute top-0 right-0 bg-gray-200 rounded-b-full rounded-tl-full rounded-tr-lg font-number font-bold text-gray-800 text-center text-xs h-4 w-6 lg:w-7 lg:h-7 lg:text-lg xl:w-8 xl:h-8 xl:text-xl xl:leading-9 2xl:w-10 2xl:h-10 2xl:leading-custom">
+          {routeData.value}
+        </p>
+      </button>
+    );
+  });
+
   return (
     <div className="container h-screen font-regular z-10 pt-10 md:px-16 lg:pt-16 lg:pb-2 2xl:flex  2xl:items-center">
       <div
@@ -248,7 +236,7 @@ export function GamePage({
               gameData={gameData}
               activeCities={activeCities}
               hoverCities={hoverCities}
-              playerColor={localPlayer.color}
+              playerColor={activePlayer.color}
               actionsLeft={actionsLeft}
               setActionsLeft={setActionsLeft}
               connectionHover={connectionHover}
@@ -282,7 +270,7 @@ export function GamePage({
             <div className="row-start-5 col-start-1 col-span-1 row-span-1 grid grid-rows-5 text-ttr-white filter drop-shadow-md p-0">
               <ScoreBoard
                 opponentList={opponentList}
-                localPlayer={localPlayer}
+                localPlayer={activePlayer}
               ></ScoreBoard>
             </div>
           </div>
@@ -353,7 +341,7 @@ export function GamePage({
           </div>
           <div className="contents" id="player-hand">
             <HandPanel
-              player={localPlayer}
+              player={activePlayer}
               activeCities={activeCities}
               setActiveCities={setActiveCities}
               setHoverCities={setHoverCities}

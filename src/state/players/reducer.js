@@ -1,17 +1,17 @@
-import {
+/* import {
   PLAYER_BUILD,
   PLAYER_COLORS,
   PLAYER_DONE,
   PLAYER_DRAW_TRAIN,
   PLAYER_FIRST_ROUND,
   PLAYER_DRAW_ROUTES,
-} from '../../constants/playerConstants';
+} from '../../constants/playerConstants'; */
 import { testPlayers } from '../../domain/playerType';
 import { DEAL_STARTER_HAND } from '../board/actions';
 import {
   DRAW_FROM_ROSTER,
   DRAW_FROM_DECK,
-  ADD_ROUTE_CARDS,
+  DRAW_ROUTE_CARDS,
   BUILD_CONNECTION,
 } from './actions';
 
@@ -33,8 +33,12 @@ export function playersReducer(state = initialState, action) {
       newState = putTrainCard(state, payload.playerId, payload.cardColors);
       break;
     }
-    case ADD_ROUTE_CARDS: {
-      newState = putRouteCard(state, payload);
+    case DRAW_ROUTE_CARDS: {
+      newState = putRouteCard(
+        state,
+        payload.playerId,
+        payload.selectedRouteCards,
+      );
       break;
     }
     case BUILD_CONNECTION: {
@@ -97,6 +101,7 @@ function putStarterHand(state, { playerId, trainCards, longRouteCard }) {
         }
       }
       newPlayer.longRouteCard = longRouteCard;
+      newPlayer.carts = 45;
       return newPlayer;
     } else {
       return player;
@@ -151,11 +156,11 @@ function putTrainCard(state, playerId, cardColors) {
         }
       }
 
-      if (cardColors.length === 1 && cardColors[0] !== 'locomotive') {
+      /* if (cardColors.length === 1 && cardColors[0] !== 'locomotive') {
         newPlayer.playerState = PLAYER_DRAW_TRAIN;
       } else {
         newPlayer.playerState = PLAYER_DONE;
-      }
+      } */
       return newPlayer;
     } else {
       return player;
@@ -163,7 +168,7 @@ function putTrainCard(state, playerId, cardColors) {
   });
 }
 
-function putRouteCard(state, { playerId, selectedRouteCards }) {
+function putRouteCard(state, playerId, selectedRouteCards) {
   return state.map((player) => {
     if (player.id === playerId) {
       let newPlayer = JSON.parse(JSON.stringify(player));

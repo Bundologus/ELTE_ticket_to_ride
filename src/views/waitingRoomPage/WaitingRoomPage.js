@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { MAIN_PAGE, IN_GAME } from '../../constants/appConstants';
-import { selectStarterHand } from '../../state/board/selector';
 import { startGame } from '../../state/game/actions';
+import { dealStarterHand } from '../../state/board/actions';
 
 export function WaitingRoomPage({
   setAppState,
@@ -10,16 +10,30 @@ export function WaitingRoomPage({
 }) {
   const game = useSelector((state) => state.game);
   const players = useSelector((state) => state.players);
+  const board = useSelector((state) => state.board);
+
+  const getStarterHand = () => {
+    return {
+      trainCards: board.trainCardDeck.slice(-4),
+      longRouteCard: board.longRouteDeck.slice(-1),
+    };
+  };
 
   const dispatch = useDispatch();
 
   const gameStartHandler = () => {
-    players.forEach((player) => {
-      const starterHand = useSelector(selectStarterHand);
-      // TODO ohno... this ^^^^^^^^^ is a problem
-      //dispatch(dealStarterHand(player.id, ))
-    });
+    for (const player of players) {
+      const starterHand = getStarterHand();
+      dispatch(
+        dealStarterHand(
+          player.id,
+          starterHand.trainCards,
+          starterHand.longRouteCard,
+        ),
+      );
+    }
     dispatch(startGame(game.gameId));
+    setAppState(IN_GAME);
   };
 
   return (
@@ -48,10 +62,7 @@ export function WaitingRoomPage({
           </button>
           <button
             className="rounded-md bg-green-600 border-green-900 border-2 hover:bg-green-500 text-white justify-self-left mt-5 ml-3 w-24 lg:px-5 lg:w-28 text-lg lg:text-2xl"
-            onClick={(e) => {
-              setAppState(IN_GAME);
-              gameStartHandler();
-            }}
+            onClick={(e) => gameStartHandler()}
           >
             Start!
           </button>

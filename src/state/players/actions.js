@@ -1,6 +1,6 @@
 export const DRAW_FROM_ROSTER = 'DRAW_FROM_ROSTER';
 export const DRAW_FROM_DECK = 'DRAW_FROM_DECK';
-export const ADD_ROUTE_CARDS = 'ADD_ROUTE_CARDS';
+export const DRAW_ROUTE_CARDS = 'DRAW_ROUTE_CARDS';
 export const BUILD_CONNECTION = 'BUILD_CONNECTION';
 
 export function drawFromRoster(playerId, cardColor, position) {
@@ -24,12 +24,17 @@ export function drawFromDeck(playerId, cardColors) {
   };
 }
 
-export function addRouteCard(playerId, selectedRouteCards) {
+export function drawRouteCards(
+  playerId,
+  selectedRouteCards,
+  droppedRouteCards,
+) {
   return {
-    type: ADD_ROUTE_CARDS,
+    type: DRAW_ROUTE_CARDS,
     palyoad: {
       playerId,
       selectedRouteCards,
+      droppedRouteCards,
     },
   };
 }
