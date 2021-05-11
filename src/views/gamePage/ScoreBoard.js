@@ -1,7 +1,8 @@
-import { PlayerListType, PlayerType } from '../../domain/playerType';
+import { useSelector } from 'react-redux';
+import { selectPlayersWithScore } from '../../state/players/selector';
 
-export function ScoreBoard({ opponentList, localPlayer }) {
-  let playerList = opponentList.map((player) => {
+export function ScoreBoard() {
+  const playerList = useSelector(selectPlayersWithScore).map((player) => {
     return {
       id: player.id,
       name: player.name,
@@ -10,12 +11,12 @@ export function ScoreBoard({ opponentList, localPlayer }) {
     };
   });
 
-  playerList.push({
+  /* playerList.push({
     id: localPlayer.id,
     name: localPlayer.name,
     color: localPlayer.color,
     score: localPlayer.score,
-  });
+  }); */
 
   const board = playerList
     .sort((p1, p2) => {
@@ -39,8 +40,3 @@ export function ScoreBoard({ opponentList, localPlayer }) {
 
   return <>{board}</>;
 }
-
-ScoreBoard.propTypes = {
-  opponentList: PlayerListType,
-  localPlayer: PlayerType,
-};
