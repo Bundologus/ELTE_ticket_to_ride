@@ -1,4 +1,10 @@
 export function PlayerCard({ player }) {
+  const trainCardCount = Object.values(player.trainCards).reduce(
+    (sum, count) => {
+      return sum + count;
+    },
+    0,
+  );
   return (
     <div
       className={`bg-player-${player.color} text-ttr-white shadow-md rounded-r-md -ml-4 p-1 pl-3.5 pt-0.5 lg:rounded-r-lg lg:py-1.5 lg:pr-1.5 3xl:py-2 3xl:pr-2 3xl:pl-4`}
@@ -31,7 +37,7 @@ export function PlayerCard({ player }) {
           <path d="M7 24.63 18.43 13.2l-.71-.7 1.42-1.43L17 8.89c1.2-1.19 3.09-1.19 4.27 0l3.6 3.61-1.42 1.41h2.84l.71.71-3.55 3.59-.71-.71V14.62l-1.47 1.42-.71-.71L9.13 26.76 7 24.63zM4 2A2 2 0 002 4V31A2 2 0 004 33H30A2 2 0 0032 31V4A2 2 0 0030 2Z" />
         </svg>
         <p className="block filter drop-shadow-md text-xs whitespace-nowrap lg:ml-0.5 xl:text-base 2xl:text-xl 3xl:text-2xl">
-          x <span className="font-number">{player.trainCardCount}</span>
+          x <span className="font-number">{trainCardCount}</span>
         </p>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +48,7 @@ export function PlayerCard({ player }) {
           <path d="M17 23 14 7c1-1 5-1 6 0l-3 16zM18 25A1 1 0 0116 27A1 1 0 0118 25zM4 2A2 2 0 002 4V31A2 2 0 004 33h26A2 2 0 0032 31V4A2 2 0 0030 2Z" />
         </svg>
         <p className="block filter drop-shadow-md text-xs whitespace-nowrap lg:ml-0.5 xl:text-base 2xl:text-xl 3xl:text-2xl">
-          x <span className="font-number">{player.routeCardCount}</span>
+          x <span className="font-number">{player.routeCards.length}</span>
         </p>
       </div>
     </div>
