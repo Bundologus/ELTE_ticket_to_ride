@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { PlayerType } from './playerType';
 
 export const TrackElement = PropTypes.shape({
   x: PropTypes.number.isRequired,
