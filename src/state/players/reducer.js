@@ -7,7 +7,7 @@
   PLAYER_DRAW_ROUTES,
 } from '../../constants/playerConstants'; */
 import { testPlayers } from '../../domain/playerType';
-import { DEAL_STARTER_HAND } from '../board/actions';
+import { DEAL_STARTER_HAND } from '../game/actions';
 import {
   DRAW_FROM_ROSTER,
   DRAW_FROM_DECK,

@@ -58,11 +58,9 @@ export function GameBoard({
     );
   });
 
-  // TODO go back to marking built connections as 'built' in state.game, instead of removing them
-
-  const freeConnectionMarkers = gameData.freeConnections
+  const freeConnectionMarkers = gameData.connections
     .filter((connection) => {
-      return !isConnectionBuilt(connection.id); // TODO probably should be: return !connection.isBuilt
+      return !connection.isBuilt;
     })
     .map((connection) => {
       const trackElements = connection.elements.map(({ x, y, rotation }) => {
@@ -111,7 +109,7 @@ export function GameBoard({
 
   const builtMarkers = gameData.connections
     .filter((connection) => {
-      return isConnectionBuilt(connection.id); // TODO should probably be return connection.isBuilt
+      return connection.isBuilt;
     })
     .map((connection) => {
       const trackElements = connection.elements.map(({ x, y, rotation }) => {
@@ -173,9 +171,8 @@ export function GameBoard({
           </h2>
           <div className="h-12 lg:h-20 xl:h-28 2xl:h-36 3xl:h-40">
             {
-              gameData.freeConnections[selectedConnectionId]
-              // TODO need to build a select for this, or it won't work after some connections are already built
-              // TODO make input fields for each cart color
+              gameData.connections[selectedConnectionId]
+              // TODO build some kind of input solution
             }
           </div>
           <button

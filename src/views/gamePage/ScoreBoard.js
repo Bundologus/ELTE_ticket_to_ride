@@ -18,7 +18,7 @@ export function ScoreBoard() {
     score: localPlayer.score,
   }); */
 
-  const board = playerList
+  const scoreBoard = playerList
     .sort((p1, p2) => {
       return p2.score - p1.score;
     })
@@ -38,5 +38,5 @@ export function ScoreBoard() {
       );
     });
 
-  return <>{board}</>;
+  return <>{scoreBoard}</>;
 }

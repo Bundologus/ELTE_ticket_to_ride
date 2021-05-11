@@ -7,18 +7,23 @@ import { HandPanel } from './HandPanel';
 import { GameBoard } from './GameBoard';
 import { PlayerListType, PlayerType } from '../../domain/playerType';
 import { ScoreBoard } from './ScoreBoard';
-import { COLOR_LIST } from '../../constants/boardConstants';
+import { COLOR_LIST } from '../../constants/gameConstants';
 import { useDispatch, useSelector } from 'react-redux';
-import { drawFromRoster } from '../../state/players/actions';
+import {
+  drawFromDeck,
+  drawFromRoster,
+  drawRouteCards,
+} from '../../state/players/actions';
 import { selectActivePlayer } from '../../state/players/selector';
 import { PLAYER_BEGIN, PLAYER_DRAW_TRAIN } from '../../constants/gameConstants';
 
-export function GamePage({ opponentList, localPlayerId, setLocalPlayerId }) {
-  const [gameState, setGameState] = useState('running');
-
+export function GamePage({ localPlayerId, setLocalPlayerId }) {
   const game = useSelector((state) => state.game);
   const players = useSelector((state) => state.players);
   const activePlayer = useSelector(selectActivePlayer);
+  const opponentList = players.filter((player) => {
+    return player.id !== activePlayer.id;
+  });
 
   const [activeCities, setActiveCities] = useState([]);
   const [hoverCities, setHoverCities] = useState([]);
@@ -28,87 +33,60 @@ export function GamePage({ opponentList, localPlayerId, setLocalPlayerId }) {
   const [drawingRoutes, setDrawingRoutes] = useState(false);
   const [drawnRoutes, setDrawnRoutes] = useState([]);
   const [selectedRoutes, setSelectedRoutes] = useState([]);
-  const [actionsLeft, setActionsLeft] = useState(2);
   const [connectionHover, setConnectionHover] = useState('');
-  const [builtConnections, setBuiltConnections] = useState([]);
 
   const dispatch = useDispatch();
 
   const colors = COLOR_LIST;
 
-  function rosterDrawHandler(color, position) {
+  function drawFromRosterHandler(color, position) {
     dispatch(drawFromRoster(activePlayer.id, color, position));
   }
 
-  function drawCarts() {
-    /* TODO weighted randomization, remaining deck tracking */
-
-    const cs = [colors[Math.floor((Math.random() * 10000) % 9)]];
-
-    if (cs[0] !== 'locomotive') {
-      cs.push(colors[Math.floor((Math.random() * 10000) % 9)]);
-    }
-    setDrawnCarts(cs);
+  function showDrawnFromTrainDeck() {
+    setDrawnCarts(game.trainCardDeck.slice(-2));
     setDrawingCarts(true);
-    setActionsLeft(0);
   }
 
-  function drawRoutes() {
-    /* TODO remaining deck tracking */
+  function drawFromDeckHandler() {
+    const cardColors = drawnCarts.map((card) => {
+      return card.color;
+    });
 
-    let rcs = [];
-    while (rcs.length < 3) {
-      let r = Math.floor((Math.random() * 10000) % 40);
-      let rNew = true;
-      rcs.forEach((rc) => {
-        if (rc === r) rNew = false;
-      });
-      if (rNew) rcs.push(r);
-    }
-    console.log(`drawRoutes()->rcs: ${rcs}`);
-    setDrawnRoutes(rcs);
+    setDrawnCarts([]);
+    setDrawingCarts(false);
+
+    dispatch(drawFromDeck(activePlayer.id, cardColors));
+  }
+
+  function showDrawnRoutes() {
+    setDrawnRoutes(game.routeDeck.slice(-3));
     setDrawingRoutes(true);
-    setActionsLeft(0);
   }
 
-  function addCartToHand(c, player) {
-    if (c === 'black') {
-      player.trainCardCount += 1;
-      player.trainCards.black += 1;
-    } else if (c === 'blue') {
-      player.trainCardCount += 1;
-      player.trainCards.blue += 1;
-    } else if (c === 'green') {
-      player.trainCardCount += 1;
-      player.trainCards.green += 1;
-    } else if (c === 'orange') {
-      player.trainCardCount += 1;
-      player.trainCards.orange += 1;
-    } else if (c === 'pink') {
-      player.trainCardCount += 1;
-      player.trainCards.pink += 1;
-    } else if (c === 'red') {
-      player.trainCardCount += 1;
-      player.trainCards.red += 1;
-    } else if (c === 'white') {
-      player.trainCardCount += 1;
-      player.trainCards.white += 1;
-    } else if (c === 'yellow') {
-      player.trainCardCount += 1;
-      player.trainCards.yellow += 1;
-    } else if (c === 'locomotive') {
-      player.trainCardCount += 1;
-      player.trainCards.locomotive += 1;
-    }
+  function drawRouteCardsHandler() {
+    const selectedRouteIds = selectedRoutes.map((route) => {
+      return route.id;
+    });
+
+    const droppedRoutes = drawnRoutes.filter((route) => {
+      return !selectedRouteIds.includes(route.id);
+    });
+
+    setDrawnRoutes([]);
+    setSelectedRoutes([]);
+    setDrawingRoutes(false);
+
+    dispatch(drawRouteCards(activePlayer.id, selectedRoutes, droppedRoutes));
   }
 
-  function isConnectionBuilt(id) {
+  /* function isConnectionBuilt(id) {
     let result = 0;
     builtConnections.forEach((cb) => {
       if (cb[0] === id) ++result;
     });
     return result;
-  }
+  } */
 
   /***************************************************/
   /**                                               **/
@@ -144,7 +122,7 @@ export function GamePage({ opponentList, localPlayerId, setLocalPlayerId }) {
     </svg>
   );
 
-  const rosterCards = game.roster.map((color, position) => {
+  const rosterCards = game.trainCardRoster.map((color, position) => {
     const available =
       (color !== 'locomotive' &&
         (game.gameState === PLAYER_BEGIN ||
@@ -161,7 +139,7 @@ export function GamePage({ opponentList, localPlayerId, setLocalPlayerId }) {
           },
         )}
         disabled={!available}
-        onClick={(e) => rosterDrawHandler(color, position)}
+        onClick={(e) => drawFromRosterHandler(color, position)}
       >
         {color === 'locomotive' ? locomotiveSVG : cartSVG}
       </button>
@@ -233,30 +211,17 @@ export function GamePage({ opponentList, localPlayerId, setLocalPlayerId }) {
         <div className="container relative h-full grid grid-cols-8 grid-rows-5 lg:grid-cols-7">
           <div className="contents" id="map">
             <GameBoard
-              gameData={gameData}
               activeCities={activeCities}
               hoverCities={hoverCities}
-              playerColor={activePlayer.color}
-              actionsLeft={actionsLeft}
-              setActionsLeft={setActionsLeft}
               connectionHover={connectionHover}
               setConnectionHover={setConnectionHover}
-              builtConnections={builtConnections}
-              setBuiltConnections={(connection, playerColor) => {
-                if (!isConnectionBuilt(connection.id)) {
-                  let newCB = JSON.parse(JSON.stringify(builtConnections));
-                  newCB.push([connection.id, playerColor]);
-                  setBuiltConnections(newCB);
-                }
-              }}
-              isConnectionBuilt={isConnectionBuilt}
             ></GameBoard>
           </div>
           <div className="contents" id="stat-cards">
             <div className="row-start-1 col-start-1">
               <PlayerCard player={opponentList[0]}></PlayerCard>
             </div>
-            <div className="row-start-2 col-start-1">
+            {/* <div className="row-start-2 col-start-1">
               <PlayerCard player={opponentList[1]}></PlayerCard>
             </div>
             <div className="row-start-3 col-start-1">
@@ -264,14 +229,11 @@ export function GamePage({ opponentList, localPlayerId, setLocalPlayerId }) {
             </div>
             <div className="row-start-4 col-start-1">
               <PlayerCard player={opponentList[3]}></PlayerCard>
-            </div>
+            </div> */}
           </div>
           <div className="contents" id="score-board">
             <div className="row-start-5 col-start-1 col-span-1 row-span-1 grid grid-rows-5 text-ttr-white filter drop-shadow-md p-0">
-              <ScoreBoard
-                opponentList={opponentList}
-                localPlayer={activePlayer}
-              ></ScoreBoard>
+              <ScoreBoard></ScoreBoard>
             </div>
           </div>
           <div className="contents" id="deck-and-roster">
@@ -294,12 +256,12 @@ export function GamePage({ opponentList, localPlayerId, setLocalPlayerId }) {
                     'filter drop-shadow-md rounded-md border-b-2 xl:border-b-4 border-yellow-200 bg-yellow-500 text-ttr-white focus:outline-none w-12 h-12 p-1 lg:w-16 lg:h-20 lg:p-2 xl:h-28 xl:w-22 xl:p-1 2xl:h-36 2xl:w-28 2xl:px-2 3xl:h-40 3xl:w-32 3xl:p-2.5',
                     {
                       'transform transition-transform hover:-translate-y-1 lg:hover:-translate-y-2':
-                        actionsLeft === 2,
-                      'cursor-not-allowed': actionsLeft < 2,
+                        game.gameState === PLAYER_BEGIN,
+                      'cursor-not-allowed': game.gameState !== PLAYER_BEGIN,
                     },
                   )}
                   onClick={() => {
-                    if (actionsLeft === 2) drawRoutes();
+                    if (game.gameState === PLAYER_BEGIN) showDrawnRoutes();
                   }}
                 >
                   <svg
@@ -316,12 +278,13 @@ export function GamePage({ opponentList, localPlayerId, setLocalPlayerId }) {
                     'filter drop-shadow-md rounded-md border-b-2 xl:border-b-4 border-blue-200 bg-blue-500 text-ttr-white focus:outline-none w-12 h-12 p-1 ml-6 mr-3 lg:w-16 lg:h-20 lg:ml-10 lg:mr-3 lg:p-2 xl:h-28 xl:w-22 xl:p-1 2xl:h-36 2xl:w-28 2xl:px-2 3xl:h-40 3xl:w-32 3xl:p-2.5',
                     {
                       'transform transition-transform hover:-translate-y-1 lg:hover:-translate-y-2':
-                        actionsLeft === 2,
-                      'cursor-not-allowed': actionsLeft < 2,
+                        game.gameState === PLAYER_BEGIN,
+                      'cursor-not-allowed': game.gameState !== PLAYER_BEGIN,
                     },
                   )}
                   onClick={() => {
-                    if (actionsLeft === 2) drawCarts();
+                    if (game.gameState === PLAYER_BEGIN)
+                      showDrawnFromTrainDeck();
                   }}
                 >
                   <svg
@@ -341,12 +304,9 @@ export function GamePage({ opponentList, localPlayerId, setLocalPlayerId }) {
           </div>
           <div className="contents" id="player-hand">
             <HandPanel
-              player={activePlayer}
               activeCities={activeCities}
               setActiveCities={setActiveCities}
               setHoverCities={setHoverCities}
-              actionsLeft={actionsLeft}
-              setActionsLeft={setActionsLeft}
               setConnectionHover={setConnectionHover}
             ></HandPanel>
           </div>
@@ -368,28 +328,10 @@ export function GamePage({ opponentList, localPlayerId, setLocalPlayerId }) {
               <button
                 className="mx-auto block focus:outline-none bg-green-600 hover:bg-green-500 border-green-800 border-2 rounded-md px-4 mt-5 xl:mt-8 xl:text-lg xl:px-6"
                 onClick={() => {
-                  let nlp = JSON.parse(JSON.stringify(localPlayer));
                   if (drawingCarts) {
-                    drawnCarts.forEach((c) => {
-                      addCartToHand(c, nlp);
-                    });
-                    setLocalPlayer(nlp);
-                    setDrawnCarts([]);
-                    setDrawingCarts(false);
+                    drawFromDeckHandler();
                   } else if (drawingRoutes) {
-                    for (const sr of selectedRoutes) {
-                      let str = JSON.stringify(gameData.routes[sr - 1]);
-                      console.log(str);
-                      let newCard = JSON.parse(str);
-                      console.log('parsed okay');
-                      newCard.finished = false;
-                      nlp.routeCards.push(newCard);
-                      nlp.routeCardCount += 1;
-                    }
-                    setLocalPlayer(nlp);
-                    setSelectedRoutes([]);
-                    setDrawnRoutes([]);
-                    setDrawingRoutes(false);
+                    drawRouteCardsHandler();
                   }
                 }}
               >
@@ -398,7 +340,7 @@ export function GamePage({ opponentList, localPlayerId, setLocalPlayerId }) {
             </div>
           </div>
         </div>
-        <div
+        {/* <div
           id="demoPanel"
           className="fixed right-1 bottom-0 rounded-t-md bg-gray-700 text-ttr-white py-0.5 px-1.5 border-2 border-b-0 border-gray-300 transition-transform transform text-2xs lg:text-xl lg:py-1.5 lg:px-3"
           onClick={() => {
@@ -412,39 +354,7 @@ export function GamePage({ opponentList, localPlayerId, setLocalPlayerId }) {
             className="bg-gray-400 text-black w-full rounded-sm mb-0.5 hover:bg-gray-300 pt-0.5"
             onClick={(e) => {
               e.stopPropagation();
-              let nlp = {
-                id: localPlayer.id,
-                name: localPlayer.name,
-                color: localPlayer.color,
-                score: 0,
-                carts: 45,
-                trainCardCount: 0,
-                trainCards: {
-                  black: 0,
-                  blue: 0,
-                  green: 0,
-                  orange: 0,
-                  pink: 0,
-                  red: 0,
-                  white: 0,
-                  yellow: 0,
-                  locomotive: 0,
-                },
-                routeCardCount: 0,
-                routeCards: [],
-                longRouteCard: {},
-              };
-              for (let i = 0; i < 4; ++i) {
-                let c = colors[Math.floor((Math.random() * 10000) % 9)];
-                addCartToHand(c, nlp);
-              }
-
-              nlp.longRouteCard =
-                gameData.longRoutes[Math.floor((Math.random() * 10000) % 6)];
-              nlp.longRouteCard.finished = false;
-              nlp.routeCardCount = 1;
-              setLocalPlayer(nlp);
-              drawRoutes();
+              dispatch()
             }}
           >
             Első kör
@@ -480,7 +390,7 @@ export function GamePage({ opponentList, localPlayerId, setLocalPlayerId }) {
           >
             Bejezett Cél
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

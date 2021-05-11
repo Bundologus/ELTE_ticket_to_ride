@@ -49,13 +49,15 @@ const initialState = {
   lastRound: false,
   lastPlayerId: null,
   cities: ticketToRideData.cities,
-  freeConnections: ticketToRideData.connections,
+  connections: ticketToRideData.connections,
   routeDeck: shuffle(ticketToRideData.routes),
   longRouteDeck: shuffle(ticketToRideData.longRoutes),
   trainCardDeck: shuffle(initialTrainDeck),
   trainDiscardPile: [],
   trainCardRoster: [],
 };
+
+// TODO if deck is emptied, reshuffle discard pile and replace the deck.
 
 export function gameReducer(state = initialState, action) {
   const { type, payload } = action;
@@ -269,13 +271,13 @@ function updateRouteDeck(state, selectedRouteCards, droppedRouteCards) {
 } */
 
 function popConnection(state, selectedConnection) {
-  let tempRouteDeck = state.freeConnections.filter((connection) => {
-    return selectedConnection.id !== connection.id;
-  });
+  let tempConnections = [...state.connections];
+
+  tempConnections[selectedConnection.id].isBuilt = true;
 
   return {
     ...state,
-    routeDeck: tempRouteDeck,
+    connections: tempConnections,
     gameState: PLAYER_DONE,
   };
 }

@@ -1,7 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { MAIN_PAGE, IN_GAME } from '../../constants/appConstants';
-import { startGame } from '../../state/game/actions';
-import { dealStarterHand } from '../../state/board/actions';
+import {
+  startGame,
+  dealStarterHand,
+  fillRoster,
+} from '../../state/game/actions';
 
 export function WaitingRoomPage({
   setAppState,
@@ -10,16 +13,20 @@ export function WaitingRoomPage({
 }) {
   const game = useSelector((state) => state.game);
   const players = useSelector((state) => state.players);
-  const board = useSelector((state) => state.board);
 
   const getStarterHand = () => {
     return {
-      trainCards: board.trainCardDeck.slice(-4),
-      longRouteCard: board.longRouteDeck.slice(-1),
+      trainCards: game.trainCardDeck.slice(-4),
+      longRouteCard: game.longRouteDeck.slice(-1),
     };
   };
 
   const dispatch = useDispatch();
+
+  // TODO not really sure how to handle this part.
+
+  if (players[0].longRouteCard === null) {
+  }
 
   const gameStartHandler = () => {
     for (const player of players) {
@@ -32,6 +39,7 @@ export function WaitingRoomPage({
         ),
       );
     }
+    dispatch(fillRoster());
     dispatch(startGame(game.gameId));
     setAppState(IN_GAME);
   };

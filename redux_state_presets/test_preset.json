@@ -1,0 +1,3 @@
+{
+	"payload": "[{\"type\":\"CREATE_GAME\",\"payload\":{\"hostPlayer\":\"asdfasdf\",\"maxPlayers\":\"2\"}},{\"type\":\"DEAL_STARTER_HAND\",\"payload\":{\"playerId\":0,\"trainCards\":[\"green\",\"orange\",\"white\",\"yellow\"],\"longRouteCard\":[{\"id\":\"45\",\"from\":\"15\",\"to\":\"3\",\"fromCity\":\"Edinburgh\",\"toCity\":\"Athina\",\"value\":\"21\"}]}},{\"type\":\"DEAL_STARTER_HAND\",\"payload\":{\"playerId\":1,\"trainCards\":[\"green\",\"orange\",\"white\",\"yellow\"],\"longRouteCard\":[{\"id\":\"45\",\"from\":\"15\",\"to\":\"3\",\"fromCity\":\"Edinburgh\",\"toCity\":\"Athina\",\"value\":\"21\"}]}},{\"type\":\"FILL_ROSTER\",\"payload\":null},{\"type\":\"START_GAME\",\"payload\":{}}]"
+}

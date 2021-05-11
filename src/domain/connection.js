@@ -17,7 +17,7 @@ export const Connection = PropTypes.shape({
   elements: TrackElementList.isRequired,
   color: PropTypes.string.isRequired,
   locomotive: PropTypes.number.isRequired,
-  built: PropTypes.bool,
+  isBuilt: PropTypes.bool,
 });
 
 export const ConnectionList = PropTypes.arrayOf(Connection);

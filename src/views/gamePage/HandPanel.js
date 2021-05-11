@@ -122,7 +122,7 @@ export function HandPanel({
           },
         )}
         onClick={() => {
-          dispatch(nextPlayer);
+          dispatch(nextPlayer());
         }}
       >
         End turn
