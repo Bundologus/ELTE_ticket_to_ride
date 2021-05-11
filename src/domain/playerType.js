@@ -27,6 +27,7 @@ export const PlayerType = PropTypes.shape({
   routeCards: RouteList,
   longRouteCard: Route,
   builtConnections: ConnectionList,
+  longestChain: PropTypes.number,
 });
 
 export const PlayerListType = PropTypes.arrayOf(PlayerType);
@@ -53,6 +54,7 @@ export const testPlayers = [
     routeCards: [],
     longRouteCard: null,
     builtConnections: [],
+    longestChain: 0,
   },
   {
     id: 1,
@@ -75,6 +77,7 @@ export const testPlayers = [
     routeCards: [],
     longRouteCard: null,
     builtConnections: [],
+    longestChain: 0,
   },
   {
     id: 2,
@@ -97,6 +100,7 @@ export const testPlayers = [
     routeCards: [],
     longRouteCard: null,
     builtConnections: [],
+    longestChain: 0,
   },
   {
     id: 3,
@@ -119,6 +123,7 @@ export const testPlayers = [
     routeCards: [],
     longRouteCard: null,
     builtConnections: [],
+    longestChain: 0,
   },
   {
     id: 4,
@@ -141,6 +146,7 @@ export const testPlayers = [
     routeCards: [],
     longRouteCard: null,
     builtConnections: [],
+    longestChain: 0,
   },
 ];
 
