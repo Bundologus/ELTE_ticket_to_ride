@@ -45,10 +45,10 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss7-compat": "^2.1.0",
-    "autoprefixer": "^9.8.6",
+    "autoprefixer": "^10.2.5",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "postcss": "^7.0.35",
+    "postcss": "^8.2.15",
     "prettier": "^2.2.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.0"
   }
