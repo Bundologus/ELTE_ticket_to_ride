@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { WAITING_FOR_PLAYERS } from '../../constants/appConstants';
 import { createGame } from '../../state/game/actions';
+import { setAppToWait } from '../../state/app/actions';
 
-export function LandingPage({ setAppState, setLocalPlayerId }) {
+export function LandingPage({ setLocalPlayerId }) {
   const [hostNameOk, setHostNameOk] = useState(true);
   const [playerNameOk, setPlayerNameOk] = useState(true);
   const [gameIdOk, setGameIdOk] = useState(true);
@@ -20,7 +20,7 @@ export function LandingPage({ setAppState, setLocalPlayerId }) {
     e.preventDefault();
 
     if (hostNameRef.current.value !== '') {
-      setAppState(WAITING_FOR_PLAYERS);
+      dispatch(setAppToWait());
       dispatch(
         createGame(hostNameRef.current.value, playerCountRef.current.value),
       );

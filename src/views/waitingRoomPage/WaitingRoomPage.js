@@ -1,16 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { MAIN_PAGE, IN_GAME } from '../../constants/appConstants';
+import { setAppToGame, setAppToMain } from '../../state/app/actions';
 import {
   startGame,
   dealStarterHand,
   fillRoster,
 } from '../../state/game/actions';
 
-export function WaitingRoomPage({
-  setAppState,
-  localPlayerId,
-  setLocalPlayerId,
-}) {
+export function WaitingRoomPage({ localPlayerId, setLocalPlayerId }) {
   const game = useSelector((state) => state.game);
   const players = useSelector((state) => state.players);
 
@@ -41,7 +37,7 @@ export function WaitingRoomPage({
 
     dispatch(fillRoster());
     dispatch(startGame(game.gameId));
-    setAppState(IN_GAME);
+    dispatch(setAppToGame());
   };
 
   return (
@@ -64,7 +60,7 @@ export function WaitingRoomPage({
         <div className="flex align-middle justify-center mx-auto">
           <button
             className="rounded-md bg-gray-600 border-gray-900 border-2 hover:bg-gray-500 text-white justify-self-right mt-5 mr-3 w-24 lg:px-5 lg:w-28 text-lg lg:text-2xl"
-            onClick={(e) => setAppState(MAIN_PAGE)}
+            onClick={(e) => dispatch(setAppToMain())}
           >
             Back
           </button>

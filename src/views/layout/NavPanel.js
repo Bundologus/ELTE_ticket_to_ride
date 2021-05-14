@@ -1,9 +1,15 @@
-import { MAIN_PAGE } from '../../constants/appConstants';
+import { useDispatch } from 'react-redux';
+import { setAppToMain } from '../../state/app/actions';
 
-export function NavPanel({ setAppState }) {
+export function NavPanel() {
+  const dispatch = useDispatch();
   return (
     <div className="fixed top-0 left-0 w-screen bg-yellow-500 flex justify-between shadow-xl h:10 p-1 lg:h-14 lg:p-2">
-      <button onClick={() => setAppState(MAIN_PAGE)}>
+      <button
+        onClick={
+          () => dispatch(setAppToMain()) // TODO should also clear the game maybe? Confirmation dialog?
+        }
+      >
         <img src="logo_light.png" className="h-8 lg:h-10" alt="logo"></img>
       </button>
       <a
