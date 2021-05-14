@@ -57,8 +57,6 @@ const initialState = {
   trainCardRoster: [],
 };
 
-// TODO if deck is emptied, reshuffle discard pile and replace the deck.
-
 export function gameReducer(state = initialState, action) {
   const { type, payload } = action;
   let newState;
@@ -173,6 +171,12 @@ function getNextPlayer(state) {
 
 function popFromDeck(state, cardColors) {
   let tempDeck = [...state.trainCardDeck];
+  let tempDiscard = state.trainDiscardPile;
+
+  if (tempDeck.length <= cardColors.length) {
+    tempDeck = [...shuffle(tempDiscard), ...tempDeck];
+    tempDiscard = [];
+  }
 
   for (const cardColor of cardColors) {
     let topCard = tempDeck.pop();
@@ -182,9 +186,11 @@ function popFromDeck(state, cardColors) {
       );
     }
   }
+
   return {
     ...state,
     trainCardDeck: tempDeck,
+    trainDiscardPile: tempDiscard,
     gameState: PLAYER_DONE,
   };
 }
