@@ -54,58 +54,57 @@ export function playersReducer(state = initialState, action) {
   return newState;
 }
 
-function putStarterHand(state, { playerId, trainCards, longRouteCard }) {
-  return state.map((player) => {
-    if (player.id === playerId) {
-      let newPlayer = JSON.parse(JSON.stringify(player));
-      for (const cardColor of trainCards) {
-        switch (cardColor) {
-          case 'black': {
-            ++newPlayer.trainCards.black;
-            break;
-          }
-          case 'blue': {
-            ++newPlayer.trainCards.blue;
-            break;
-          }
-          case 'green': {
-            ++newPlayer.trainCards.green;
-            break;
-          }
-          case 'orange': {
-            ++newPlayer.trainCards.orange;
-            break;
-          }
-          case 'pink': {
-            ++newPlayer.trainCards.pink;
-            break;
-          }
-          case 'red': {
-            ++newPlayer.trainCards.red;
-            break;
-          }
-          case 'white': {
-            ++newPlayer.trainCards.white;
-            break;
-          }
-          case 'yellow': {
-            ++newPlayer.trainCards.yellow;
-            break;
-          }
-          case 'locomotive': {
-            ++newPlayer.trainCards.locomotive;
-            break;
-          }
-          default:
-            break;
+function putStarterHand(state, { arrayOfHands }) {
+  return state.map((player, ind) => {
+    let newPlayer = JSON.parse(JSON.stringify(player));
+
+    const { trainCards, longRouteCard } = arrayOfHands[ind];
+
+    for (const cardColor of trainCards) {
+      switch (cardColor) {
+        case 'black': {
+          ++newPlayer.trainCards.black;
+          break;
         }
+        case 'blue': {
+          ++newPlayer.trainCards.blue;
+          break;
+        }
+        case 'green': {
+          ++newPlayer.trainCards.green;
+          break;
+        }
+        case 'orange': {
+          ++newPlayer.trainCards.orange;
+          break;
+        }
+        case 'pink': {
+          ++newPlayer.trainCards.pink;
+          break;
+        }
+        case 'red': {
+          ++newPlayer.trainCards.red;
+          break;
+        }
+        case 'white': {
+          ++newPlayer.trainCards.white;
+          break;
+        }
+        case 'yellow': {
+          ++newPlayer.trainCards.yellow;
+          break;
+        }
+        case 'locomotive': {
+          ++newPlayer.trainCards.locomotive;
+          break;
+        }
+        default:
+          break;
       }
-      newPlayer.longRouteCard = longRouteCard;
-      newPlayer.carts = 45;
-      return newPlayer;
-    } else {
-      return player;
     }
+    newPlayer.longRouteCard = longRouteCard;
+    newPlayer.carts = 45;
+    return newPlayer;
   });
 }
 

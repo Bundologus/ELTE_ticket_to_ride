@@ -70,8 +70,15 @@ export function gameReducer(state = initialState, action) {
       break;
     }
     case DEAL_STARTER_HAND: {
-      newState = popFromDeck(state, payload.trainCards);
-      newState = popFromLongRouteDeck(newState, payload.longRouteCard);
+      newState = { ...state };
+      for (const hand of payload.arrayOfHands) {
+        console.log('gameReducer');
+        console.log(hand);
+        console.log(hand.trainCards);
+        console.log(hand.longRouteCard);
+        newState = popFromDeck(newState, hand.trainCards);
+        newState = popFromLongRouteDeck(newState, hand.longRouteCard);
+      }
       break;
     }
     case DRAW_FROM_ROSTER: {

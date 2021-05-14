@@ -36,10 +36,10 @@ export function startLastRound() {
   };
 }
 
-export function dealStarterHand(playerId, trainCards, longRouteCard) {
+export function dealStarterHand(arrayOfHands) {
   return {
     type: DEAL_STARTER_HAND,
-    payload: { playerId, trainCards, longRouteCard },
+    payload: { arrayOfHands },
   };
 }
 

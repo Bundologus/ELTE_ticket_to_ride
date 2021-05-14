@@ -14,31 +14,31 @@ export function WaitingRoomPage({
   const game = useSelector((state) => state.game);
   const players = useSelector((state) => state.players);
 
-  const getStarterHand = () => {
-    return {
-      trainCards: game.trainCardDeck.slice(-4),
-      longRouteCard: game.longRouteDeck.slice(-1),
-    };
+  const getStarterHands = (playerCount) => {
+    let arrayOfHands = [];
+    let reverseDeck = [...game.trainCardDeck];
+    reverseDeck.reverse();
+
+    for (let i = 0; i < playerCount; ++i) {
+      arrayOfHands.push({
+        trainCards: reverseDeck.slice(4 * i, 4 * (i + 1)),
+        longRouteCard: game.longRouteDeck[game.longRouteDeck.length - (i + 1)],
+      });
+    }
+
+    console.log('arrayOfHands');
+    console.log(arrayOfHands);
+    return arrayOfHands;
   };
 
   const dispatch = useDispatch();
 
   // TODO not really sure how to handle this part.
 
-  if (players[0].longRouteCard === null) {
-  }
-
   const gameStartHandler = () => {
-    for (const player of players) {
-      const starterHand = getStarterHand();
-      dispatch(
-        dealStarterHand(
-          player.id,
-          starterHand.trainCards,
-          starterHand.longRouteCard,
-        ),
-      );
-    }
+    const arrayOfStarterHands = getStarterHands(players.length);
+    dispatch(dealStarterHand(arrayOfStarterHands));
+
     dispatch(fillRoster());
     dispatch(startGame(game.gameId));
     setAppState(IN_GAME);
