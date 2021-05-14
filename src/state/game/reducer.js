@@ -230,15 +230,37 @@ function popFromRoster(state, cardColor, position) {
 function fillRosterFromDeck(state) {
   let tempRoster = [...state.trainCardRoster];
   let tempDeck = [...state.trainCardDeck];
+  let tempDiscard = state.trainDiscardPile;
+  let totalTrainCount;
 
-  while (tempRoster.length < 5) {
-    tempRoster.push(tempDeck.pop());
-  }
+  do {
+    if (tempDeck.length < 5 && tempDiscard.length > 0) {
+      tempDeck = [...shuffle(tempDiscard), ...tempDeck];
+    }
+
+    while (tempRoster.length < 5 && tempDeck.length > 0) {
+      tempRoster.push(tempDeck.pop());
+    }
+
+    totalTrainCount = tempRoster.reduce((trainCount, currentColor) => {
+      if (currentColor === CART_COLOR_LOCOMOTIVE) {
+        return trainCount + 1;
+      } else {
+        return trainCount;
+      }
+    }, 0);
+
+    if (totalTrainCount >= 3) {
+      tempDiscard = [...tempDiscard, ...tempRoster];
+      tempRoster = [];
+    }
+  } while (tempRoster.length < 5 && tempDeck.length + tempDiscard.length > 0);
 
   return {
     ...state,
     trainCardDeck: tempDeck,
     trainCardRoster: tempRoster,
+    trainDiscardPile: tempDiscard,
   };
 }
 
