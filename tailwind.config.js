@@ -69,6 +69,7 @@ module.exports = {
     },
   },
   variants: {
+    animation: ['motion-reduce'],
     extend: {
       backgroundColor: ['active'],
     },

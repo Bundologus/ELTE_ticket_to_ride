@@ -120,6 +120,8 @@ export function HandPanel({
           },
         )}
         onClick={() => {
+          setActiveCities([]);
+          setHoverCities(new Set([]));
           dispatch(nextPlayer());
         }}
       >

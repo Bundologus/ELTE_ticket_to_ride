@@ -16,8 +16,8 @@ import {
   DRAW_ROUTES_FIRST_ROUND,
 } from './actions';
 
-//const initialState = testPlayers.slice(0, 2);
-const initialState = testPlayers;
+const initialState = testPlayers.slice(0, 2);
+//const initialState = testPlayers;
 
 export function playersReducer(state = initialState, action) {
   const { type, payload } = action;

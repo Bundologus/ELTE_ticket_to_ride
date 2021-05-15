@@ -48,8 +48,9 @@ export function GameBoard({
   };
 
   const cityMarkers = gameData.cities.map((city) => {
+    const hoverCityArray = Array.from(hoverCities);
     const hoverStyle =
-      activeCities.includes(city.id) || hoverCities.includes(city.id)
+      activeCities.includes(city.id) || hoverCityArray.includes(city.id)
         ? ` w-2 h-2 border-2 3xl:border-4 shadow-glow-${activePlayer.color}-sm lg:shadow-glow-${activePlayer.color} lg:w-3 lg:h-3 2xl:w-4 2xl:h-4 3xl:w-5 3xl:h-5`
         : '';
     const style = { top: city.y + '%', left: city.x + '%' };
