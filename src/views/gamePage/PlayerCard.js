@@ -13,9 +13,9 @@ export function PlayerCard({ player }) {
     'M17 23 14 7c1-1 5-1 6 0l-3 16zM18 25A1 1 0 0116 27A1 1 0 0118 25zM4 2A2 2 0 002 4V31A2 2 0 004 33h26A2 2 0 0032 31V4A2 2 0 0030 2Z',
   ];
 
-  const iconRow = svgPaths.map((path) => {
+  const iconRow = svgPaths.map((path, ptid) => {
     return (
-      <td>
+      <td key={'path-' + ptid}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="mx-auto h-3.5 w-3.5 lg:h-6 lg:w-6 xl:h-10 xl:w-10 2xl:h-12 2xl:w-12 3xl:h-16 3xl:w-16"
@@ -30,6 +30,7 @@ export function PlayerCard({ player }) {
 
   return (
     <div
+      key={`playerCard-${player.id}`}
       className={classNames(
         `relative bg-player-${player.color} text-ttr-white shadow-md rounded-br-lg -ml-4 p-1 pl-3.5 pt-0.5 lg:rounded-br-xl lg:py-1.5 lg:pr-1.5 xl:rounded-br-2xl 3xl:py-2 3xl:pr-2 3xl:pl-4 3xl:rounded-br-3xl`,
         {
@@ -49,24 +50,26 @@ export function PlayerCard({ player }) {
         {player.score}
       </p>
       <table className="w-full text-center filter drop-shadow-md">
-        <tr>{iconRow}</tr>
-        <tr className="filter drop-shadow-md text-2xs lg:text-sm xl:text-base 2xl:text-2xl 3xl:text-3xl">
-          <td>
-            <p className="block">
-              <span className="font-number">{player.carts}</span>
-            </p>
-          </td>
-          <td>
-            <p className="block">
-              <span className="font-number">{player.trainCardCount}</span>
-            </p>
-          </td>
-          <td>
-            <p className="block">
-              <span className="font-number">{player.routeCardCount}</span>
-            </p>
-          </td>
-        </tr>
+        <tbody>
+          <tr>{iconRow}</tr>
+          <tr className="filter drop-shadow-md text-2xs lg:text-sm xl:text-base 2xl:text-2xl 3xl:text-3xl">
+            <td>
+              <p className="block">
+                <span className="font-number">{player.carts}</span>
+              </p>
+            </td>
+            <td>
+              <p className="block">
+                <span className="font-number">{player.trainCardCount}</span>
+              </p>
+            </td>
+            <td>
+              <p className="block">
+                <span className="font-number">{player.routeCardCount}</span>
+              </p>
+            </td>
+          </tr>
+        </tbody>
       </table>
       <div className="flex items-center filter drop-shadow-md"></div>
       <div className="flex items-center justify-between filter drop-shadow-md lg:mb-1 lg:pr-1 xl:pr-2"></div>

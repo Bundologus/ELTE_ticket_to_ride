@@ -13,6 +13,7 @@ import {
   DRAW_FROM_DECK,
   DRAW_ROUTE_CARDS,
   BUILD_CONNECTION,
+  DRAW_ROUTES_FIRST_ROUND,
 } from './actions';
 
 //const initialState = testPlayers.slice(0, 2);
@@ -34,7 +35,8 @@ export function playersReducer(state = initialState, action) {
       newState = putTrainCard(state, payload.playerId, payload.cardColors);
       break;
     }
-    case DRAW_ROUTE_CARDS: {
+    case DRAW_ROUTE_CARDS:
+    case DRAW_ROUTES_FIRST_ROUND: {
       newState = putRouteCard(
         state,
         payload.playerId,
@@ -173,6 +175,7 @@ function putRouteCard(state, playerId, selectedRouteCards) {
     if (player.id === playerId) {
       let newPlayer = JSON.parse(JSON.stringify(player));
       newPlayer.routeCards = [...newPlayer.routeCards, ...selectedRouteCards];
+      newPlayer.playerFirstRound = false;
       return newPlayer;
     } else {
       return player;

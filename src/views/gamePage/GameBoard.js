@@ -6,13 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectActivePlayer } from '../../state/players/selector';
 import { useRef, useState } from 'react';
 import { PLAYER_BEGIN } from '../../constants/gameConstants';
+import { buildConnection } from '../../state/players/actions';
 
 export function GameBoard({
   activeCities,
   hoverCities,
   connectionHover,
   setConnectionHover,
-  isConnectionBuilt,
 }) {
   const [isBuilding, setIsBuilding] = useState(false);
   const [selectedConnectionId, setSelectedConnectionId] = useState(null);
@@ -24,24 +24,32 @@ export function GameBoard({
 
   const startBuildHandler = (e, connectionId) => {
     e.stopPropagation();
-    setIsBuilding(true);
-    setSelectedConnectionId(connectionId);
+    if (gameData.gameState === PLAYER_BEGIN && !activePlayer.playerFirstRound) {
+      setIsBuilding(true);
+      setSelectedConnectionId(connectionId);
+    }
   };
 
   const confirmBuildHandler = (e) => {
     e.preventDefault();
     const formData = trainColorFormRef.current.value;
     console.log(formData);
-    // let selectedTrainCards = [];
-    // dispatch(buildConnection(activePlayer.id, selectedTrainCards, selectedConnectionId));
+    /* let selectedTrainCards = [];
+    dispatch(
+      buildConnection(
+        activePlayer.id,
+        activePlayer.name,
+        selectedTrainCards,
+        selectedConnectionId,
+      ),
+    ); */
     setSelectedConnectionId(null);
     setIsBuilding(false);
   };
 
   const cityMarkers = gameData.cities.map((city) => {
     const hoverStyle =
-      activeCities.includes(city.id) ||
-      city.id === hoverCities.includes(city.id)
+      activeCities.includes(city.id) || hoverCities.includes(city.id)
         ? ` w-2 h-2 border-2 3xl:border-4 shadow-glow-${activePlayer.color}-sm lg:shadow-glow-${activePlayer.color} lg:w-3 lg:h-3 2xl:w-4 2xl:h-4 3xl:w-5 3xl:h-5`
         : '';
     const style = { top: city.y + '%', left: city.x + '%' };
@@ -85,7 +93,11 @@ export function GameBoard({
             className={classNames(
               `absolute w-2 h-4 lg:w-2.5 lg:h-5 xl:w-3 xl:h-7 2xl:w-3.5 2xl:h-8 3xl:w-4 3xl:h-10 transform focus:outline-none transition-all border-player-${activePlayer.color}` +
                 hoverStyle,
-              { 'cursor-not-allowed': gameData.gameState !== PLAYER_BEGIN },
+              {
+                'cursor-not-allowed':
+                  gameData.gameState !== PLAYER_BEGIN ||
+                  activePlayer.playerFirstRound,
+              },
             )}
             style={style}
             data-connection={connection.fromCity + '-' + connection.toCity}

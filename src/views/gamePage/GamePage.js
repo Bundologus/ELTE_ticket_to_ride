@@ -12,9 +12,11 @@ import {
   drawFromDeck,
   drawFromRoster,
   drawRouteCards,
+  drawRoutesFirstRound,
 } from '../../state/players/actions';
 import { selectActivePlayer } from '../../state/players/selector';
 import { PLAYER_BEGIN, PLAYER_DRAW_TRAIN } from '../../constants/gameConstants';
+import { fillRoster } from '../../state/game/actions';
 
 export function GamePage({ localPlayerId, setLocalPlayerId }) {
   const game = useSelector((state) => state.game);
@@ -50,7 +52,11 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
   const colors = COLOR_LIST;
 
   function drawFromRosterHandler(color, position) {
-    dispatch(drawFromRoster(activePlayer.id, color, position));
+    dispatch(
+      drawFromRoster(activePlayer.id, activePlayer.name, color, position),
+    );
+    setTimeout(1000);
+    dispatch(fillRoster());
   }
 
   function showDrawnFromTrainDeck() {
@@ -59,14 +65,9 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
   }
 
   function drawFromDeckHandler() {
-    const cardColors = drawnCarts.map((card) => {
-      return card.color;
-    });
-
+    dispatch(drawFromDeck(activePlayer.id, activePlayer.name, drawnCarts));
     setDrawnCarts([]);
     setDrawingCarts(false);
-
-    dispatch(drawFromDeck(activePlayer.id, cardColors));
   }
 
   function showDrawnRoutes() {
@@ -75,7 +76,8 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
   }
 
   function drawRouteCardsHandler() {
-    const selectedRouteIds = selectedRoutes.map((route) => {
+    const selectedRouteArray = Array.from(selectedRoutes);
+    const selectedRouteIds = selectedRouteArray.map((route) => {
       return route.id;
     });
 
@@ -87,7 +89,24 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
     setSelectedRoutes([]);
     setDrawingRoutes(false);
 
-    dispatch(drawRouteCards(activePlayer.id, selectedRoutes, droppedRoutes));
+    if (activePlayer.playerFirstRound)
+      dispatch(
+        drawRoutesFirstRound(
+          activePlayer.id,
+          activePlayer.name,
+          selectedRouteArray,
+          droppedRoutes,
+        ),
+      );
+    else
+      dispatch(
+        drawRouteCards(
+          activePlayer.id,
+          activePlayer.name,
+          selectedRouteArray,
+          droppedRoutes,
+        ),
+      );
   }
 
   /***************************************************/
@@ -125,11 +144,17 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
   );
 
   const rosterCards = game.trainCardRoster.map((color, position) => {
+    const gameState = game.gameState;
+    const isLocomotive = color === 'locomotive';
+    const isFirstRound = activePlayer.playerFirstRound;
+
     const available =
-      (color !== 'locomotive' &&
-        (game.gameState === PLAYER_BEGIN ||
-          game.gameState === PLAYER_DRAW_TRAIN)) ||
-      (color === 'locomotive' && game.gameState === PLAYER_BEGIN); // TODO && activePlayer.id === localPlayerId
+      !isFirstRound &&
+      ((!isLocomotive &&
+        (gameState === PLAYER_BEGIN || gameState === PLAYER_DRAW_TRAIN)) ||
+        (isLocomotive && gameState === PLAYER_BEGIN));
+    // TODO && activePlayer.id === localPlayerId
+
     return (
       <button
         key={color + '-roster-' + position}
@@ -159,33 +184,26 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
     );
   });
 
-  const drawingRouteCards = drawnRoutes.map((routeId) => {
-    let routeData = gameData.routes[routeId];
-    routeData.isSelected = false;
-    selectedRoutes.forEach((sr) => {
-      if (sr === routeData.id) {
-        routeData.isSelected = true;
-      }
-    });
-
+  const drawingRouteCards = drawnRoutes.map((routeData) => {
+    const selectedRouteArray = Array.from(selectedRoutes);
     return (
       <button
         key={'drawnRoute-' + routeData.id}
         className={classNames(
-          'relative focus:ring-0 focus:outline-none text-ttr-white w-24 2xl:w-40 text-left inline-grid grid-rows-2 mb-1 mx-2 rounded-md p-1.5 py-1 lg:p-1.5 transform transition-tranform hover:-translate-y-0.5 xl:-hover:-translate-y-2',
+          'relative focus:ring-0 focus:outline-none text-ttr-white w-24 xl:w-32 2xl:w-40 text-left inline-grid grid-rows-2 mb-1 mx-2 rounded-md p-1.5 py-1 lg:p-1.5 transform transition-tranform hover:-translate-y-0.5 xl:-hover:-translate-y-2',
           {
             'bg-gray-800': routeData.id > 40,
             'bg-gray-500': routeData.id <= 40,
-            'border-2 border-gray-400': routeData.isSelected,
+            'border-2 border-gray-400': selectedRouteArray.includes(routeData),
           },
         )}
         onClick={() => {
           let newSet = new Set(selectedRoutes);
 
-          if (newSet.has(routeData.id)) {
-            newSet.delete(routeData.id);
+          if (newSet.has(routeData)) {
+            newSet.delete(routeData);
           } else {
-            newSet.add(routeData.id);
+            newSet.add(routeData);
           }
 
           setSelectedRoutes(newSet);
@@ -204,9 +222,15 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
     );
   });
 
-  const actionLogList = actionLog.map((logEntry) => {
+  const actionLogList = actionLog.map((logEntry, leid) => {
     return (
-      <li className="text-3xs lg:text-2xs xl:text-xs 2xl:text-sm 3xl:text-base">
+      <li
+        key={'log-' + leid}
+        className={classNames(
+          'text-3xs lg:text-2xs xl:text-xs 2xl:text-sm 3xl:text-base',
+          { 'font-bold': activePlayer.id === logEntry.id },
+        )}
+      >
         <i>{logEntry.name}</i>&nbsp;
         {logEntry.text}
       </li>
@@ -250,7 +274,7 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
                 />
                 <button
                   className={classNames(
-                    'filter drop-shadow-md rounded-md border-b-2 xl:border-b-4 border-yellow-200 bg-yellow-500 text-ttr-white focus:outline-none w-12 h-12 p-1 lg:w-16 lg:h-20 lg:p-2 xl:h-28 xl:w-22 xl:p-1 2xl:h-36 2xl:w-28 2xl:px-2 3xl:h-40 3xl:w-32 3xl:p-2.5',
+                    'relative filter drop-shadow-md rounded-md border-b-2 xl:border-b-4 border-yellow-200 bg-yellow-500 text-ttr-white focus:outline-none w-12 h-12 p-1 lg:w-16 lg:h-20 lg:p-2 xl:h-28 xl:w-22 xl:p-1 2xl:h-36 2xl:w-28 2xl:px-2 3xl:h-40 3xl:w-32 3xl:p-2.5',
                     {
                       'transform transition-transform hover:-translate-y-1 lg:hover:-translate-y-2':
                         game.gameState === PLAYER_BEGIN,
@@ -263,20 +287,31 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-10 w-10 lg:h-12 lg:w-12 xl:h-20 xl:w-20 2xl:h-24 2xl:w-24 3xl:h-28 3xl:w-28"
+                    className={classNames(
+                      'h-10 w-10 lg:h-12 lg:w-12 xl:h-20 xl:w-20 2xl:h-24 2xl:w-24 3xl:h-28 3xl:w-28',
+                      {
+                        'animate-bounce':
+                          activePlayer.playerFirstRound &&
+                          game.gameState === PLAYER_BEGIN,
+                      },
+                    )}
                     viewBox="0 0 26 26"
                     fill="currentColor"
                   >
                     <path d="M13 19l-3-16c1-1 5-1 6 0l-3 16zM14 21a1 1 0 01-2 2a1 1 0 012-2z" />
                   </svg>
                 </button>
+
                 <button
                   className={classNames(
                     'filter drop-shadow-md rounded-md border-b-2 xl:border-b-4 border-blue-200 bg-blue-500 text-ttr-white focus:outline-none w-12 h-12 p-1 ml-6 mr-3 lg:w-16 lg:h-20 lg:ml-10 lg:mr-3 lg:p-2 xl:h-28 xl:w-22 xl:p-1 2xl:h-36 2xl:w-28 2xl:px-2 3xl:h-40 3xl:w-32 3xl:p-2.5',
                     {
                       'transform transition-transform hover:-translate-y-1 lg:hover:-translate-y-2':
-                        game.gameState === PLAYER_BEGIN,
-                      'cursor-not-allowed': game.gameState !== PLAYER_BEGIN,
+                        game.gameState === PLAYER_BEGIN &&
+                        !activePlayer.playerFirstRound,
+                      'cursor-not-allowed':
+                        game.gameState !== PLAYER_BEGIN ||
+                        activePlayer.playerFirstRound,
                     },
                   )}
                   onClick={() => {
@@ -331,15 +366,22 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
               <h2 className="text-ttr-white font-smallCaps font-semibold text-sm mb-2 xl:text-base xl:mb-4 2xl:text-xl 2xl:mb-3">
                 Cards drawn:
               </h2>
-              <div className="h-12 lg:h-20 xl:h-28 2xl:h-36 3xl:h-40">
+              <div className="">
                 {drawingCarts ? drawingCartCards : drawingRouteCards}
               </div>
               <button
-                className="mx-auto block focus:outline-none bg-green-600 hover:bg-green-500 border-green-800 border-2 rounded-md px-4 mt-5 xl:mt-8 xl:text-lg xl:px-6"
+                className={classNames(
+                  'mx-auto block focus:outline-none bg-green-600 border-green-800 border-2 rounded-md px-4 mt-5 xl:mt-8 xl:text-lg xl:px-6',
+                  {
+                    'hover:bg-green-500':
+                      drawingCarts || selectedRoutes.size > 0,
+                    invisible: drawingRoutes && selectedRoutes.size === 0,
+                  },
+                )}
                 onClick={() => {
                   if (drawingCarts) {
                     drawFromDeckHandler();
-                  } else if (drawingRoutes) {
+                  } else if (drawingRoutes && selectedRoutes.size > 0) {
                     drawRouteCardsHandler();
                   }
                 }}

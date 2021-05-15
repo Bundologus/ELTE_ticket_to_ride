@@ -22,6 +22,7 @@ import {
   BUILD_CONNECTION,
   DRAW_FROM_DECK,
   DRAW_FROM_ROSTER,
+  DRAW_ROUTES_FIRST_ROUND,
 } from '../players/actions';
 
 const initialTrainDeck = (() => {
@@ -47,7 +48,7 @@ const initialState = {
   gameId: '',
   gameState: GAME_WAITING,
   lastRound: false,
-  lastPlayerId: null,
+  finishingPlayerId: null,
   cities: ticketToRideData.cities,
   connections: ticketToRideData.connections,
   routeDeck: shuffle(ticketToRideData.routes),
@@ -74,10 +75,6 @@ export function gameReducer(state = initialState, action) {
     case DEAL_STARTER_HAND: {
       newState = { ...state };
       for (const hand of payload.arrayOfHands) {
-        console.log('gameReducer');
-        console.log(hand);
-        console.log(hand.trainCards);
-        console.log(hand.longRouteCard);
         newState = popFromDeck(newState, hand.trainCards);
         newState = popFromLongRouteDeck(newState, hand.longRouteCard);
       }
@@ -89,7 +86,7 @@ export function gameReducer(state = initialState, action) {
         newState,
         payload.playerName,
         payload.playerId,
-        `picked a ${payload.cardColor} card.`,
+        `picked a ${payload.cardColor} cart.`,
       );
       break;
     }
@@ -121,6 +118,22 @@ export function gameReducer(state = initialState, action) {
         state,
         payload.selectedRouteCards,
         payload.droppedRouteCards,
+        true,
+      );
+      newState = logAction(
+        newState,
+        payload.playerName,
+        payload.playerId,
+        `pulled ${payload.selectedRouteCards.length} new routes.`,
+      );
+      break;
+    }
+    case DRAW_ROUTES_FIRST_ROUND: {
+      newState = updateRouteDeck(
+        state,
+        payload.selectedRouteCards,
+        payload.droppedRouteCards,
+        false,
       );
       newState = logAction(
         newState,
@@ -158,7 +171,7 @@ function initNewGame(state) {
     gameId: uuidv4(),
     gameState: GAME_WAITING,
     lastRound: false,
-    lastPlayerId: null,
+    finishingPlayerId: null,
   };
 }
 
@@ -176,14 +189,14 @@ function setLastRound(state) {
     activePlayerId: getNextPlayer(state),
     gameState: PLAYER_BEGIN,
     lastRound: true,
-    lastPlayerId: state.activePlayerId,
+    finishingPlayerId: state.activePlayerId,
   };
 }
 
 function setNextPlayer(state) {
   if (
     state.gameState === GAME_LAST_ROUND &&
-    state.acitvePlayer === state.lastPlayerId
+    state.acitvePlayerId === state.finishingPlayerId
   ) {
     return {
       ...state,
@@ -199,8 +212,8 @@ function setNextPlayer(state) {
 }
 
 function getNextPlayer(state) {
-  if (state.acitvePlayer + 1 >= state.maxPlayers) return 0;
-  else return state.acitvePlayer + 1;
+  if (state.activePlayerId + 1 >= state.maxPlayers) return 0;
+  else return state.activePlayerId + 1;
 }
 
 function popFromDeck(state, cardColors) {
@@ -298,7 +311,12 @@ function fillRosterFromDeck(state) {
   };
 }
 
-function updateRouteDeck(state, selectedRouteCards, droppedRouteCards) {
+function updateRouteDeck(
+  state,
+  selectedRouteCards,
+  droppedRouteCards,
+  stateChange,
+) {
   let selectedIds = [...selectedRouteCards, ...droppedRouteCards].map(
     (routeCard) => {
       return routeCard.id;
@@ -311,26 +329,10 @@ function updateRouteDeck(state, selectedRouteCards, droppedRouteCards) {
 
   return {
     ...state,
-    routeDeck: [...selectedRouteCards, ...tempRouteDeck],
-    gameState: PLAYER_DONE,
+    routeDeck: [...droppedRouteCards, ...tempRouteDeck],
+    gameState: stateChange ? PLAYER_DONE : PLAYER_BEGIN,
   };
 }
-
-/* function popFromRouteDeck(state, selectedRouteCards) {
-  let selectedIds = selectedRouteCards.map((routeCard) => {
-    return routeCard.id;
-  });
-
-  let tempRouteDeck = state.routeDeck.filter((routeCard) => {
-    return !selectedIds.includes(routeCard.id);
-  });
-
-  return {
-    ...state,
-    routeDeck: tempRouteDeck,
-    gameState: PLAYER_DONE,
-  };
-} */
 
 function popConnection(state, selectedConnection) {
   let tempConnections = [...state.connections];

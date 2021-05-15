@@ -22,8 +22,6 @@ export function WaitingRoomPage({ localPlayerId, setLocalPlayerId }) {
       });
     }
 
-    console.log('arrayOfHands');
-    console.log(arrayOfHands);
     return arrayOfHands;
   };
 

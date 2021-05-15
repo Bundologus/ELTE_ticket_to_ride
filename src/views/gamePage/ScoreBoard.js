@@ -47,7 +47,12 @@ export function ScoreBoard() {
       return p2.score - p1.score;
     })
     .map((player) => {
-      return <PlayerCard player={player}></PlayerCard>;
+      return (
+        <PlayerCard
+          key={'playerCard-' + player.id}
+          player={player}
+        ></PlayerCard>
+      );
     });
 
   return <>{scoreBoard}</>;

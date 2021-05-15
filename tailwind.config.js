@@ -50,7 +50,7 @@ module.exports = {
       },
       fontSize: {
         '2xs': ['.65rem', '.8rem'],
-        '3xs': ['.5rem', '.65rem'],
+        '3xs': ['.5rem', '.7rem'],
       },
       lineHeight: {
         custom: '2.85rem',

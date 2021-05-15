@@ -55,11 +55,9 @@ export function HandPanel({
           onMouseEnter={() => {
             if (route.finished) {
               setHoverCities([route.from, route.to]);
-              console.log(route.path);
               setConnectionHover(route.path);
             } else {
               setHoverCities([route.from, route.to]);
-              console.log(route.path);
             }
           }}
           onMouseLeave={() => {
@@ -118,7 +116,7 @@ export function HandPanel({
           'absolute focus:outline-none w-full top-1 left-1 text-left pl-2 2xl:left-2 2xl:mt-1.5 font-smallCaps font-semibold rounded-md xl:rounded-lg bg-yellow-300 hover:bg-yellow-200 text-yellow-700 border-2 border-yellow-600 text-xs whitespace-nowrap z-50 lg:text-base xl:text-xl 2xl:text-2xl transform transition-transform',
           {
             'translate-x-22 lg:translate-x-36 xl:translate-x-44 2xl:translate-x-52 3xl:translate-x-72':
-              game.gameState === PLAYER_DONE,
+              game.gameState !== PLAYER_DONE,
           },
         )}
         onClick={() => {

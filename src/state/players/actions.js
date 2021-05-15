@@ -1,12 +1,13 @@
 export const DRAW_FROM_ROSTER = 'DRAW_FROM_ROSTER';
 export const DRAW_FROM_DECK = 'DRAW_FROM_DECK';
 export const DRAW_ROUTE_CARDS = 'DRAW_ROUTE_CARDS';
+export const DRAW_ROUTES_FIRST_ROUND = 'DRAW_ROUTES_FIRST_ROUND';
 export const BUILD_CONNECTION = 'BUILD_CONNECTION';
 
 export function drawFromRoster(playerId, playerName, cardColor, position) {
   return {
     type: DRAW_FROM_ROSTER,
-    palyoad: {
+    payload: {
       playerId,
       playerName,
       cardColor,
@@ -18,7 +19,7 @@ export function drawFromRoster(playerId, playerName, cardColor, position) {
 export function drawFromDeck(playerId, playerName, cardColors) {
   return {
     type: DRAW_FROM_DECK,
-    palyoad: {
+    payload: {
       playerId,
       playerName,
       cardColors,
@@ -34,7 +35,24 @@ export function drawRouteCards(
 ) {
   return {
     type: DRAW_ROUTE_CARDS,
-    palyoad: {
+    payload: {
+      playerId,
+      playerName,
+      selectedRouteCards,
+      droppedRouteCards,
+    },
+  };
+}
+
+export function drawRoutesFirstRound(
+  playerId,
+  playerName,
+  selectedRouteCards,
+  droppedRouteCards,
+) {
+  return {
+    type: DRAW_ROUTES_FIRST_ROUND,
+    payload: {
       playerId,
       playerName,
       selectedRouteCards,
@@ -51,7 +69,7 @@ export function buildConnection(
 ) {
   return {
     type: BUILD_CONNECTION,
-    palyoad: {
+    payload: {
       playerId,
       playerName,
       usedTrainColors,
