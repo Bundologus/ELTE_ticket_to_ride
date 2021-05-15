@@ -38,7 +38,7 @@ export const testPlayers = [
     name: 'Resistance',
     color: 'green',
     score: 0,
-    playerFirstRound: false,
+    playerFirstRound: true,
     carts: 0,
     trainCards: {
       black: 0,
@@ -61,7 +61,7 @@ export const testPlayers = [
     name: 'is futile.',
     color: 'blue',
     score: 0,
-    playerFirstRound: false,
+    playerFirstRound: true,
     carts: 0,
     trainCards: {
       black: 0,
@@ -84,7 +84,7 @@ export const testPlayers = [
     name: "Who's there?",
     color: 'yellow',
     score: 0,
-    playerFirstRound: false,
+    playerFirstRound: true,
     carts: 0,
     trainCards: {
       black: 0,
@@ -107,7 +107,7 @@ export const testPlayers = [
     name: 'Trains go.',
     color: 'red',
     score: 0,
-    playerFirstRound: false,
+    playerFirstRound: true,
     carts: 0,
     trainCards: {
       black: 0,
@@ -130,7 +130,7 @@ export const testPlayers = [
     name: 'Trains go who?',
     color: 'black',
     score: 0,
-    playerFirstRound: false,
+    playerFirstRound: true,
     carts: 0,
     trainCards: {
       black: 0,
