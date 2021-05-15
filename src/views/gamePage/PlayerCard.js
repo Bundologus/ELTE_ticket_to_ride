@@ -1,4 +1,9 @@
+import classNames from 'classnames';
+import { useSelector } from 'react-redux';
+import { selectActivePlayer } from '../../state/players/selector';
+
 export function PlayerCard({ player }) {
+  const activePlayer = useSelector(selectActivePlayer);
   const svgPaths = [
     /* cart svg */
     'M4 2A2 2 0 002 4V31A2 2 0 004 33H30A2 2 0 0032 31V4A2 2 0 0030 2ZM9.5 20a.9.9 90 11-2 0a.9.9 90 012 0zM13 20a.9.9 90 11-2 0a.9.9 90 012 0zM23 20a.9.9 90 11-2 0a.9.9 90 012 0zM26.5 20a.9.9 90 11-2 0a.9.9 90 012 0zM6 12h22a1 1 0 011 1v4.75h1v-.75h.4v2h-.4v-.75h-1v.75a1 1 0 01-1 1h-1a1 1 0 00-3 0h-.5a1 1 0 00-3 0h-7a1 1 0 00-3 0h-.5a1 1 0 00-3 0h-1a1 1 0 01-1-1v-.75h-1v.75h-.4v-2h.4v.75h1v-4.75a1 1 0 011-1z',
@@ -25,7 +30,13 @@ export function PlayerCard({ player }) {
 
   return (
     <div
-      className={`relative bg-player-${player.color} text-ttr-white shadow-md rounded-r-md -ml-4 p-1 pl-3.5 pt-0.5 lg:rounded-r-lg lg:py-1.5 lg:pr-1.5 3xl:py-2 3xl:pr-2 3xl:pl-4`}
+      className={classNames(
+        `relative bg-player-${player.color} text-ttr-white shadow-md rounded-br-lg -ml-4 p-1 pl-3.5 pt-0.5 lg:rounded-br-xl lg:py-1.5 lg:pr-1.5 xl:rounded-br-2xl 3xl:py-2 3xl:pr-2 3xl:pl-4 3xl:rounded-br-3xl`,
+        {
+          'border-ttr-white border xl:border-2 2xl:border-4':
+            player.id === activePlayer.id,
+        },
+      )}
     >
       <h2 className="font-smallCaps font-semibold filter drop-shadow-md text-xs truncate lg:text-base xl:text-lg 2xl:text-2xl 2xl:mb-1 3xl:text-3xl">
         {player.name}

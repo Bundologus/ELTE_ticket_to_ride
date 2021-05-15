@@ -55,6 +55,7 @@ const initialState = {
   trainCardDeck: shuffle(initialTrainDeck),
   trainDiscardPile: [],
   trainCardRoster: [],
+  actionLog: [],
 };
 
 export function gameReducer(state = initialState, action) {
@@ -67,6 +68,7 @@ export function gameReducer(state = initialState, action) {
     }
     case START_GAME: {
       newState = setFirstRound(state);
+      newState = logAction(newState, '', '-1', `Game started.`);
       break;
     }
     case DEAL_STARTER_HAND: {
@@ -83,6 +85,12 @@ export function gameReducer(state = initialState, action) {
     }
     case DRAW_FROM_ROSTER: {
       newState = popFromRoster(state, payload.cardColor, payload.position);
+      newState = logAction(
+        newState,
+        payload.playerName,
+        payload.playerId,
+        `picked a ${payload.cardColor} card.`,
+      );
       break;
     }
     case FILL_ROSTER: {
@@ -91,10 +99,17 @@ export function gameReducer(state = initialState, action) {
     }
     case DRAW_FROM_DECK: {
       newState = popFromDeck(state, payload.cardColors);
+      newState = logAction(
+        newState,
+        payload.playerName,
+        payload.playerId,
+        `pulled 2 from the cart deck.`,
+      );
       break;
     }
     case START_LAST_ROUND: {
       newState = setLastRound(state);
+      newState = logAction(newState, '', '-1', `Last round started.`);
       break;
     }
     case NEXT_PLAYER: {
@@ -107,11 +122,23 @@ export function gameReducer(state = initialState, action) {
         payload.selectedRouteCards,
         payload.droppedRouteCards,
       );
+      newState = logAction(
+        newState,
+        payload.playerName,
+        payload.playerId,
+        `pulled ${payload.selectedRouteCards.length} new routes.`,
+      );
       break;
     }
     case BUILD_CONNECTION: {
       newState = popConnection(state, payload.connection);
       newState = pushToDiscardPile(newState, payload.usedTrainColors);
+      newState = logAction(
+        newState,
+        payload.playerName,
+        payload.playerId,
+        `built connection between ${payload.connection.toCity} and ${payload.connection.fromCity} with ${payload.usedTrainColors}.`,
+      );
       break;
     }
     default: {
@@ -321,6 +348,13 @@ function pushToDiscardPile(state, usedTrainColors) {
   return {
     ...state,
     trainDiscardPile: [...state.trainDiscardPile, ...usedTrainColors],
+  };
+}
+
+function logAction(state, name, id, text) {
+  return {
+    ...state,
+    actionLog: [{ name, id, text }, ...state.actionLog.slice(0, 10)],
   };
 }
 

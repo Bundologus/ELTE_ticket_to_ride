@@ -20,10 +20,11 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
   const game = useSelector((state) => state.game);
   const players = useSelector((state) => state.players);
   const activePlayer = useSelector(selectActivePlayer);
+  const actionLog = game.actionLog;
   /* const opponentList = players.filter((player) => {
     return player.id !== activePlayer.id;
   }); */
-  const actionLog = [
+  /* const actionLog = [
     { name: 'Resistance', text: 'drew 2 train cards.' },
     { name: 'is futile', text: 'joined the game.' },
     {
@@ -32,7 +33,7 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
     },
     { name: 'Resistance', text: 'joinged the game.' },
     { name: 'Resistance', text: 'joinged the game.' },
-  ];
+  ]; */
 
   const [activeCities, setActiveCities] = useState([]);
   const [hoverCities, setHoverCities] = useState([]);
