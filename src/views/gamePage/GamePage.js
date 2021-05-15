@@ -2,7 +2,6 @@ import { useState } from 'react';
 import classNames from 'classnames';
 import { ticketToRideData as gameData } from '../../assets/ticket-to-ride-data';
 import './gamePage.css';
-import { PlayerCard } from './PlayerCard';
 import { HandPanel } from './HandPanel';
 import { GameBoard } from './GameBoard';
 import { PlayerListType, PlayerType } from '../../domain/playerType';
@@ -21,9 +20,19 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
   const game = useSelector((state) => state.game);
   const players = useSelector((state) => state.players);
   const activePlayer = useSelector(selectActivePlayer);
-  const opponentList = players.filter((player) => {
+  /* const opponentList = players.filter((player) => {
     return player.id !== activePlayer.id;
-  });
+  }); */
+  const actionLog = [
+    { name: 'Resistance', text: 'drew 2 train cards.' },
+    { name: 'is futile', text: 'joined the game.' },
+    {
+      name: 'Resistance',
+      text: 'joinged the game blahh blah blahhahahahaha.',
+    },
+    { name: 'Resistance', text: 'joinged the game.' },
+    { name: 'Resistance', text: 'joinged the game.' },
+  ];
 
   const [activeCities, setActiveCities] = useState([]);
   const [hoverCities, setHoverCities] = useState([]);
@@ -79,14 +88,6 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
 
     dispatch(drawRouteCards(activePlayer.id, selectedRoutes, droppedRoutes));
   }
-
-  /* function isConnectionBuilt(id) {
-    let result = 0;
-    builtConnections.forEach((cb) => {
-      if (cb[0] === id) ++result;
-    });
-    return result;
-  } */
 
   /***************************************************/
   /**                                               **/
@@ -202,6 +203,15 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
     );
   });
 
+  const actionLogList = actionLog.map((logEntry) => {
+    return (
+      <li className="text-3xs lg:text-2xs xl:text-xs 2xl:text-sm 3xl:text-base">
+        <i>{logEntry.name}</i>&nbsp;
+        {logEntry.text}
+      </li>
+    );
+  });
+
   return (
     <div className="container h-screen font-regular z-10 pt-10 md:px-16 lg:pt-16 lg:pb-2 2xl:flex  2xl:items-center">
       <div
@@ -217,22 +227,8 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
               setConnectionHover={setConnectionHover}
             ></GameBoard>
           </div>
-          <div className="contents" id="stat-cards">
-            <div className="row-start-1 col-start-1">
-              <PlayerCard player={opponentList[0]}></PlayerCard>
-            </div>
-            {/* <div className="row-start-2 col-start-1">
-              <PlayerCard player={opponentList[1]}></PlayerCard>
-            </div>
-            <div className="row-start-3 col-start-1">
-              <PlayerCard player={opponentList[2]}></PlayerCard>
-            </div>
-            <div className="row-start-4 col-start-1">
-              <PlayerCard player={opponentList[3]}></PlayerCard>
-            </div> */}
-          </div>
           <div className="contents" id="score-board">
-            <div className="row-start-5 col-start-1 col-span-1 row-span-1 grid grid-rows-5 text-ttr-white filter drop-shadow-md p-0">
+            <div className="row-start-1 col-start-1 col-span-1 row-span-4 grid grid-rows-5 text-ttr-white filter drop-shadow-md p-0">
               <ScoreBoard></ScoreBoard>
             </div>
           </div>
@@ -299,6 +295,18 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
                 <div className="h-12 lg:h-20 xl:h-28 2xl:h-36 3xl:h-40">
                   {rosterCards}
                 </div>
+              </div>
+            </div>
+          </div>
+          <div className="contents" id="action-log">
+            <div className="row-start-5 col-start-1 col-span-1 row-span-1 text-ttr-white filter drop-shadow-md bg-gray-600 flex flex-col flex-nowrap flex-1 rounded-r-md -mx-4 p-1 pl-3.5 pt-0.5 lg:mr-0 lg:rounded-r-lg lg:py-1.5 lg:pr-1.5 3xl:py-2 3xl:pr-2 3xl:pl-4">
+              <h3 className="flex-initial font-smallCaps font-semibold filter drop-shadow-md text-xs truncate lg:text-base xl:text-lg 2xl:text-2xl 3xl:text-3xl">
+                Action log
+              </h3>
+              <div className="flex-1 overflow-y-scroll" id="action-list">
+                <ul className=" divide-y-0.5 divide-ttr-white">
+                  {actionLogList}
+                </ul>
               </div>
             </div>
           </div>

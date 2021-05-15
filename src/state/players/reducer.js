@@ -15,7 +15,8 @@ import {
   BUILD_CONNECTION,
 } from './actions';
 
-const initialState = testPlayers.slice(0, 2);
+//const initialState = testPlayers.slice(0, 2);
+const initialState = testPlayers;
 
 export function playersReducer(state = initialState, action) {
   const { type, payload } = action;

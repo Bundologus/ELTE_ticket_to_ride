@@ -45,8 +45,12 @@ module.exports = {
         'player-red': '#b11017',
         'player-yellow': '#d09d01',
       },
+      divideWidth: {
+        0.5: '0.5px',
+      },
       fontSize: {
         '2xs': ['.65rem', '.8rem'],
+        '3xs': ['.5rem', '.65rem'],
       },
       lineHeight: {
         custom: '2.85rem',
