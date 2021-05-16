@@ -482,7 +482,7 @@ export const ticketToRideData = {
       to: '30',
       toCity: 'Paris',
       elements: [{ x: 23.875, y: 45.96622889305816, rotation: -40 }],
-      color: 'purple',
+      color: 'pink',
       locomotive: 0,
     },
     {
@@ -544,7 +544,7 @@ export const ticketToRideData = {
         { x: 34, y: 34.146341463414636, rotation: -45 },
         { x: 36.5, y: 37.89868667917448, rotation: -45 },
       ],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
@@ -586,7 +586,7 @@ export const ticketToRideData = {
         { x: 19.5, y: 58.536585365853654, rotation: 175 },
         { x: 19.75, y: 63.977485928705434, rotation: 0 },
       ],
-      color: 'purple',
+      color: 'pink',
       locomotive: 0,
     },
     {
@@ -644,7 +644,7 @@ export const ticketToRideData = {
         { x: 15.375, y: 76.73545966228893, rotation: 45 },
         { x: 13.125, y: 80.86303939962477, rotation: 38 },
       ],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
@@ -658,7 +658,7 @@ export const ticketToRideData = {
         { x: 5.375, y: 78.79924953095684, rotation: 90 },
         { x: 4.375, y: 82.17636022514071, rotation: 0 },
       ],
-      color: 'purple',
+      color: 'pink',
       locomotive: 0,
     },
     {
@@ -783,7 +783,7 @@ export const ticketToRideData = {
         { x: 36.875, y: 61.16322701688556, rotation: 10 },
         { x: 36.125, y: 66.22889305816135, rotation: 15 },
       ],
-      color: 'purple',
+      color: 'pink',
       locomotive: 0,
     },
     {
@@ -797,7 +797,7 @@ export const ticketToRideData = {
         { x: 33, y: 46.34146341463415, rotation: 60 },
         { x: 35.875, y: 43.52720450281426, rotation: 55 },
       ],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
@@ -837,7 +837,7 @@ export const ticketToRideData = {
         { x: 39.125, y: 45.77861163227016, rotation: -15 },
         { x: 40.875, y: 48.78048780487805, rotation: 75 },
       ],
-      color: 'purple',
+      color: 'pink',
       locomotive: 0,
     },
     {
@@ -1001,7 +1001,7 @@ export const ticketToRideData = {
         { x: 51.125, y: 11.632270168855536, rotation: 50 },
         { x: 54, y: 8.442776735459661, rotation: 60 },
       ],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
@@ -1041,7 +1041,7 @@ export const ticketToRideData = {
         { x: 49.125, y: 73.73358348968105, rotation: 85 },
         { x: 52.37500000000001, y: 75.79737335834896, rotation: -40 },
       ],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
@@ -1145,7 +1145,7 @@ export const ticketToRideData = {
         { x: 58.5, y: 30.95684803001876, rotation: 90 },
         { x: 62, y: 31.51969981238274, rotation: -80 },
       ],
-      color: 'purple',
+      color: 'pink',
       locomotive: 0,
     },
     {
@@ -1249,7 +1249,7 @@ export const ticketToRideData = {
       to: '10',
       toCity: 'Budapest',
       elements: [{ x: 56.25, y: 54.03377110694184, rotation: -58 }],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
@@ -1290,7 +1290,7 @@ export const ticketToRideData = {
         { x: 60.25, y: 63.22701688555347, rotation: -10 },
         { x: 60.75000000000001, y: 68.48030018761726, rotation: -10 },
       ],
-      color: 'purple',
+      color: 'pink',
       locomotive: 0,
     },
     {
@@ -1332,7 +1332,7 @@ export const ticketToRideData = {
         { x: 64.375, y: 81.05065666041276, rotation: 5 },
         { x: 65.25, y: 85.92870544090057, rotation: -32 },
       ],
-      color: 'purple',
+      color: 'pink',
       locomotive: 0,
     },
     {
@@ -1625,7 +1625,7 @@ export const ticketToRideData = {
         { x: 82.25, y: 59.849906191369605, rotation: -65 },
         { x: 85.125, y: 63.22701688555347, rotation: -40 },
       ],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {
@@ -1764,7 +1764,7 @@ export const ticketToRideData = {
         { x: 91.625, y: 17.636022514071296, rotation: -28 },
         { x: 92.625, y: 23.076923076923077, rotation: -5 },
       ],
-      color: 'whote',
+      color: 'white',
       locomotive: 0,
     },
     {

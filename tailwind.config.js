@@ -1,3 +1,6 @@
+const svgToTinyDataUri = require('mini-svg-data-uri');
+const plugin = require('tailwindcss/plugin');
+
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
@@ -45,8 +48,12 @@ module.exports = {
         'player-red': '#b11017',
         'player-yellow': '#d09d01',
       },
+      divideWidth: {
+        0.5: '0.5px',
+      },
       fontSize: {
         '2xs': ['.65rem', '.8rem'],
+        '3xs': ['.5rem', '.7rem'],
       },
       lineHeight: {
         custom: '2.85rem',
@@ -65,9 +72,24 @@ module.exports = {
     },
   },
   variants: {
+    animation: ['motion-reduce'],
     extend: {
-      backgroundColor: ['active'],
+      backgroundColor: ['active', 'checked'],
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [
+    require('@tailwindcss/forms'),
+    plugin(({ addUtilities }) => {
+      const svgUri = svgToTinyDataUri(
+        `<svg viewBox="0 0 16 16" fill="black" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="3"/></svg>`,
+      );
+      const newUtilities = {
+        '.radio-dark': {
+          'background-image': 'url("' + svgUri + '")',
+        },
+      };
+
+      addUtilities(newUtilities, ['checked']);
+    }),
+  ],
 };

@@ -14,10 +14,12 @@
   color: #444;
 }
 
-#routecard-box ::-webkit-scrollbar {
+#routecard-box ::-webkit-scrollbar,
+#action-log ::-webkit-scrollbar {
   display: none;
 }
 
-#routecard-box {
+#routecard-box,
+#action-list {
   scrollbar-color: transparent transparent;
 }

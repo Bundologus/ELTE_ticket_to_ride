@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { ConnectionList } from './connection';
 import { Route, RouteList } from './route';
 
 export const TrainCardsHand = PropTypes.shape({
@@ -18,12 +19,15 @@ export const PlayerType = PropTypes.shape({
   name: PropTypes.string.isRequired,
   color: PropTypes.string,
   score: PropTypes.number,
+  playerFirstRound: PropTypes.bool,
   carts: PropTypes.number,
-  trainCardCount: PropTypes.number,
+  /* trainCardCount: PropTypes.number, */
   trainCards: TrainCardsHand,
-  routeCardCount: PropTypes.number,
+  /* routeCardCount: PropTypes.number, */
   routeCards: RouteList,
   longRouteCard: Route,
+  builtConnections: ConnectionList,
+  longestChain: PropTypes.number,
 });
 
 export const PlayerListType = PropTypes.arrayOf(PlayerType);
@@ -31,9 +35,128 @@ export const PlayerListType = PropTypes.arrayOf(PlayerType);
 export const testPlayers = [
   {
     id: 0,
+    name: 'Resistance',
+    color: 'green',
+    score: 0,
+    playerFirstRound: true,
+    carts: 0,
+    trainCards: {
+      black: 0,
+      blue: 0,
+      green: 0,
+      orange: 0,
+      pink: 0,
+      red: 0,
+      white: 0,
+      yellow: 0,
+      locomotive: 0,
+    },
+    routeCards: [],
+    longRouteCard: null,
+    builtConnections: [],
+    longestChain: 0,
+  },
+  {
+    id: 1,
+    name: 'is futile.',
+    color: 'blue',
+    score: 0,
+    playerFirstRound: true,
+    carts: 0,
+    trainCards: {
+      black: 0,
+      blue: 0,
+      green: 0,
+      orange: 0,
+      pink: 0,
+      red: 0,
+      white: 0,
+      yellow: 0,
+      locomotive: 0,
+    },
+    routeCards: [],
+    longRouteCard: null,
+    builtConnections: [],
+    longestChain: 0,
+  },
+  {
+    id: 2,
+    name: "Who's there?",
+    color: 'yellow',
+    score: 0,
+    playerFirstRound: true,
+    carts: 0,
+    trainCards: {
+      black: 0,
+      blue: 0,
+      green: 0,
+      orange: 0,
+      pink: 0,
+      red: 0,
+      white: 0,
+      yellow: 0,
+      locomotive: 0,
+    },
+    routeCards: [],
+    longRouteCard: null,
+    builtConnections: [],
+    longestChain: 0,
+  },
+  {
+    id: 3,
+    name: 'Trains go.',
+    color: 'red',
+    score: 0,
+    playerFirstRound: true,
+    carts: 0,
+    trainCards: {
+      black: 0,
+      blue: 0,
+      green: 0,
+      orange: 0,
+      pink: 0,
+      red: 0,
+      white: 0,
+      yellow: 0,
+      locomotive: 0,
+    },
+    routeCards: [],
+    longRouteCard: null,
+    builtConnections: [],
+    longestChain: 0,
+  },
+  {
+    id: 4,
+    name: 'Trains go who?',
+    color: 'black',
+    score: 0,
+    playerFirstRound: true,
+    carts: 0,
+    trainCards: {
+      black: 0,
+      blue: 0,
+      green: 0,
+      orange: 0,
+      pink: 0,
+      red: 0,
+      white: 0,
+      yellow: 0,
+      locomotive: 0,
+    },
+    routeCards: [],
+    longRouteCard: null,
+    builtConnections: [],
+    longestChain: 0,
+  },
+];
+
+/* export const testPlayers = [
+  {
+    id: 0,
     name: 'No silly, trains go CHOO!',
     color: 'green',
     score: 10,
+    playerFirstRound: false,
     carts: 45,
     trainCardCount: 5,
     trainCards: {
@@ -86,12 +209,14 @@ export const testPlayers = [
       value: '20',
       finished: false,
     },
+    builtConnections: [],
   },
   {
     id: 1,
     name: 'Knock, knock!',
     color: 'blue',
     score: 50,
+    playerFirstRound: false,
     carts: 45,
     trainCardCount: 4,
     trainCards: {
@@ -108,12 +233,14 @@ export const testPlayers = [
     routeCardCount: 2,
     routeCards: [],
     longRouteCard: null,
+    builtConnections: [],
   },
   {
     id: 2,
     name: "Who's there?",
     color: 'yellow',
     score: 40,
+    playerFirstRound: false,
     carts: 45,
     trainCardCount: 7,
     trainCards: {
@@ -130,12 +257,14 @@ export const testPlayers = [
     routeCardCount: 4,
     routeCards: [],
     longRouteCard: null,
+    builtConnections: [],
   },
   {
     id: 3,
     name: 'Trains go.',
     color: 'red',
     score: 30,
+    playerFirstRound: false,
     carts: 45,
     trainCardCount: 4,
     trainCards: {
@@ -152,12 +281,14 @@ export const testPlayers = [
     routeCardCount: 5,
     routeCards: [],
     longRouteCard: null,
+    builtConnections: [],
   },
   {
     id: 4,
     name: 'Trains go who?',
     color: 'black',
     score: 20,
+    playerFirstRound: false,
     carts: 45,
     trainCardCount: 4,
     trainCards: {
@@ -174,5 +305,6 @@ export const testPlayers = [
     routeCardCount: 3,
     routeCards: [],
     longRouteCard: null,
+    builtConnections: [],
   },
-];
+]; */
