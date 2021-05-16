@@ -46,7 +46,10 @@ export function GameBoard({
       setSelectedConnection(connection);
       const colorOptions = getColorOptions(connection);
 
-      if (colorOptions.length > 0) {
+      if (
+        colorOptions.length > 0 &&
+        activePlayer.trainCards.locomotive >= connection.locomotive
+      ) {
         setSelectedTrainColor(colorOptions[0]);
         setIsBuilding(true);
       }
@@ -142,7 +145,9 @@ export function GameBoard({
     })
     .map((connection) => {
       const trackElements = connection.elements.map(({ x, y, rotation }) => {
-        let canBuild = getColorOptions(connection).length > 0;
+        let canBuild =
+          getColorOptions(connection).length > 0 &&
+          activePlayer.trainCards.locomotive >= connection.locomotive;
         let hoverStyle = connectionHover.includes(connection.id)
           ? ` border-2 shadow-glow-${activePlayer.color}-sm lg:shadow-glow-${activePlayer.color}`
           : '';
@@ -267,7 +272,7 @@ export function GameBoard({
     const pathLength = connection.elements.length;
     const minLocomotive = Math.max(
       pathLength - activePlayer.trainCards[selectedTrainColor],
-      0,
+      connection.locomotive,
     );
     const maxLocomotive = Math.min(
       activePlayer.trainCards.locomotive,
