@@ -52,20 +52,26 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
   const colors = COLOR_LIST;
 
   function drawFromRosterHandler(color, position) {
-    dispatch(
-      drawFromRoster(activePlayer.id, activePlayer.name, color, position),
-    );
-    setTimeout(1000);
-    dispatch(fillRoster());
+    if (!activePlayer.playerFirstRound) {
+      dispatch(
+        drawFromRoster(activePlayer.id, activePlayer.name, color, position),
+      );
+      setTimeout(1000);
+      dispatch(fillRoster());
+    }
   }
 
   function showDrawnFromTrainDeck() {
-    setDrawnCarts(game.trainCardDeck.slice(-2));
-    setDrawingCarts(true);
+    if (!activePlayer.playerFirstRound) {
+      setDrawnCarts(game.trainCardDeck.slice(-2));
+      setDrawingCarts(true);
+    }
   }
 
   function drawFromDeckHandler() {
-    dispatch(drawFromDeck(activePlayer.id, activePlayer.name, drawnCarts));
+    dispatch(
+      drawFromDeck(activePlayer.id, activePlayer.name, drawnCarts.reverse()),
+    );
     setDrawnCarts([]);
     setDrawingCarts(false);
   }
@@ -254,7 +260,7 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
           <div className="contents" id="map">
             <GameBoard
               activeCities={activeCities}
-              hoverCities={hoverCities}
+              hoverCities={Array.from(hoverCities)}
               connectionHover={connectionHover}
               setConnectionHover={setConnectionHover}
             ></GameBoard>

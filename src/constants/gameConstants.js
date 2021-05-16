@@ -17,6 +17,7 @@ export const CART_COLOR_RED = 'red';
 export const CART_COLOR_WHITE = 'white';
 export const CART_COLOR_YELLOW = 'yellow';
 export const CART_COLOR_LOCOMOTIVE = 'locomotive';
+export const CONNECTION_COLOR_GRAY = 'gray';
 export const COLOR_LIST = [
   'black',
   'blue',

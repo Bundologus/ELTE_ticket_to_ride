@@ -225,11 +225,11 @@ function popFromDeck(state, cardColors) {
     tempDiscard = [];
   }
 
-  for (const cardColor of cardColors) {
+  for (const color of cardColors) {
     let topCard = tempDeck.pop();
-    if (topCard !== cardColor) {
+    if (topCard !== color) {
       console.error(
-        `Error occured while drawing train cards from deck.\n\tDrawn cards:\n\t${cardColors}\n\tDeck:\n\t${state.trainCardDeck}`,
+        `Error occured while drawing train cards from deck.\n\tDrawn cards:\n\t${color}\n\tDeck:\n\t${state.trainCardDeck}`,
       );
     }
   }
@@ -256,10 +256,13 @@ function popFromRoster(state, cardColor, position) {
   let popped = tempRoster.splice(position, 1);
   let tempGameState;
 
-  if (popped !== cardColor)
+  if (popped[0] !== cardColor) {
     console.error(
-      `Error occured while removing card form roster.\n\tExpected color: ${cardColor}\n\tPopped color: ${popped}`,
+      `Error occured while removing card form roster.\n\tExpected color: ${cardColor}\n\tPopped color: ${popped} || popped!==cardColor = ${
+        popped !== cardColor
+      }`,
     );
+  }
 
   if (state.gameState === PLAYER_BEGIN && cardColor !== CART_COLOR_LOCOMOTIVE) {
     tempGameState = PLAYER_DRAW_TRAIN;
