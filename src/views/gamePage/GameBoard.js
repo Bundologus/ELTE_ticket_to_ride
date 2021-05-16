@@ -6,7 +6,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectActivePlayer } from '../../state/players/selector';
 import { useRef, useState } from 'react';
 import {
+  CART_COLOR_BLACK,
+  CART_COLOR_BLUE,
+  CART_COLOR_GREEN,
   CART_COLOR_LOCOMOTIVE,
+  CART_COLOR_ORANGE,
+  CART_COLOR_PINK,
+  CART_COLOR_RED,
+  CART_COLOR_WHITE,
+  CART_COLOR_YELLOW,
   COLOR_LIST,
   CONNECTION_COLOR_GRAY,
   PLAYER_BEGIN,
@@ -19,47 +27,51 @@ export function GameBoard({
   connectionHover,
   setConnectionHover,
 }) {
-  const [isBuilding, setIsBuilding] = useState(false);
-  const [selectedConnection, setSelectedConnection] = useState(null);
-  const [chosenTrainColor, setChosenTrainColor] = useState('');
-  const locomotiveCountRef = useRef(null);
-  const trainColorRef = useRef(null);
   const gameData = useSelector(selectGame);
   const activePlayer = useSelector(selectActivePlayer);
+  const [isBuilding, setIsBuilding] = useState(false);
+  const [selectedConnection, setSelectedConnection] = useState(
+    gameData.connections[0],
+  );
+  const [selectedTrainColor, setSelectedTrainColor] = useState(
+    CART_COLOR_BLACK,
+  );
+  const [selectedLocomotiveCount, setSelectedLocomotiveCount] = useState(0);
 
   const dispatch = useDispatch();
 
   const startBuildHandler = (e, connection) => {
     e.stopPropagation();
     if (gameData.gameState === PLAYER_BEGIN && !activePlayer.playerFirstRound) {
-      setIsBuilding(true);
       setSelectedConnection(connection);
+      const colorOptions = getColorOptions(connection);
+
+      if (colorOptions.length > 0) {
+        setSelectedTrainColor(colorOptions[0]);
+        setIsBuilding(true);
+      }
     }
   };
 
   const confirmBuildHandler = (e) => {
     e.preventDefault();
-    if (
-      trainColorRef.current.value === 'null' ||
-      locomotiveCountRef.current === null
-    ) {
+    if (selectedTrainColor === 'null') {
       return false;
     }
     const elementsNeeded = selectedConnection.elements.length;
-    const locomotiveCount = locomotiveCountRef.current.value;
-    const colorCount = elementsNeeded - Number(locomotiveCount);
+    const colorCount = elementsNeeded - Number(selectedLocomotiveCount);
 
     if (
       elementsNeeded < 1 ||
-      locomotiveCount > elementsNeeded ||
-      locomotiveCount > activePlayer.trainCards.locomotive ||
-      locomotiveCount < 0
+      selectedLocomotiveCount > elementsNeeded ||
+      selectedLocomotiveCount > activePlayer.trainCards.locomotive ||
+      selectedLocomotiveCount < 0
     ) {
       return false;
     }
 
-    const colorCards = Array(Number(colorCount)).fill(chosenTrainColor);
-    const locomotiveCards = Array(Number(locomotiveCount)).fill(
+    const colorCards = Array(Number(colorCount)).fill(selectedTrainColor);
+    const locomotiveCards = Array(Number(selectedLocomotiveCount)).fill(
       CART_COLOR_LOCOMOTIVE,
     );
 
@@ -71,21 +83,35 @@ export function GameBoard({
         selectedConnection.id,
       ),
     );
-    setSelectedConnection(null);
     setIsBuilding(false);
-    setChosenTrainColor('');
-  };
-
-  const trainColorChangeHandler = (e) => {
-    e.preventDefault();
-
-    setChosenTrainColor(e.target.value);
   };
 
   const cancelBuildhandler = (e) => {
-    setSelectedConnection(null);
     setIsBuilding(false);
-    setChosenTrainColor('');
+  };
+
+  const getColorOptions = (connection) => {
+    if (connection.color === CONNECTION_COLOR_GRAY) {
+      return COLOR_LIST.filter((color) => {
+        return (
+          color !== CART_COLOR_LOCOMOTIVE &&
+          activePlayer.trainCards[color] > 0 &&
+          activePlayer.trainCards[color] +
+            activePlayer.trainCards[CART_COLOR_LOCOMOTIVE] >=
+            connection.elements.length
+        );
+      });
+    } else {
+      if (
+        activePlayer.trainCards[connection.color] +
+          activePlayer.trainCards[CART_COLOR_LOCOMOTIVE] >=
+        connection.elements.length
+      ) {
+        return [connection.color];
+      } else {
+        return [];
+      }
+    }
   };
 
   const cityMarkers = gameData.cities.map((city) => {
@@ -114,6 +140,7 @@ export function GameBoard({
     })
     .map((connection) => {
       const trackElements = connection.elements.map(({ x, y, rotation }) => {
+        let canBuild = getColorOptions(connection).length > 0;
         let hoverStyle = connectionHover.includes(connection.id)
           ? ` border-2 shadow-glow-${activePlayer.color}-sm lg:shadow-glow-${activePlayer.color}`
           : '';
@@ -138,7 +165,8 @@ export function GameBoard({
               {
                 'cursor-not-allowed':
                   gameData.gameState !== PLAYER_BEGIN ||
-                  activePlayer.playerFirstRound,
+                  activePlayer.playerFirstRound ||
+                  !canBuild,
               },
             )}
             style={style}
@@ -203,27 +231,100 @@ export function GameBoard({
     });
 
   const connectionBuilderForm = (() => {
-    if (selectedConnection === null) return null;
+    if (!isBuilding) return null;
     const connection = selectedConnection;
 
-    const colorOptions = COLOR_LIST.filter((color) => {
+    const colorOptions = getColorOptions(selectedConnection);
+
+    const colorRadioButtons = colorOptions.map((color) => {
+      const isChecked = color === selectedTrainColor ? 'checked' : '';
       return (
-        ((connection.color === CONNECTION_COLOR_GRAY &&
-          color !== CART_COLOR_LOCOMOTIVE) ||
-          connection.color === color) &&
-        activePlayer.trainCards[color] +
-          activePlayer.trainCards[CART_COLOR_LOCOMOTIVE] >=
-          connection.elements.length
+        <label className="mr-3 inline-flex items-center">
+          <input
+            key={'radioSelect-' + color}
+            type="radio"
+            name="colorSelect"
+            value={color}
+            className={classNames(
+              `mr-1 -mb-0.5 bg-ttr-${color} checked:bg-ttr-${color} focus:bg-ttr-${color} focus:ring-ttr-${color} text-ttr-${color}`,
+              {
+                'checked:radio-dark focus:ring-offset-black':
+                  color === CART_COLOR_WHITE,
+              },
+            )}
+            onClick={(e) => {
+              setSelectedTrainColor(color);
+            }}
+            checked={isChecked}
+          />
+          <p className="pt-1">{color}</p>
+        </label>
       );
     });
 
-    const colorSelectOptions = colorOptions.map((color) => {
-      return (
-        <option className="text-sm" key={'select-' + color} value={color}>
-          {color}
-        </option>
-      );
-    });
+    const pathLength = connection.elements.length;
+    const minLocomotive = Math.max(
+      pathLength - activePlayer.trainCards[selectedTrainColor],
+      0,
+    );
+    const maxLocomotive = Math.min(
+      activePlayer.trainCards.locomotive,
+      pathLength,
+    );
+
+    let locomotiveCountOptions = [];
+
+    for (let i = minLocomotive; i <= maxLocomotive; ++i) {
+      locomotiveCountOptions.push(i);
+    }
+
+    const locomotiveCountButtons = locomotiveCountOptions.map(
+      (locomotiveCardCount) => {
+        const colorCount = pathLength - locomotiveCardCount;
+        let colorArray = [];
+
+        for (let i = 0; i < colorCount; ++i) {
+          colorArray.push(selectedTrainColor);
+        }
+
+        for (let i = 0; i < locomotiveCardCount; ++i) {
+          colorArray.push(CART_COLOR_LOCOMOTIVE);
+        }
+
+        console.log(colorArray);
+
+        const colorDivArray = colorArray.map((color) => {
+          return (
+            <div
+              className={`inline-block bg-ttr-${color} w-8 h-5 mx-1 rounded-sm`}
+            ></div>
+          );
+        });
+
+        return (
+          <button
+            key={'locCount-' + locomotiveCardCount}
+            className={classNames(
+              'block ml-4 my-2 p-1.5 px-4 rounded-md bg-ttr-white bg-opacity-20 hover:bg-opacity-40 border-2 border-opacity-40 border-transparent',
+              {
+                'border-white bg-opacity-40':
+                  locomotiveCardCount === selectedLocomotiveCount,
+              },
+            )}
+            onClick={(e) => {
+              e.preventDefault();
+              setSelectedLocomotiveCount(locomotiveCardCount);
+            }}
+          >
+            <div className="flex flex-row flex-nowrap items-center">
+              <span className="font-number text-sm">{locomotiveCardCount}</span>
+              <span className="text-sm mx-4">|</span>
+              {colorDivArray}
+            </div>
+          </button>
+        );
+      },
+    );
 
     return (
       <form
@@ -235,39 +336,22 @@ export function GameBoard({
           {connection.toCity}
         </h2>
         <p className="font-smallCaps opacity-60 mb-2 xl:mb-4 2xl:mb-3 text-sm xl:text-base 2xl:text-lg">
-          Connection color: {selectedConnection.color}
-          <br />
-          Connection length: {selectedConnection.elements.length}
+          Color: {selectedConnection.color}
+          <span className="ml-4">|</span>
+          <span className="ml-4">
+            Length: {selectedConnection.elements.length}
+          </span>
         </p>
+        <h3>Select the train cards you want to build with!</h3>
         <label htmlFor="chosenColor" className="text-sm">
-          Suitable train card colors:
+          <span className="font-number">1)</span> Select a color:
         </label>
-        <select
-          className="block w-1/2 bg-gray-700 rounded-md text-xs p-1 border-none focus:ring-0"
-          name="chosenColor"
-          value={chosenTrainColor}
-          ref={trainColorRef}
-          onChange={(e) => trainColorChangeHandler(e)}
-        >
-          <option value="null">Select a color</option>
-          {colorSelectOptions}
-        </select>
+        <div className="ml-4">{colorRadioButtons}</div>
         <label htmlFor="locomotivesUsed" className="text-sm">
-          How many locomotive cards do you want to use?
+          <span className="font-number">2)</span> Select the number of
+          locomotives to use:
         </label>
-        <input
-          className="block w-1/2 bg-gray-700 rounded-md text-xs p-1 border-none focus:ring-0 font-number"
-          name="locomotivesUsed"
-          ref={locomotiveCountRef}
-          type="number"
-          max={activePlayer.trainCards.locomotive}
-          min={
-            chosenTrainColor
-              ? selectedConnection.elements.length -
-                activePlayer.trainCards[chosenTrainColor]
-              : '0'
-          }
-        ></input>
+        {locomotiveCountButtons}
         <div className="flex flex-row w-100">
           <button
             type="submit"
