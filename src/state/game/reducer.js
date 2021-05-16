@@ -144,7 +144,11 @@ export function gameReducer(state = initialState, action) {
       break;
     }
     case BUILD_CONNECTION: {
-      newState = popConnection(state, payload.connection);
+      newState = setConnectionToBuilt(
+        state,
+        payload.connection,
+        payload.playerColor,
+      );
       newState = pushToDiscardPile(newState, payload.usedTrainColors);
       newState = logAction(
         newState,
@@ -337,10 +341,14 @@ function updateRouteDeck(
   };
 }
 
-function popConnection(state, selectedConnection) {
+function setConnectionToBuilt(state, selectedConnection, playerColor) {
   let tempConnections = [...state.connections];
 
-  tempConnections[selectedConnection.id].isBuilt = true;
+  tempConnections = tempConnections.map((connection) => {
+    if (connection.id === selectedConnection.id)
+      return { ...connection, isBuilt: true, ownerColor: playerColor };
+    else return connection;
+  });
 
   return {
     ...state,

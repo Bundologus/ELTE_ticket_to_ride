@@ -64,6 +64,7 @@ export function drawRoutesFirstRound(
 export function buildConnection(
   playerId,
   playerName,
+  playerColor,
   usedTrainColors,
   connection,
 ) {
@@ -72,6 +73,7 @@ export function buildConnection(
     payload: {
       playerId,
       playerName,
+      playerColor,
       usedTrainColors,
       connection,
     },

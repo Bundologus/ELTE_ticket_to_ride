@@ -36,7 +36,7 @@ export function GameBoard({
   const [selectedTrainColor, setSelectedTrainColor] = useState(
     CART_COLOR_BLACK,
   );
-  const [selectedLocomotiveCount, setSelectedLocomotiveCount] = useState(0);
+  const [selectedLocomotiveCount, setSelectedLocomotiveCount] = useState(-1);
 
   const dispatch = useDispatch();
 
@@ -55,7 +55,7 @@ export function GameBoard({
 
   const confirmBuildHandler = (e) => {
     e.preventDefault();
-    if (selectedTrainColor === 'null') {
+    if (selectedTrainColor === 'null' || selectedLocomotiveCount < 0) {
       return false;
     }
     const elementsNeeded = selectedConnection.elements.length;
@@ -79,10 +79,12 @@ export function GameBoard({
       buildConnection(
         activePlayer.id,
         activePlayer.name,
+        activePlayer.color,
         [...colorCards, ...locomotiveCards],
-        selectedConnection.id,
+        selectedConnection,
       ),
     );
+    setSelectedLocomotiveCount(-1);
     setIsBuilding(false);
   };
 
@@ -196,7 +198,7 @@ export function GameBoard({
     .map((connection) => {
       const trackElements = connection.elements.map(({ x, y, rotation }) => {
         let hoverStyle = connectionHover.includes(connection.id)
-          ? ` shadow-glow-${activePlayer.color}-sm lg:shadow-glow-${activePlayer.color}` // TODO change these to the actual owner's color
+          ? ` shadow-glow-${connection.ownerColor}-sm lg:shadow-glow-${connection.ownerColor}`
           : '';
         const style = rotation
           ? {
@@ -214,7 +216,7 @@ export function GameBoard({
           <div
             key={y + '-' + x}
             className={
-              `absolute w-2 h-4 lg:w-2.5 lg:h-5 xl:w-3 xl:h-7 2xl:w-3.5 2xl:h-8 3xl:w-4 3xl:h-10 built-border bg-player-${activePlayer.color}` +
+              `absolute w-2 h-4 lg:w-2.5 lg:h-5 xl:w-3 xl:h-7 2xl:w-3.5 2xl:h-8 3xl:w-4 3xl:h-10 built-border bg-player-${connection.ownerColor}` +
               hoverStyle
             }
             style={style}
@@ -291,8 +293,6 @@ export function GameBoard({
           colorArray.push(CART_COLOR_LOCOMOTIVE);
         }
 
-        console.log(colorArray);
-
         const colorDivArray = colorArray.map((color) => {
           return (
             <div
@@ -305,9 +305,9 @@ export function GameBoard({
           <button
             key={'locCount-' + locomotiveCardCount}
             className={classNames(
-              'block ml-4 my-2 p-1.5 px-4 rounded-md bg-ttr-white bg-opacity-20 hover:bg-opacity-40 border-2 border-opacity-40 border-transparent',
+              'block ml-4 my-2 p-1.5 px-4 rounded-md bg-ttr-white bg-opacity-20 hover:bg-opacity-40',
               {
-                'border-white bg-opacity-40':
+                'bg-opacity-40':
                   locomotiveCardCount === selectedLocomotiveCount,
               },
             )}
