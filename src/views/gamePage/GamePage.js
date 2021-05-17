@@ -16,7 +16,6 @@ import { selectActivePlayer } from '../../state/players/selector';
 import {
   CART_COLOR_LOCOMOTIVE,
   PLAYER_BEGIN,
-  PLAYER_DONE,
   PLAYER_DRAW_TRAIN,
 } from '../../constants/gameConstants';
 import { fillRoster, nextPlayer } from '../../state/game/actions';
@@ -26,19 +25,6 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
   const game = useSelector(selectGame);
   const activePlayer = useSelector(selectActivePlayer);
   const actionLog = game.actionLog;
-  /* const opponentList = players.filter((player) => {
-    return player.id !== activePlayer.id;
-  }); */
-  /* const actionLog = [
-    { name: 'Resistance', text: 'drew 2 train cards.' },
-    { name: 'is futile', text: 'joined the game.' },
-    {
-      name: 'Resistance',
-      text: 'joinged the game blahh blah blahhahahahaha.',
-    },
-    { name: 'Resistance', text: 'joinged the game.' },
-    { name: 'Resistance', text: 'joinged the game.' },
-  ]; */
 
   const [activeCities, setActiveCities] = useState({
     routeIds: [],

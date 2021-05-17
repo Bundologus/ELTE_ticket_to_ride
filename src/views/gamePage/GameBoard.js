@@ -14,6 +14,7 @@ import {
   PLAYER_BEGIN,
 } from '../../constants/gameConstants';
 import { buildConnection } from '../../state/players/actions';
+import { startLastRound } from '../../state/game/actions';
 
 export function GameBoard({
   activeCities,
@@ -37,7 +38,11 @@ export function GameBoard({
 
   const startBuildHandler = (e, connection) => {
     e.stopPropagation();
-    if (gameData.gameState === PLAYER_BEGIN && !activePlayer.playerFirstRound) {
+    if (
+      gameData.gameState === PLAYER_BEGIN &&
+      !activePlayer.playerFirstRound &&
+      activePlayer.carts >= connection.elements.length
+    ) {
       setSelectedConnection(connection);
       const colorOptions = getColorOptions(connection);
 
@@ -84,7 +89,13 @@ export function GameBoard({
     );
     setSelectedLocomotiveCount(-1);
     setIsBuilding(false);
+    const plId = activePlayer.id;
+    const plCarts = activePlayer.carts - selectedConnection.elements.length;
     setNextPlayer();
+
+    if (plCarts <= 2) {
+      dispatch(startLastRound(plId));
+    }
   };
 
   const cancelBuildhandler = (e) => {
@@ -140,13 +151,14 @@ export function GameBoard({
       return !connection.isBuilt;
     })
     .map((connection) => {
+      const canBuild =
+        getColorOptions(connection).length > 0 &&
+        activePlayer.trainCards.locomotive >= connection.locomotive &&
+        activePlayer.carts >= connection.elements.length;
+      const hoverStyle = connectionHover.includes(connection.id)
+        ? ` border-2 shadow-glow-${activePlayer.color}-sm lg:shadow-glow-${activePlayer.color}`
+        : '';
       const trackElements = connection.elements.map(({ x, y, rotation }) => {
-        let canBuild =
-          getColorOptions(connection).length > 0 &&
-          activePlayer.trainCards.locomotive >= connection.locomotive;
-        let hoverStyle = connectionHover.includes(connection.id)
-          ? ` border-2 shadow-glow-${activePlayer.color}-sm lg:shadow-glow-${activePlayer.color}`
-          : '';
         const style = rotation
           ? {
               /* transformOrigin: 'translate(-50%, -50%)', */
@@ -203,7 +215,6 @@ export function GameBoard({
           : '';
         const style = rotation
           ? {
-              /* transformOrigin: 'translate(-50%, -50%)', */
               transform: `translate(-50%,-50%) rotate(${rotation}deg)`,
               top: y + '%',
               left: x + '%',
@@ -217,7 +228,7 @@ export function GameBoard({
           <div
             key={y + '-' + x}
             className={
-              `absolute w-2 h-4 lg:w-2.5 lg:h-5 xl:w-3 xl:h-7 2xl:w-3.5 2xl:h-8 3xl:w-4 3xl:h-10 built-border bg-player-${connection.ownerColor}` +
+              `absolute w-2.5 h-3.5 lg:w-3 lg:h-4.5 xl:w-4 xl:h-6 2xl:w-5 2xl:h-7.5 3xl:w-4 3xl:h-10 built-border bg-player-${connection.ownerColor}` +
               hoverStyle
             }
             style={style}

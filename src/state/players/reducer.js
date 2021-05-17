@@ -99,7 +99,7 @@ function putStarterHand(state, { arrayOfHands }) {
       }
     }
     newPlayer.longRouteCard = longRouteCard;
-    newPlayer.carts = 45;
+    newPlayer.carts = 8;
     return newPlayer;
   });
 }
