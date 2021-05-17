@@ -37,7 +37,10 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
     { name: 'Resistance', text: 'joinged the game.' },
   ]; */
 
-  const [activeCities, setActiveCities] = useState([]);
+  const [activeCities, setActiveCities] = useState({
+    routeIds: [],
+    cityIds: [],
+  });
   const [hoverCities, setHoverCities] = useState([]);
   const [deckPulled, setDeckPulled] = useState(false);
   const [drawingCarts, setDrawingCarts] = useState(false);
@@ -49,7 +52,27 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
 
   const dispatch = useDispatch();
 
-  const colors = COLOR_LIST;
+  const setActiveCitiesHandler = (route) => {
+    let newActives = { ...activeCities };
+    if (activeCities.routeIds.includes(route.id)) {
+      newActives.routeIds = activeCities.routeIds.filter((routeId) => {
+        return routeId !== route.id;
+      });
+
+      let newCities = [...activeCities.cityIds];
+      newCities.splice(newCities.indexOf(route.from), 1);
+      newCities.splice(newCities.indexOf(route.to), 1);
+      newActives.cityIds = newCities;
+    } else {
+      newActives.routeIds = [...activeCities.routeIds, route.id];
+
+      let newCities = [...activeCities.cityIds];
+      newCities.push(route.from);
+      newCities.push(route.to);
+      newActives.cityIds = newCities;
+    }
+    setActiveCities(newActives);
+  };
 
   function drawFromRosterHandler(color, position) {
     if (!activePlayer.playerFirstRound) {
@@ -259,7 +282,7 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
         <div className="container relative h-full grid grid-cols-8 grid-rows-5 lg:grid-cols-7">
           <div className="contents" id="map">
             <GameBoard
-              activeCities={activeCities}
+              activeCities={activeCities.cityIds}
               hoverCities={Array.from(hoverCities)}
               connectionHover={connectionHover}
               setConnectionHover={setConnectionHover}
@@ -374,8 +397,8 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
           </div>
           <div className="contents" id="player-hand">
             <HandPanel
-              activeCities={activeCities}
-              setActiveCities={setActiveCities}
+              activeRoutes={activeCities.routeIds}
+              setActiveCities={setActiveCitiesHandler}
               setHoverCities={setHoverCities}
               setConnectionHover={setConnectionHover}
             ></HandPanel>

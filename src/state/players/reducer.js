@@ -1,11 +1,4 @@
-/* import {
-  PLAYER_BUILD,
-  PLAYER_COLORS,
-  PLAYER_DONE,
-  PLAYER_DRAW_TRAIN,
-  PLAYER_FIRST_ROUND,
-  PLAYER_DRAW_ROUTES,
-} from '../../constants/playerConstants'; */
+import Graph from 'graph-data-structure';
 import { testPlayers } from '../../domain/playerType';
 import { DEAL_STARTER_HAND } from '../game/actions';
 import {
@@ -187,8 +180,14 @@ function putConnection(state, { playerId, usedTrainColors, connection }) {
   return state.map((player) => {
     if (player.id === playerId) {
       let newPlayer = JSON.parse(JSON.stringify(player));
+
+      console.log('Building connection');
+      console.log(connection);
+
+      // Adding connection
       newPlayer.builtConnections = [...newPlayer.builtConnections, connection];
 
+      // Removing used train cards
       for (const cardColor of usedTrainColors) {
         switch (cardColor) {
           case 'black': {
@@ -231,6 +230,90 @@ function putConnection(state, { playerId, usedTrainColors, connection }) {
             break;
         }
       }
+
+      // Removing used carts
+      newPlayer.carts -= connection.elements.length;
+
+      // Adding to path graph
+      // reading stored graph
+      let graph;
+      if (newPlayer.hasOwnProperty('connectionGraph')) {
+        graph = Graph(newPlayer.connectionGraph);
+        console.log(newPlayer.connectionGraph);
+      } else {
+        graph = Graph();
+        console.log('Empty graph generated');
+      }
+
+      console.log(
+        `Adding edge: ${connection.from}, ${connection.to}, ${connection.elements.length}`,
+      );
+      // adding new edge
+      graph.addEdge(
+        `${connection.from}`,
+        `${connection.to}`,
+        connection.elements.length,
+      );
+
+      console.log(
+        `Adding edge: ${connection.to}, ${connection.from}, ${connection.elements.length}`,
+      );
+
+      // adding new edge reverse direction
+      graph.addEdge(
+        `${connection.to}`,
+        `${connection.from}`,
+        connection.elements.length,
+      );
+
+      // checking all routes, adding their nodes if not there yet, and checking if path exists
+      newPlayer.routeCards = newPlayer.routeCards.map((routeCard) => {
+        if (routeCard.finished) {
+          return routeCard;
+        } else {
+          graph.addNode(routeCard.from);
+          graph.addNode(routeCard.to);
+          let shortPath = [];
+          try {
+            shortPath = graph.shortestPath(
+              `${routeCard.from}`,
+              `${routeCard.to}`,
+            );
+          } catch (error) {
+            console.log('Pathfinding failed.');
+          }
+
+          if (shortPath.length > 0) {
+            return { ...routeCard, path: shortPath, finished: true };
+          } else {
+            return routeCard;
+          }
+        }
+      });
+
+      // adding, and pathfinding for long route
+      if (!newPlayer.longRouteCard.finished) {
+        let newCard = newPlayer.longRouteCard;
+        graph.addNode(newCard.from);
+        graph.addNode(newCard.to);
+        let shortPath = [];
+        try {
+          shortPath = graph.shortestPath(`${newCard.from}`, `${newCard.to}`);
+        } catch (error) {
+          console.log('Pathfinding failed.');
+        }
+
+        if (shortPath.length > 0) {
+          newPlayer.longRouteCard = {
+            ...newCard,
+            path: shortPath,
+            finished: true,
+          };
+        }
+      }
+
+      newPlayer.connectionGraph = graph.serialize();
+      console.log(newPlayer.connectionGraph);
 
       return newPlayer;
     } else {

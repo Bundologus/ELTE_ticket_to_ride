@@ -8,7 +8,7 @@ import { PLAYER_DONE } from '../../constants/gameConstants';
 import { nextPlayer } from '../../state/game/actions';
 
 export function HandPanel({
-  activeCities,
+  activeRoutes,
   setActiveCities,
   setHoverCities,
   setConnectionHover,
@@ -48,10 +48,13 @@ export function HandPanel({
       return (
         <button
           key={'route-' + route.id}
-          className={
-            'relative focus:ring-0 focus:outline-none w-full text-left grid grid-rows-2 mb-1 rounded-md p-1 py-0.5 lg:p-1.5 ' +
-            (route.id > 40 ? 'bg-gray-800' : 'bg-gray-500')
-          }
+          className={classNames(
+            'relative focus:ring-0 focus:outline-none w-full text-left grid grid-rows-2 mb-1 rounded-md p-1 py-0.5 lg:p-1.5 border-2 bg-gray-500',
+            {
+              'border-gray-400': activeRoutes.includes(route.id),
+              'border-transparent': !activeRoutes.includes(route.id),
+            },
+          )}
           onMouseEnter={() => {
             if (route.finished) {
               setHoverCities([route.from, route.to]);
@@ -65,7 +68,8 @@ export function HandPanel({
             setConnectionHover([]);
           }}
           onClick={() => {
-            if (!route.finished) {
+            setActiveCities(route);
+            /* if (!route.finished) {
               if (
                 activeCities.length === 0 ||
                 activeCities[0] !== route.from ||
@@ -76,7 +80,7 @@ export function HandPanel({
                 setActiveCities([]);
                 setHoverCities([]);
               }
-            }
+            } */
           }}
         >
           <h3 className="text-2xs font-semibold lg:text-xs xl:text-base 2xl:text-lg 3xl:text-xl">
@@ -169,12 +173,17 @@ export function HandPanel({
         >
           <button
             key={'route-' + activePlayer.longRouteCard.id}
-            className={
-              'relative focus:ring-0 focus:outline-none w-full text-left grid grid-rows-2 mb-1 rounded-md p-1 py-0.5 lg:p-1.5 ' +
-              (activePlayer.longRouteCard.id > 40
-                ? 'bg-gray-800'
-                : 'bg-gray-500')
-            }
+            className={classNames(
+              'relative focus:ring-0 focus:outline-none w-full text-left grid grid-rows-2 mb-1 rounded-md p-1 py-0.5 lg:p-1.5 bg-gray-800 border-2',
+              {
+                'border-gray-400': activeRoutes.includes(
+                  activePlayer.longRouteCard.id,
+                ),
+                'border-transparent': !activeRoutes.includes(
+                  activePlayer.longRouteCard.id,
+                ),
+              },
+            )}
             onMouseEnter={() =>
               setHoverCities([
                 activePlayer.longRouteCard.from,
@@ -183,7 +192,8 @@ export function HandPanel({
             }
             onMouseLeave={() => setHoverCities([])}
             onClick={() => {
-              if (
+              setActiveCities(activePlayer.longRouteCard);
+              /* if (
                 activeCities.length === 0 ||
                 activeCities[0] !== activePlayer.longRouteCard.from ||
                 activeCities[1] !== activePlayer.longRouteCard.to
@@ -195,7 +205,7 @@ export function HandPanel({
               else {
                 setActiveCities([]);
                 setHoverCities([]);
-              }
+              } */
             }}
           >
             <h3 className="text-2xs font-semibold lg:text-xs xl:text-base 2xl:text-lg 3xl:text-xl">

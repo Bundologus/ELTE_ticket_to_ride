@@ -190,7 +190,7 @@ export function GameBoard({
         );
       });
       return (
-        <div key={`connection-${connection.id}`} className="contents">
+        <div key={'connection-' + connection.id} className="contents">
           {trackElements}
         </div>
       );
@@ -231,7 +231,7 @@ export function GameBoard({
         );
       });
       return (
-        <div key={`connection-${connection.id}`} className="contents">
+        <div key={'connection-' + connection.id} className="contents">
           {trackElements}
         </div>
       );
@@ -246,9 +246,11 @@ export function GameBoard({
     const colorRadioButtons = colorOptions.map((color) => {
       const isChecked = color === selectedTrainColor ? 'checked' : '';
       return (
-        <label className="mr-3 inline-flex items-center">
+        <label
+          key={'radioSelect-' + color}
+          className="mr-3 inline-flex items-center"
+        >
           <input
-            key={'radioSelect-' + color}
             type="radio"
             name="colorSelect"
             value={color}
@@ -261,6 +263,9 @@ export function GameBoard({
             )}
             onClick={(e) => {
               setSelectedTrainColor(color);
+            }}
+            onChange={(e) => {
+              return;
             }}
             checked={isChecked}
           />
@@ -298,9 +303,10 @@ export function GameBoard({
           colorArray.push(CART_COLOR_LOCOMOTIVE);
         }
 
-        const colorDivArray = colorArray.map((color) => {
+        const colorDivArray = colorArray.map((color, ind) => {
           return (
             <div
+              key={'buildColorCard-' + locomotiveCardCount + ind}
               className={`inline-block bg-ttr-${color} w-8 h-5 mx-1 rounded-sm`}
             ></div>
           );
