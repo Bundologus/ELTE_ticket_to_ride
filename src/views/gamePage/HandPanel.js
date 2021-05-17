@@ -69,18 +69,7 @@ export function HandPanel({
           }}
           onClick={() => {
             setActiveCities(route);
-            /* if (!route.finished) {
-              if (
-                activeCities.length === 0 ||
-                activeCities[0] !== route.from ||
-                activeCities[1] !== route.to
-              )
-                setActiveCities([route.from, route.to]);
-              else {
-                setActiveCities([]);
-                setHoverCities([]);
-              }
-            } */
+            setHoverCities([]);
           }}
         >
           <h3 className="text-2xs font-semibold lg:text-xs xl:text-base 2xl:text-lg 3xl:text-xl">
@@ -124,7 +113,7 @@ export function HandPanel({
           },
         )}
         onClick={() => {
-          setActiveCities([]);
+          setActiveCities(null);
           setHoverCities(new Set([]));
           dispatch(nextPlayer());
         }}
@@ -193,19 +182,7 @@ export function HandPanel({
             onMouseLeave={() => setHoverCities([])}
             onClick={() => {
               setActiveCities(activePlayer.longRouteCard);
-              /* if (
-                activeCities.length === 0 ||
-                activeCities[0] !== activePlayer.longRouteCard.from ||
-                activeCities[1] !== activePlayer.longRouteCard.to
-              )
-                setActiveCities([
-                  activePlayer.longRouteCard.from,
-                  activePlayer.longRouteCard.to,
-                ]);
-              else {
-                setActiveCities([]);
-                setHoverCities([]);
-              } */
+              setHoverCities([]);
             }}
           >
             <h3 className="text-2xs font-semibold lg:text-xs xl:text-base 2xl:text-lg 3xl:text-xl">

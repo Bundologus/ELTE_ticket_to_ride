@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import classNames from 'classnames';
-import { ticketToRideData as gameData } from '../../assets/ticket-to-ride-data';
 import './gamePage.css';
 import { HandPanel } from './HandPanel';
 import { GameBoard } from './GameBoard';
 import { PlayerListType, PlayerType } from '../../domain/playerType';
 import { ScoreBoard } from './ScoreBoard';
-import { COLOR_LIST } from '../../constants/gameConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   drawFromDeck,
@@ -15,12 +13,17 @@ import {
   drawRoutesFirstRound,
 } from '../../state/players/actions';
 import { selectActivePlayer } from '../../state/players/selector';
-import { PLAYER_BEGIN, PLAYER_DRAW_TRAIN } from '../../constants/gameConstants';
-import { fillRoster } from '../../state/game/actions';
+import {
+  CART_COLOR_LOCOMOTIVE,
+  PLAYER_BEGIN,
+  PLAYER_DONE,
+  PLAYER_DRAW_TRAIN,
+} from '../../constants/gameConstants';
+import { fillRoster, nextPlayer } from '../../state/game/actions';
+import { selectGame } from '../../state/game/selector';
 
 export function GamePage({ localPlayerId, setLocalPlayerId }) {
-  const game = useSelector((state) => state.game);
-  const players = useSelector((state) => state.players);
+  const game = useSelector(selectGame);
   const activePlayer = useSelector(selectActivePlayer);
   const actionLog = game.actionLog;
   /* const opponentList = players.filter((player) => {
@@ -52,24 +55,33 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
 
   const dispatch = useDispatch();
 
+  const setNextPlayerHandler = () => {
+    setActiveCitiesHandler(null);
+    dispatch(nextPlayer());
+  };
+
   const setActiveCitiesHandler = (route) => {
     let newActives = { ...activeCities };
-    if (activeCities.routeIds.includes(route.id)) {
-      newActives.routeIds = activeCities.routeIds.filter((routeId) => {
-        return routeId !== route.id;
-      });
-
-      let newCities = [...activeCities.cityIds];
-      newCities.splice(newCities.indexOf(route.from), 1);
-      newCities.splice(newCities.indexOf(route.to), 1);
-      newActives.cityIds = newCities;
+    if (route === null) {
+      newActives = { routeIds: [], cityIds: [] };
     } else {
-      newActives.routeIds = [...activeCities.routeIds, route.id];
+      if (activeCities.routeIds.includes(route.id)) {
+        newActives.routeIds = activeCities.routeIds.filter((routeId) => {
+          return routeId !== route.id;
+        });
 
-      let newCities = [...activeCities.cityIds];
-      newCities.push(route.from);
-      newCities.push(route.to);
-      newActives.cityIds = newCities;
+        let newCities = [...activeCities.cityIds];
+        newCities.splice(newCities.indexOf(route.from), 1);
+        newCities.splice(newCities.indexOf(route.to), 1);
+        newActives.cityIds = newCities;
+      } else {
+        newActives.routeIds = [...activeCities.routeIds, route.id];
+
+        let newCities = [...activeCities.cityIds];
+        newCities.push(route.from);
+        newCities.push(route.to);
+        newActives.cityIds = newCities;
+      }
     }
     setActiveCities(newActives);
   };
@@ -79,8 +91,13 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
       dispatch(
         drawFromRoster(activePlayer.id, activePlayer.name, color, position),
       );
-      setTimeout(1000);
       dispatch(fillRoster());
+
+      if (
+        game.gameState === PLAYER_DRAW_TRAIN ||
+        color === CART_COLOR_LOCOMOTIVE
+      )
+        setNextPlayerHandler();
     }
   }
 
@@ -97,10 +114,12 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
     );
     setDrawnCarts([]);
     setDrawingCarts(false);
+    setNextPlayerHandler();
   }
 
   function showDrawnRoutes() {
     setDrawnRoutes(game.routeDeck.slice(-3));
+    setActiveCitiesHandler(activePlayer.longRouteCard);
     setDrawingRoutes(true);
   }
 
@@ -128,7 +147,7 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
           droppedRoutes,
         ),
       );
-    else
+    else {
       dispatch(
         drawRouteCards(
           activePlayer.id,
@@ -137,6 +156,8 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
           droppedRoutes,
         ),
       );
+      setNextPlayerHandler();
+    }
   }
 
   /***************************************************/
@@ -236,6 +257,8 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
         onClick={() => {
           let newSet = new Set(selectedRoutes);
 
+          setActiveCitiesHandler(routeData);
+
           if (newSet.has(routeData)) {
             newSet.delete(routeData);
           } else {
@@ -283,6 +306,7 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
           <div className="contents" id="map">
             <GameBoard
               activeCities={activeCities.cityIds}
+              setNextPlayer={setNextPlayerHandler}
               hoverCities={Array.from(hoverCities)}
               connectionHover={connectionHover}
               setConnectionHover={setConnectionHover}
