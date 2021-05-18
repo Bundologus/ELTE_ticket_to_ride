@@ -29,10 +29,10 @@ export function nextPlayer() {
   };
 }
 
-export function startLastRound() {
+export function startLastRound(playerId) {
   return {
     type: START_LAST_ROUND,
-    payload: {},
+    payload: { playerId },
   };
 }
 

@@ -55,6 +55,12 @@ module.exports = {
         '2xs': ['.65rem', '.8rem'],
         '3xs': ['.5rem', '.7rem'],
       },
+      height: {
+        4.5: '1.125rem',
+        5.5: '1.375rem',
+        6.5: '1.625rem',
+        7.5: '1.875rem',
+      },
       lineHeight: {
         custom: '2.85rem',
       },
@@ -68,6 +74,12 @@ module.exports = {
         50: '12.5rem',
         108: '27rem',
         112: '28rem',
+      },
+      width: {
+        4.5: '1.125rem',
+        5.5: '1.375rem',
+        6.5: '1.625rem',
+        7.5: '1.875rem',
       },
     },
   },

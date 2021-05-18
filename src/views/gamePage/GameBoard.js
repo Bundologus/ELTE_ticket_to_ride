@@ -4,25 +4,21 @@ import PropTypes from 'prop-types';
 import { selectGame } from '../../state/game/selector';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectActivePlayer } from '../../state/players/selector';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import {
   CART_COLOR_BLACK,
-  CART_COLOR_BLUE,
-  CART_COLOR_GREEN,
   CART_COLOR_LOCOMOTIVE,
-  CART_COLOR_ORANGE,
-  CART_COLOR_PINK,
-  CART_COLOR_RED,
   CART_COLOR_WHITE,
-  CART_COLOR_YELLOW,
   COLOR_LIST,
   CONNECTION_COLOR_GRAY,
   PLAYER_BEGIN,
 } from '../../constants/gameConstants';
 import { buildConnection } from '../../state/players/actions';
+import { startLastRound } from '../../state/game/actions';
 
 export function GameBoard({
   activeCities,
+  setNextPlayer,
   hoverCities,
   connectionHover,
   setConnectionHover,
@@ -42,7 +38,11 @@ export function GameBoard({
 
   const startBuildHandler = (e, connection) => {
     e.stopPropagation();
-    if (gameData.gameState === PLAYER_BEGIN && !activePlayer.playerFirstRound) {
+    if (
+      gameData.gameState === PLAYER_BEGIN &&
+      !activePlayer.playerFirstRound &&
+      activePlayer.carts >= connection.elements.length
+    ) {
       setSelectedConnection(connection);
       const colorOptions = getColorOptions(connection);
 
@@ -89,6 +89,13 @@ export function GameBoard({
     );
     setSelectedLocomotiveCount(-1);
     setIsBuilding(false);
+    const plId = activePlayer.id;
+    const plCarts = activePlayer.carts - selectedConnection.elements.length;
+    setNextPlayer();
+
+    if (plCarts <= 2) {
+      dispatch(startLastRound(plId));
+    }
   };
 
   const cancelBuildhandler = (e) => {
@@ -144,13 +151,14 @@ export function GameBoard({
       return !connection.isBuilt;
     })
     .map((connection) => {
+      const canBuild =
+        getColorOptions(connection).length > 0 &&
+        activePlayer.trainCards.locomotive >= connection.locomotive &&
+        activePlayer.carts >= connection.elements.length;
+      const hoverStyle = connectionHover.includes(connection.id)
+        ? ` border-2 shadow-glow-${activePlayer.color}-sm lg:shadow-glow-${activePlayer.color}`
+        : '';
       const trackElements = connection.elements.map(({ x, y, rotation }) => {
-        let canBuild =
-          getColorOptions(connection).length > 0 &&
-          activePlayer.trainCards.locomotive >= connection.locomotive;
-        let hoverStyle = connectionHover.includes(connection.id)
-          ? ` border-2 shadow-glow-${activePlayer.color}-sm lg:shadow-glow-${activePlayer.color}`
-          : '';
         const style = rotation
           ? {
               /* transformOrigin: 'translate(-50%, -50%)', */
@@ -207,7 +215,6 @@ export function GameBoard({
           : '';
         const style = rotation
           ? {
-              /* transformOrigin: 'translate(-50%, -50%)', */
               transform: `translate(-50%,-50%) rotate(${rotation}deg)`,
               top: y + '%',
               left: x + '%',
@@ -221,7 +228,7 @@ export function GameBoard({
           <div
             key={y + '-' + x}
             className={
-              `absolute w-2 h-4 lg:w-2.5 lg:h-5 xl:w-3 xl:h-7 2xl:w-3.5 2xl:h-8 3xl:w-4 3xl:h-10 built-border bg-player-${connection.ownerColor}` +
+              `absolute w-2.5 h-3.5 lg:w-3 lg:h-4.5 xl:w-4 xl:h-6 2xl:w-5 2xl:h-7.5 3xl:w-4 3xl:h-10 built-border bg-player-${connection.ownerColor}` +
               hoverStyle
             }
             style={style}
@@ -328,8 +335,20 @@ export function GameBoard({
             }}
           >
             <div className="flex flex-row flex-nowrap items-center">
-              <span className="font-number text-sm">{locomotiveCardCount}</span>
-              <span className="text-sm mx-4">|</span>
+              <span className="font-number text-sm">
+                {locomotiveCardCount}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="inline ml-2 w-8 h-4"
+                  viewBox="0 0 36 23"
+                  fill="currentColor"
+                >
+                  <path d="M10 17.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0zM15.9 17.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0z" />
+                  <path d="M28 17.5a1.5 1.5 0 11-3 0a1.5 1.5 0 013 0z" />
+                  <path d="M4 4a1 1.3 0 00-1 1h1V14.5h-1.5v-1h-.5v3h.5v-1h1.5L4 16a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0h1a2.5 2.5 0 014.9 0H24a2.5 2.5 0 014.9 0h2.1a1 1 0 001-1v-.5h1.5v1h.5v-3h-.5v1h-1.5L32 9a1 1.3 0 00-1-1h-4v-4l1-1v-1h-4v1l1 1v4h-3v-1a1 1 0 00-2 0v1H14V5A1 1 0 0013 4H4z" />
+                </svg>
+              </span>
+              <span className="text-sm ml-3 mr-4">|</span>
               {colorDivArray}
             </div>
           </button>
@@ -366,7 +385,15 @@ export function GameBoard({
         <div className="flex flex-row w-100">
           <button
             type="submit"
-            className="mx-auto block focus:outline-none bg-green-600 hover:bg-green-500 border-green-800 border-2 rounded-md px-4 mt-5 xl:mt-8 xl:text-lg xl:px-6"
+            className={classNames(
+              'mx-auto block focus:outline-none border-2 rounded-md px-4 mt-5 xl:mt-8 xl:text-lg xl:px-6',
+              {
+                'bg-green-600 border-green-800 hover:bg-green-500':
+                  selectedTrainColor !== 'null' && selectedLocomotiveCount >= 0,
+                'bg-gray-600 border-gray-800 cursor-not-allowed':
+                  selectedTrainColor === 'null' || selectedLocomotiveCount < 0,
+              },
+            )}
           >
             OK
           </button>

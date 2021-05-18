@@ -105,7 +105,7 @@ export function gameReducer(state = initialState, action) {
       break;
     }
     case START_LAST_ROUND: {
-      newState = setLastRound(state);
+      newState = setLastRound(state, payload);
       newState = logAction(newState, '', '-1', `Last round started.`);
       break;
     }
@@ -187,13 +187,11 @@ function setFirstRound(state) {
   };
 }
 
-function setLastRound(state) {
+function setLastRound(state, { playerId }) {
   return {
     ...state,
-    activePlayerId: getNextPlayer(state),
-    gameState: PLAYER_BEGIN,
     lastRound: true,
-    finishingPlayerId: state.activePlayerId,
+    finishingPlayerId: playerId,
   };
 }
 

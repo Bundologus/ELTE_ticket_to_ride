@@ -99,7 +99,7 @@ function putStarterHand(state, { arrayOfHands }) {
       }
     }
     newPlayer.longRouteCard = longRouteCard;
-    newPlayer.carts = 45;
+    newPlayer.carts = 8;
     return newPlayer;
   });
 }
@@ -181,9 +181,6 @@ function putConnection(state, { playerId, usedTrainColors, connection }) {
     if (player.id === playerId) {
       let newPlayer = JSON.parse(JSON.stringify(player));
 
-      console.log('Building connection');
-      console.log(connection);
-
       // Adding connection
       newPlayer.builtConnections = [...newPlayer.builtConnections, connection];
 
@@ -239,24 +236,15 @@ function putConnection(state, { playerId, usedTrainColors, connection }) {
       let graph;
       if (newPlayer.hasOwnProperty('connectionGraph')) {
         graph = Graph(newPlayer.connectionGraph);
-        console.log(newPlayer.connectionGraph);
       } else {
         graph = Graph();
-        console.log('Empty graph generated');
       }
 
-      console.log(
-        `Adding edge: ${connection.from}, ${connection.to}, ${connection.elements.length}`,
-      );
       // adding new edge
       graph.addEdge(
         `${connection.from}`,
         `${connection.to}`,
         connection.elements.length,
-      );
-
-      console.log(
-        `Adding edge: ${connection.to}, ${connection.from}, ${connection.elements.length}`,
       );
 
       // adding new edge reverse direction
@@ -280,7 +268,7 @@ function putConnection(state, { playerId, usedTrainColors, connection }) {
               `${routeCard.to}`,
             );
           } catch (error) {
-            console.log('Pathfinding failed.');
+            console.trace('Could not find path.');
           }
 
           if (shortPath.length > 0) {
@@ -300,7 +288,7 @@ function putConnection(state, { playerId, usedTrainColors, connection }) {
         try {
           shortPath = graph.shortestPath(`${newCard.from}`, `${newCard.to}`);
         } catch (error) {
-          console.log('Pathfinding failed.');
+          console.trace('Could not find path.');
         }
 
         if (shortPath.length > 0) {
@@ -313,7 +301,6 @@ function putConnection(state, { playerId, usedTrainColors, connection }) {
       }
 
       newPlayer.connectionGraph = graph.serialize();
-      console.log(newPlayer.connectionGraph);
 
       return newPlayer;
     } else {
