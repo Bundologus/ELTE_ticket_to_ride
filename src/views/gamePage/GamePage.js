@@ -12,7 +12,10 @@ import {
   drawRouteCards,
   drawRoutesFirstRound,
 } from '../../state/players/actions';
-import { selectActivePlayer } from '../../state/players/selector';
+import {
+  selectActivePlayer,
+  selectPlayersWithFinalScore,
+} from '../../state/players/selector';
 import {
   CART_COLOR_LOCOMOTIVE,
   PLAYER_BEGIN,
@@ -25,6 +28,7 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
   const game = useSelector(selectGame);
   const activePlayer = useSelector(selectActivePlayer);
   const actionLog = game.actionLog;
+  const TESTING = useSelector(selectPlayersWithFinalScore);
 
   const [activeCities, setActiveCities] = useState({
     routeIds: [],
