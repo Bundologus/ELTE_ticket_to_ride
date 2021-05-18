@@ -14,6 +14,11 @@ export const TrainCardsHand = PropTypes.shape({
   locomotive: PropTypes.number,
 });
 
+export const Path = PropTypes.shape({
+  length: PropTypes.number,
+  path: PropTypes.arrayOf(PropTypes.number),
+});
+
 export const PlayerType = PropTypes.shape({
   id: PropTypes.number,
   name: PropTypes.string.isRequired,
@@ -21,13 +26,11 @@ export const PlayerType = PropTypes.shape({
   score: PropTypes.number,
   playerFirstRound: PropTypes.bool,
   carts: PropTypes.number,
-  /* trainCardCount: PropTypes.number, */
   trainCards: TrainCardsHand,
-  /* routeCardCount: PropTypes.number, */
   routeCards: RouteList,
   longRouteCard: Route,
   builtConnections: ConnectionList,
-  longestChain: PropTypes.number,
+  longestPath: Path,
 });
 
 export const PlayerListType = PropTypes.arrayOf(PlayerType);
@@ -54,7 +57,7 @@ export const testPlayers = [
     routeCards: [],
     longRouteCard: null,
     builtConnections: [],
-    longestChain: 0,
+    longestPath: null,
   },
   {
     id: 1,
@@ -77,7 +80,7 @@ export const testPlayers = [
     routeCards: [],
     longRouteCard: null,
     builtConnections: [],
-    longestChain: 0,
+    longestPath: null,
   },
   {
     id: 2,
@@ -100,7 +103,7 @@ export const testPlayers = [
     routeCards: [],
     longRouteCard: null,
     builtConnections: [],
-    longestChain: 0,
+    longestPath: null,
   },
   {
     id: 3,
@@ -123,7 +126,7 @@ export const testPlayers = [
     routeCards: [],
     longRouteCard: null,
     builtConnections: [],
-    longestChain: 0,
+    longestPath: null,
   },
   {
     id: 4,
@@ -146,7 +149,7 @@ export const testPlayers = [
     routeCards: [],
     longRouteCard: null,
     builtConnections: [],
-    longestChain: 0,
+    longestPath: null,
   },
 ];
 

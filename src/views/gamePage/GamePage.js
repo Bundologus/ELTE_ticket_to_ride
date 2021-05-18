@@ -12,23 +12,21 @@ import {
   drawRouteCards,
   drawRoutesFirstRound,
 } from '../../state/players/actions';
-import {
-  selectActivePlayer,
-  selectPlayersWithFinalScore,
-} from '../../state/players/selector';
+import { selectActivePlayer } from '../../state/players/selector';
 import {
   CART_COLOR_LOCOMOTIVE,
+  GAME_ENDED,
   PLAYER_BEGIN,
   PLAYER_DRAW_TRAIN,
 } from '../../constants/gameConstants';
 import { fillRoster, nextPlayer } from '../../state/game/actions';
 import { selectGame } from '../../state/game/selector';
+import { FinalScoreBoard } from './FinalScoreBoard';
 
 export function GamePage({ localPlayerId, setLocalPlayerId }) {
   const game = useSelector(selectGame);
   const activePlayer = useSelector(selectActivePlayer);
   const actionLog = game.actionLog;
-  const TESTING = useSelector(selectPlayersWithFinalScore);
 
   const [activeCities, setActiveCities] = useState({
     routeIds: [],
@@ -41,7 +39,7 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
   const [drawingRoutes, setDrawingRoutes] = useState(false);
   const [drawnRoutes, setDrawnRoutes] = useState([]);
   const [selectedRoutes, setSelectedRoutes] = useState(new Set([]));
-  const [connectionHover, setConnectionHover] = useState('');
+  const [connectionHover, setConnectionHover] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -474,57 +472,18 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
             </div>
           </div>
         </div>
-        {/* <div
-          id="demoPanel"
-          className="fixed right-1 bottom-0 rounded-t-md bg-gray-700 text-ttr-white py-0.5 px-1.5 border-2 border-b-0 border-gray-300 transition-transform transform text-2xs lg:text-xl lg:py-1.5 lg:px-3"
-          onClick={() => {
-            document
-              .getElementById('demoPanel')
-              .classList.toggle('translate-y-3/4');
-          }}
-        >
-          <h1 className="text-sm lg:text-2xl">Demó panel</h1>
-          <button
-            className="bg-gray-400 text-black w-full rounded-sm mb-0.5 hover:bg-gray-300 pt-0.5"
-            onClick={(e) => {
-              e.stopPropagation();
-              dispatch()
-            }}
-          >
-            Első kör
-          </button>
-          <button
-            className="bg-gray-400 text-black w-full rounded-sm mb-0.5 hover:bg-gray-300 pt-0.5"
-            onClick={(e) => {
-              e.preventDefault();
-              let finishedRoute = {
-                id: '21',
-                from: '30',
-                to: '44',
-                fromCity: 'Paris',
-                toCity: 'Wien',
-                value: '8',
-                finished: true,
-                path: [47, 35, 29],
-              };
-
-              let nlp = JSON.parse(JSON.stringify(localPlayer));
-              nlp.routeCards.push(finishedRoute);
-              nlp.routeCardCount += 1;
-              setLocalPlayer(nlp);
-              let newCB = JSON.parse(JSON.stringify(builtConnections));
-              finishedRoute.path.forEach((connectionId) => {
-                if (!isConnectionBuilt(connectionId)) {
-                  newCB.push([connectionId, localPlayer.color]);
-                }
-              });
-              setBuiltConnections(newCB);
-              setConnectionHover(finishedRoute.path);
-            }}
-          >
-            Bejezett Cél
-          </button>
-        </div> */}
+        <div className="contents" id="endGameModal">
+          {game.gameState === GAME_ENDED ? (
+            <FinalScoreBoard
+              activeCities={activeCities.cityIds}
+              setNextPlayer={setNextPlayerHandler}
+              hoverCities={Array.from(hoverCities)}
+              setHoverCities={setHoverCities}
+              connectionHover={connectionHover}
+              setConnectionHover={setConnectionHover}
+            ></FinalScoreBoard>
+          ) : null}
+        </div>
       </div>
     </div>
   );

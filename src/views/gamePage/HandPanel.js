@@ -57,11 +57,9 @@ export function HandPanel({
           )}
           onMouseEnter={() => {
             if (route.finished) {
-              setHoverCities([route.from, route.to]);
-              setConnectionHover(route.path);
-            } else {
-              setHoverCities([route.from, route.to]);
+              setConnectionHover(route.path.connectionIdList);
             }
+            setHoverCities([route.from, route.to]);
           }}
           onMouseLeave={() => {
             setHoverCities([]);
@@ -173,13 +171,21 @@ export function HandPanel({
                 ),
               },
             )}
-            onMouseEnter={() =>
+            onMouseEnter={() => {
+              if (activePlayer.longRouteCard.finished) {
+                setConnectionHover(
+                  activePlayer.longRouteCard.path.connectionIdList,
+                );
+              }
               setHoverCities([
                 activePlayer.longRouteCard.from,
                 activePlayer.longRouteCard.to,
-              ])
-            }
-            onMouseLeave={() => setHoverCities([])}
+              ]);
+            }}
+            onMouseLeave={() => {
+              setHoverCities([]);
+              setConnectionHover([]);
+            }}
             onClick={() => {
               setActiveCities(activePlayer.longRouteCard);
               setHoverCities([]);
