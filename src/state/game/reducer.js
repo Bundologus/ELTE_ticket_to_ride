@@ -11,7 +11,6 @@ import {
 import {
   GAME_WAITING,
   GAME_ENDED,
-  GAME_LAST_ROUND,
   PLAYER_BEGIN,
   PLAYER_DRAW_TRAIN,
   PLAYER_DONE,
@@ -196,9 +195,16 @@ function setLastRound(state, { playerId }) {
 }
 
 function setNextPlayer(state) {
+  console.log('last round:' + state.lastRound);
+  console.log('activePlayerId: ' + state.activePlayerId);
+  console.log('finishingPlayerId: ' + state.finishingPlayerId);
+  console.log(
+    'finishing === active: ' +
+      (Number(state.activePlayerId) === Number(state.finishingPlayerId)),
+  );
   if (
-    state.gameState === GAME_LAST_ROUND &&
-    state.acitvePlayerId === state.finishingPlayerId
+    state.lastRound &&
+    Number(state.activePlayerId) === Number(state.finishingPlayerId)
   ) {
     return {
       ...state,

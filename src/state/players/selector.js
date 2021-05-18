@@ -1,4 +1,3 @@
-import { node } from 'prop-types';
 import { selectGame } from '../game/selector';
 
 export function selectPlayers(state) {
@@ -51,9 +50,6 @@ export function selectPlayersWithScore(state) {
       }
     }, 0);
 
-    /* if (longestChainLength > 0 && longestChainLength === player.longestChain)
-      score += 10; */
-
     return {
       ...player,
       trainCardCount: trainCardCount,
@@ -65,14 +61,14 @@ export function selectPlayersWithScore(state) {
 
 export function selectPlayersWithFinalScore(state) {
   const players = selectPlayers(state);
-  const longestChainLength = players.reduce((currentLongestChain, player) => {
-    player.longestChain = getLongestPath(player);
-    if (player.longestChain.length > currentLongestChain)
-      return player.longestChain;
-    else return currentLongestChain;
+  const longestPathLength = players.reduce((currentLongest, player) => {
+    player.longestPath = getLongestPath(player);
+    if (player.longestPath.length > currentLongest)
+      return player.longestPath.length;
+    else return currentLongest;
   }, 0);
 
-  return players.map((player) => {
+  const outPlayers = players.map((player) => {
     const trainCardCount = Object.values(player.trainCards).reduce(
       (sum, count) => {
         return sum + count;
@@ -82,43 +78,55 @@ export function selectPlayersWithFinalScore(state) {
 
     let score = 0;
 
-    score += player.builtConnections.reduce((sum, connection) => {
-      switch (connection.elements.length) {
-        case 1:
-          return sum + 1;
-        case 2:
-          return sum + 2;
-        case 3:
-          return sum + 4;
-        case 4:
-          return sum + 7;
-        case 6:
-          return sum + 15;
-        case 8:
-          return sum + 21;
-        default:
-          console.error(
-            `Error while calculating connection length score.\nConnection:\n${connection}\nCalculated length: ${connection.elements.length}`,
-          );
-          return sum;
-      }
-    }, 0);
+    score += Number(
+      player.builtConnections.reduce((sum, connection) => {
+        let value = 0;
+        switch (connection.elements.length) {
+          case 1:
+            value = 1;
+            break;
+          case 2:
+            value = 2;
+            break;
+          case 3:
+            value = 4;
+            break;
+          case 4:
+            value = 7;
+            break;
+          case 6:
+            value = 15;
+            break;
+          case 8:
+            value = 21;
+            break;
+          default:
+            console.error(
+              `Error while calculating connection length score.\nConnection:\n${connection}\nCalculated length: ${connection.elements.length}`,
+            );
+            break;
+        }
+        return Number(sum) + Number(value);
+      }, 0),
+    );
 
-    score += player.routeCards.reduce((sum, routeCard) => {
-      if (routeCard.finished) {
-        return sum + routeCard.value;
-      } else {
-        return sum - routeCard.value;
-      }
-    }, 0);
+    score += Number(
+      player.routeCards.reduce((sum, routeCard) => {
+        if (routeCard.finished) {
+          return Number(sum) + Number(routeCard.value);
+        } else {
+          return Number(sum) - Number(routeCard.value);
+        }
+      }, 0),
+    );
 
     if (player.longRouteCard.finished) {
-      score += player.longRouteCard.value;
+      score += Number(player.longRouteCard.value);
     } else {
-      score -= player.longRouteCard.value;
+      score -= Number(player.longRouteCard.value);
     }
 
-    if (longestChainLength === player.longestChain) score += 10;
+    if (longestPathLength === player.longestPath.length) score += 10;
 
     return {
       ...player,
@@ -127,20 +135,53 @@ export function selectPlayersWithFinalScore(state) {
       score: score,
     };
   });
+
+  outPlayers.sort((playerA, playerB) => {
+    return playerB.score - playerA.score;
+  });
+  return [outPlayers, longestPathLength];
 }
 
 function getLongestPath(player) {
-  if (!player.hasOwnProperty('connectionGraph')) return 0;
-  const subGraphs = getConnectedSubgraphs(player.connectionGraph);
+  if (player.hasOwnProperty('connectionGraph')) {
+    const subGraphs = getConnectedSubgraphs(player.connectionGraph);
 
-  return subGraphs.reduce(
-    (longestPath, currentGraph) => {
-      if (currentGraph.maxLength > longestPath)
-        return findLongestPathInConnectedGraph(currentGraph);
-      else return longestPath;
-    },
-    { length: 0, path: [] },
-  );
+    const path = subGraphs.reduce(
+      (longestPath, currentGraph) => {
+        if (currentGraph.maxLength > longestPath.length)
+          return findLongestPathInConnectedGraph(currentGraph);
+        else return longestPath;
+      },
+      { length: 0, path: [] },
+    );
+
+    let connections = [];
+
+    if (path.length > 0) {
+      console.log('path');
+      console.log(path);
+
+      for (let i = 1; i < path.path.length; i++) {
+        const cityIdA = path.path[i - 1];
+        const cityIdB = path.path[i];
+
+        console.log(`CityA: ${cityIdA} CityB: ${cityIdB}`);
+
+        const currentConnection = player.builtConnections.find((connection) => {
+          return (
+            (connection.from === cityIdA && connection.to === cityIdB) ||
+            (connection.from === cityIdB && connection.to === cityIdA)
+          );
+        });
+
+        connections.push(currentConnection.id);
+      }
+    }
+
+    return { ...path, connections: connections };
+  } else {
+    return { length: 0, path: [], connections: [] };
+  }
 }
 
 function getConnectedSubgraphs(graph) {
@@ -259,10 +300,10 @@ function getMaxDepth(currentNode, alGraph, weightList) {
   let maxDepth = 0;
   let maxDepthPath = [];
 
-  let links = Array.from(alGraph.get(currentNode));
+  let connectedNodes = Array.from(alGraph.get(currentNode));
 
-  while (links.length > 0) {
-    const nextNode = links.shift();
+  while (connectedNodes.length > 0) {
+    const nextNode = connectedNodes.shift();
 
     const nextWeightKey = `${Math.min(
       Number(nextNode),

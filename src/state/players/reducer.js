@@ -1,4 +1,5 @@
 import Graph from 'graph-data-structure';
+import { ticketToRideData } from '../../assets/ticket-to-ride-data';
 import { testPlayers } from '../../domain/playerType';
 import { DEAL_STARTER_HAND } from '../game/actions';
 import {
@@ -52,7 +53,7 @@ export function playersReducer(state = initialState, action) {
 
 function putStarterHand(state, { arrayOfHands }) {
   return state.map((player, ind) => {
-    let newPlayer = JSON.parse(JSON.stringify(player));
+    let newPlayer = { ...player };
 
     const { trainCards, longRouteCard } = arrayOfHands[ind];
 
@@ -99,7 +100,7 @@ function putStarterHand(state, { arrayOfHands }) {
       }
     }
     newPlayer.longRouteCard = longRouteCard;
-    newPlayer.carts = 8;
+    newPlayer.carts = 45;
     return newPlayer;
   });
 }
@@ -107,7 +108,7 @@ function putStarterHand(state, { arrayOfHands }) {
 function putTrainCard(state, playerId, cardColors) {
   return state.map((player) => {
     if (player.id === playerId) {
-      let newPlayer = JSON.parse(JSON.stringify(player));
+      let newPlayer = { ...player };
       for (const cardColor of cardColors) {
         switch (cardColor) {
           case 'black': {
@@ -166,7 +167,7 @@ function putTrainCard(state, playerId, cardColors) {
 function putRouteCard(state, playerId, selectedRouteCards) {
   return state.map((player) => {
     if (player.id === playerId) {
-      let newPlayer = JSON.parse(JSON.stringify(player));
+      let newPlayer = { ...player };
       newPlayer.routeCards = [...newPlayer.routeCards, ...selectedRouteCards];
       newPlayer.playerFirstRound = false;
       return newPlayer;
@@ -179,7 +180,7 @@ function putRouteCard(state, playerId, selectedRouteCards) {
 function putConnection(state, { playerId, usedTrainColors, connection }) {
   return state.map((player) => {
     if (player.id === playerId) {
-      let newPlayer = JSON.parse(JSON.stringify(player));
+      let newPlayer = { ...player };
 
       // Adding connection
       newPlayer.builtConnections = [...newPlayer.builtConnections, connection];
@@ -261,9 +262,9 @@ function putConnection(state, { playerId, usedTrainColors, connection }) {
         } else {
           graph.addNode(routeCard.from);
           graph.addNode(routeCard.to);
-          let shortPath = [];
+          let cityPath = [];
           try {
-            shortPath = graph.shortestPath(
+            cityPath = graph.shortestPath(
               `${routeCard.from}`,
               `${routeCard.to}`,
             );
@@ -271,8 +272,31 @@ function putConnection(state, { playerId, usedTrainColors, connection }) {
             console.trace('Could not find path.');
           }
 
-          if (shortPath.length > 0) {
-            return { ...routeCard, path: shortPath, finished: true };
+          if (cityPath.length > 0) {
+            let connectionPath = [];
+
+            for (let i = 1; i < cityPath.length; i++) {
+              const cityIdA = cityPath[i - 1];
+              const cityIdB = cityPath[i];
+
+              const currentConnection = newPlayer.builtConnections.find(
+                (connection) => {
+                  return (
+                    (connection.from === cityIdA &&
+                      connection.to === cityIdB) ||
+                    (connection.from === cityIdB && connection.to === cityIdA)
+                  );
+                },
+              );
+
+              connectionPath.push(currentConnection.id);
+            }
+
+            return {
+              ...routeCard,
+              path: { connectionIdList: connectionPath, cityIdList: cityPath },
+              finished: true,
+            };
           } else {
             return routeCard;
           }
@@ -284,17 +308,35 @@ function putConnection(state, { playerId, usedTrainColors, connection }) {
         let newCard = newPlayer.longRouteCard;
         graph.addNode(newCard.from);
         graph.addNode(newCard.to);
-        let shortPath = [];
+        let cityPath = [];
         try {
-          shortPath = graph.shortestPath(`${newCard.from}`, `${newCard.to}`);
+          cityPath = graph.shortestPath(`${newCard.from}`, `${newCard.to}`);
         } catch (error) {
           console.trace('Could not find path.');
         }
 
-        if (shortPath.length > 0) {
+        if (cityPath.length > 0) {
+          let connectionPath = [];
+
+          for (let i = 1; i < cityPath.length; i++) {
+            const cityIdA = cityPath[i - 1];
+            const cityIdB = cityPath[i];
+
+            const currentConnection = newPlayer.builtConnections.find(
+              (connection) => {
+                return (
+                  (connection.from === cityIdA && connection.to === cityIdB) ||
+                  (connection.from === cityIdB && connection.to === cityIdA)
+                );
+              },
+            );
+
+            connectionPath.push(currentConnection.id);
+          }
+
           newPlayer.longRouteCard = {
             ...newCard,
-            path: shortPath,
+            path: { connectionIdList: connectionPath, cityIdList: cityPath },
             finished: true,
           };
         }

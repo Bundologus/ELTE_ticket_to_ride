@@ -22,6 +22,7 @@ export function GameBoard({
   hoverCities,
   connectionHover,
   setConnectionHover,
+  displayOnly = false,
 }) {
   const gameData = useSelector(selectGame);
   const activePlayer = useSelector(selectActivePlayer);
@@ -41,7 +42,8 @@ export function GameBoard({
     if (
       gameData.gameState === PLAYER_BEGIN &&
       !activePlayer.playerFirstRound &&
-      activePlayer.carts >= connection.elements.length
+      activePlayer.carts >= connection.elements.length &&
+      !displayOnly
     ) {
       setSelectedConnection(connection);
       const colorOptions = getColorOptions(connection);
@@ -58,7 +60,11 @@ export function GameBoard({
 
   const confirmBuildHandler = (e) => {
     e.preventDefault();
-    if (selectedTrainColor === 'null' || selectedLocomotiveCount < 0) {
+    if (
+      selectedTrainColor === 'null' ||
+      selectedLocomotiveCount < 0 ||
+      displayOnly
+    ) {
       return false;
     }
     const elementsNeeded = selectedConnection.elements.length;
@@ -93,7 +99,7 @@ export function GameBoard({
     const plCarts = activePlayer.carts - selectedConnection.elements.length;
     setNextPlayer();
 
-    if (plCarts <= 2) {
+    if (plCarts <= 2 && !gameData.lastRound) {
       dispatch(startLastRound(plId));
     }
   };
@@ -171,31 +177,41 @@ export function GameBoard({
               top: y + '%',
               left: x + '%',
             };
-        return (
-          <button
-            key={y + '-' + x}
-            className={classNames(
-              `absolute w-2 h-4 lg:w-2.5 lg:h-5 xl:w-3 xl:h-7 2xl:w-3.5 2xl:h-8 3xl:w-4 3xl:h-10 transform focus:outline-none transition-all border-player-${activePlayer.color}` +
-                hoverStyle,
-              {
-                'cursor-not-allowed':
-                  gameData.gameState !== PLAYER_BEGIN ||
-                  activePlayer.playerFirstRound ||
-                  !canBuild,
-              },
-            )}
-            style={style}
-            data-connection={connection.fromCity + '-' + connection.toCity}
-            data-connection-id={connection.id}
-            onMouseEnter={() => {
-              setConnectionHover([connection.id]);
-            }}
-            onMouseLeave={() => {
-              setConnectionHover([]);
-            }}
-            onClick={(e) => startBuildHandler(e, connection)}
-          ></button>
-        );
+        if (displayOnly) {
+          return (
+            <div
+              key={y + '-' + x}
+              className="absolute w-2 h-4 lg:w-2.5 lg:h-5 xl:w-3 xl:h-7 2xl:w-3.5 2xl:h-8 3xl:w-4 3xl:h-10 transform focus:outline-none"
+              style={style}
+            ></div>
+          );
+        } else {
+          return (
+            <button
+              key={y + '-' + x}
+              className={classNames(
+                `absolute w-2 h-4 lg:w-2.5 lg:h-5 xl:w-3 xl:h-7 2xl:w-3.5 2xl:h-8 3xl:w-4 3xl:h-10 transform focus:outline-none transition-all border-player-${activePlayer.color}` +
+                  hoverStyle,
+                {
+                  'cursor-not-allowed':
+                    gameData.gameState !== PLAYER_BEGIN ||
+                    activePlayer.playerFirstRound ||
+                    !canBuild,
+                },
+              )}
+              style={style}
+              data-connection={connection.fromCity + '-' + connection.toCity}
+              data-connection-id={connection.id}
+              onMouseEnter={() => {
+                setConnectionHover([connection.id]);
+              }}
+              onMouseLeave={() => {
+                setConnectionHover([]);
+              }}
+              onClick={(e) => startBuildHandler(e, connection)}
+            ></button>
+          );
+        }
       });
       return (
         <div key={'connection-' + connection.id} className="contents">

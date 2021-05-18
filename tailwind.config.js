@@ -64,6 +64,9 @@ module.exports = {
       lineHeight: {
         custom: '2.85rem',
       },
+      minWidth: {
+        '1/5': '20%',
+      },
       screens: {
         '3xl': '2048px',
       },
