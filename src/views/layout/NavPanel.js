@@ -23,7 +23,7 @@ export function NavPanel() {
           checked={game.determShuffle}
           onChange={() => {
             dispatch(setDetermShuffle());
-            dispatch(createGame('', 5));
+            dispatch(createGame('', 2));
           }}
         />
       </label>

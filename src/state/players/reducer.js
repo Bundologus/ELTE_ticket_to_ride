@@ -10,8 +10,8 @@ import {
 } from './actions';
 
 // TODO remove
-const initialState = testPlayers.slice(0, 5);
-const startingCartCount = 4;
+const initialState = testPlayers.slice(0, 2);
+const startingCartCount = 45;
 // TODO end
 
 export function playersReducer(state = initialState, action) {

@@ -211,6 +211,16 @@ export function HandPanel({
                   : 'bg-gray-200')
               }
             >
+              {activePlayer.longRouteCard.finished ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="absolute top-0 right-0 h-4 w-6 lg:h-7 lg:w-7 2xl:h-9 2xl:w-9 text-green-700"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M 10 21 Q 14 10 21 3 Q 13 9 10 15 Q 8 13 3 11 Q 7 14 10 21 z" />
+                </svg>
+              ) : null}
               {activePlayer.longRouteCard.value}
             </p>
           </button>

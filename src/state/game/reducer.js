@@ -43,7 +43,7 @@ const initialTrainDeck = (() => {
 })();
 
 // TODO remove
-const startingPlayerCount = 5;
+const startingPlayerCount = 2;
 const shuffleData = [
   /*0*/ 0,
   /*1*/ 1,
@@ -159,7 +159,7 @@ const shuffleData = [
 // TODO end
 
 const initialState = {
-  maxPlayers: 5,
+  maxPlayers: 2,
   activePlayerId: 0,
   gameId: '',
   gameState: GAME_WAITING,
