@@ -285,12 +285,12 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
   });
 
   return (
-    <div className="container h-screen font-regular z-10 pt-10 md:px-16 lg:pt-16 lg:pb-2 2xl:flex  2xl:items-center">
+    <div className="container h-screen font-regular z-10 pt-10 flex md:px-16 lg:pt-16 lg:pb-2 2xl:flex  2xl:items-center">
       <div
-        className="container relative overflow-hidden h-full p-1.5 shadow-md bg-cover rounded-none lg:rounded-xl lg:p-3"
+        className="container relative overflow-hidden max-h-full h-auto self-center p-1.5 shadow-md bg-cover rounded-xl lg:p-3"
         id="board-backdrop"
       >
-        <div className="container relative h-full grid grid-cols-8 grid-rows-5 lg:grid-cols-7">
+        <div className="container relative h-full grid grid-cols-8 grid-rows-5 lg:max-h-lg lg:grid-cols-7 xl:max-h-xl 2xl:max-h-2xl 3xl:max-h-3xl">
           <div className="contents" id="map">
             <GameBoard
               activeCities={activeCities.cityIds}

@@ -1,8 +1,15 @@
 import { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { createGame } from '../../state/game/actions';
-import { setAppToWait } from '../../state/app/actions';
+import {
+  createGame,
+  dealStarterHand,
+  fillRoster,
+  startGame,
+} from '../../state/game/actions';
+import { setAppToGame, setAppToWait } from '../../state/app/actions';
+import { selectPlayers } from '../../state/players/selector';
+import { selectGame } from '../../state/game/selector';
 
 export function LandingPage({ setLocalPlayerId }) {
   const [hostNameOk, setHostNameOk] = useState(true);
@@ -16,15 +23,46 @@ export function LandingPage({ setLocalPlayerId }) {
 
   const dispatch = useDispatch();
 
+  // TODO remove these for phase 3
+  const players = useSelector(selectPlayers);
+  const game = useSelector(selectGame);
+
+  if (game.gameId === '') {
+    dispatch(createGame('', 5));
+  }
+  const getStarterHands = (playerCount) => {
+    let arrayOfHands = [];
+    let reverseDeck = [...game.trainCardDeck];
+    reverseDeck.reverse();
+
+    for (let i = 0; i < playerCount; ++i) {
+      arrayOfHands.push({
+        trainCards: reverseDeck.slice(4 * i, 4 * (i + 1)),
+        longRouteCard: game.longRouteDeck[game.longRouteDeck.length - (i + 1)],
+      });
+    }
+
+    return arrayOfHands;
+  };
+
+  // TODO end of TODO
+
   const createGameHandler = (e) => {
     e.preventDefault();
 
     if (hostNameRef.current.value !== '') {
-      dispatch(setAppToWait());
-      dispatch(
-        createGame(hostNameRef.current.value, playerCountRef.current.value),
-      );
       setLocalPlayerId(0);
+
+      // TODO remove this for phase 3let arrayOfHands = [];
+
+      const arrayOfStarterHands = getStarterHands(players.length);
+      dispatch(dealStarterHand(arrayOfStarterHands));
+
+      dispatch(fillRoster());
+      dispatch(startGame(game.gameId));
+      dispatch(setAppToGame());
+
+      //TODO end of TODO
     }
   };
 
@@ -52,7 +90,7 @@ export function LandingPage({ setLocalPlayerId }) {
         </h1>
       </div>
       <div
-        className="m-2 mb-1 lg:-mt-4 xl:mr-2 xl:w-4/5 xl:justify-self-end 2xl:w-2/3"
+        className="m-2 mb-1 self-end lg:self-auto lg:-mt-4 xl:mr-2 xl:w-4/5 xl:justify-self-end 2xl:w-2/3"
         id="newGameForm"
       >
         <form
@@ -62,7 +100,7 @@ export function LandingPage({ setLocalPlayerId }) {
               hostNameRef !== null && hostNameRef.current.value !== '',
             );
           }}
-          className="relative rounded-xl border-2 border-green-500 bg-green-200 bg-opacity-80 text-green-900 w-full h-full p-3 md:py-2 lg:h-auto lg:p-6 lg:py-4"
+          className="relative rounded-xl border-2 border-green-500 bg-green-200 bg-opacity-80 text-green-900 w-full h-auto self-end p-3 md:py-2 lg:p-6 lg:py-4"
         >
           <h2 className="font-smallCaps text-xl mb-2.5 lg:text-2xl lg:mb-3">
             New Game
@@ -114,7 +152,7 @@ export function LandingPage({ setLocalPlayerId }) {
             );
             setGameIdOk(gameIdRef !== null && gameIdRef.current.value !== '');
           }}
-          className="relative rounded-xl border-2 border-blue-500 bg-blue-200 bg-opacity-80 text-blue-900 w-full h-full p-3 md:py-2 lg:h-auto lg:p-6 lg:py-4"
+          className="relative rounded-xl border-2 border-blue-500 bg-blue-200 bg-opacity-80 text-blue-900 w-full h-auto p-3 md:py-2 lg:p-6 lg:py-4"
         >
           <h2 className="ont-smallCaps text-xl mb-2.5 lg:text-2xl lg:mb-3">
             Join Game

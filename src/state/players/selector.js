@@ -158,14 +158,9 @@ function getLongestPath(player) {
     let connections = [];
 
     if (path.length > 0) {
-      console.log('path');
-      console.log(path);
-
       for (let i = 1; i < path.path.length; i++) {
         const cityIdA = path.path[i - 1];
         const cityIdB = path.path[i];
-
-        console.log(`CityA: ${cityIdA} CityB: ${cityIdB}`);
 
         const currentConnection = player.builtConnections.find((connection) => {
           return (

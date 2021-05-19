@@ -1,6 +1,4 @@
-function getLongestPath(graph) {
-  /* if (!player.hasOwnProperty('connectionGraph')) return 0; */
-
+/* function getLongestPath(graph) {
   const subGraphs = getConnectedSubgraphs(graph);
 
   return subGraphs.reduce(
@@ -246,3 +244,24 @@ const testGraph = {
 const l = getLongestPath(testGraph);
 
 console.log(l);
+ */
+
+let fs = require('fs');
+/* import { fs } from 'fs'; */
+
+function generateDetermShuffleNumberPairs() {
+  const max = 110;
+  let pairArray = [];
+
+  for (let i = 2; i < max; i++) {
+    const to = Math.floor((Math.random() * 10000) % i);
+
+    pairArray.push([i, to]);
+  }
+
+  console.log(JSON.stringify(pairArray));
+  /* 
+  fs.writeFile('randompairs.json', JSON.stringify(pairArray)); */
+}
+
+generateDetermShuffleNumberPairs();

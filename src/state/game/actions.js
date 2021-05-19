@@ -4,6 +4,7 @@ export const NEXT_PLAYER = 'NEXT_PLAYER';
 export const START_LAST_ROUND = 'START_LAST_ROUND';
 export const DEAL_STARTER_HAND = 'DEAL_STARTER_HAND';
 export const FILL_ROSTER = 'FILL_ROSTER';
+export const SET_DETERM_SHUFFLE = 'SET_DETERM_SHUFFLE';
 
 export function createGame(hostPlayer, maxPlayers) {
   return {
@@ -18,14 +19,14 @@ export function createGame(hostPlayer, maxPlayers) {
 export function startGame(gameId) {
   return {
     type: START_GAME,
-    payload: {},
+    payload: null,
   };
 }
 
 export function nextPlayer() {
   return {
     type: NEXT_PLAYER,
-    payload: {},
+    payload: null,
   };
 }
 
@@ -47,5 +48,12 @@ export function fillRoster() {
   return {
     type: FILL_ROSTER,
     payload: null,
+  };
+}
+
+export function setDetermShuffle(newValue) {
+  return {
+    type: SET_DETERM_SHUFFLE,
+    payload: { newValue },
   };
 }

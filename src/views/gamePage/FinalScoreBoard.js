@@ -75,7 +75,7 @@ export function FinalScoreBoard({
         <div
           key={'route-' + route.id}
           className={classNames(
-            'relative focus:ring-0 overflow-hidden focus:outline-none w-full text-left rounded-md rounded-tr-none p-1 py-0.5 mb-1.5 lg:p-1.5',
+            'relative focus:ring-0 overflow-hidden focus:outline-none w-full text-left rounded-md rounded-tr-none p-1 py-0.5 pl-1.5 mb-0.5 lg:mb-1.5 lg:p-1.5',
             {
               'bg-gray-500': route.id <= 40,
               'bg-gray-800': route.id > 40,
@@ -96,7 +96,7 @@ export function FinalScoreBoard({
             {route.fromCity} - {route.toCity}
             <span
               className={
-                'absolute top-0 right-0 font-number font-bold text-gray-800 text-center rounded-l-md text-xs h-full lg:w-12 lg:py-1.5 lg:text-lg xl:text-xl ' +
+                'absolute top-0 right-0 font-number font-bold text-gray-800 text-center rounded-l-md text-xs h-full w-7 lg:w-10 xl:py-1.5 lg:text-lg xl:text-xl ' +
                 (route.finished ? 'bg-green-400' : 'bg-red-400')
               }
             >
@@ -110,9 +110,9 @@ export function FinalScoreBoard({
     return (
       <div
         key={'finalScoreCard-' + player.id}
-        className={`relative text-ttr-white bg-player-${player.color} p-2 pt-1 max-w-xs xl:rounded-md `}
+        className={`relative text-ttr-white bg-player-${player.color} p-1 pt-0.5 lg:p-2 lg:pt-1 max-w-xs rounded-sm xl:rounded-md`}
       >
-        <h3 className="font-smallCaps font-bold xl:text-xl xl:mr-10  xl:mt-1 xl:mb-3">
+        <h3 className="font-smallCaps font-bold text-sm mr-4 mt-0 mb-0 lg:mb-1.5 lg:text-base xl:text-xl xl:mr-10 xl:mt-1 xl:mb-3">
           {player.name}
         </h3>
         <p
@@ -122,9 +122,11 @@ export function FinalScoreBoard({
         >
           {player.score}
         </p>
-        <div className="bg-gray-800 bg-opacity-30 overflow-y-auto rounded-md p-0.5 py-1 lg:p-2 lg:mb-1.5">
-          <p className="font-smallCaps">Score from connections</p>
-          <table className="text-center border-collapse table-fixed lg:text-sm">
+        <div className="bg-gray-800 bg-opacity-30 overflow-y-auto rounded-md p-0.5 pt-0 lg:py-1 lg:p-2 lg:mb-1.5">
+          <p className="font-smallCaps text-sm lg:text-base">
+            Score from connections
+          </p>
+          <table className="text-center border-collapse table-fixed text-2xs lg:text-sm">
             <tbody>
               <tr>
                 <th
@@ -243,7 +245,7 @@ export function FinalScoreBoard({
         </div>
         {player.longestPath.length === longestPathLength ? (
           <div
-            className="bg-gray-800 bg-opacity-30 overflow-y-auto rounded-md p-0.5 py-1 lg:p-2 lg:mb-1.5 border-4 border-yellow-500"
+            className="bg-gray-800 bg-opacity-30 overflow-y-auto rounded-md p-0.5 pt-0 border-2 lg:p-2 lg:pt-1 lg:mb-1.5 xl:border-4 border-yellow-500"
             onMouseEnter={() => {
               setConnectionHover(player.longestPath.connections);
             }}
@@ -251,17 +253,21 @@ export function FinalScoreBoard({
               setConnectionHover([]);
             }}
           >
-            <p className="font-smallCaps">Longest continous path</p>
-            <p className="font-smallCaps font-semibold text-sm">
+            <p className="font-smallCaps text-sm lg:text-base">
+              Longest continous path
+            </p>
+            <p className="font-smallCaps font-semibold text-2xs xl:text-sm">
               {longestPathString}
             </p>
           </div>
         ) : null}
         <div
-          className="bg-gray-800 bg-opacity-30 overflow-y-auto max-h-40 rounded-md p-0.5 py-1 lg:p-2"
+          className="bg-gray-800 bg-opacity-30 overflow-y-auto max-h-40 rounded-md p-0.5 py-1 lg:p-2 lg:pt-1"
           id="routecard-box"
         >
-          <p className="font-smallCaps">Score from routes</p>
+          <p className="font-smallCaps text-sm lg:text-base">
+            Score from routes
+          </p>
           {routeCards}
         </div>
       </div>
@@ -269,24 +275,28 @@ export function FinalScoreBoard({
   });
 
   return (
-    <div className="fixed top-0 left-0 w-full h-screen z-50 bg-black bg-opacity-20 flex flex-row justify-center place-items-center">
-      <div className="relative bg-gray-900 rounded-md xl:rounded-lg p-1 lg:p-2 xl:p-5 flex flex-col items-center">
-        <h2 className="text-ttr-white font-smallCaps font-semibold text-sm xl:text-xl 2xl:text-2xl mb-4 xl:mb-4 2xl:mb-3 place-self-start">
-          Game concluded!
-        </h2>
-        <h2 className="text-ttr-white font-smallCaps font-semibold text-sm xl:text-xl 2xl:text-lg mb-4 xl:mb-4 xl:-mt-8 2xl:mb-3">
-          {winnerNames.length > 1
-            ? 'And the winners are...'
-            : 'And the winner is...'}
-        </h2>
-        <h2 className="text-ttr-white whitespace-nowrap font-smallCaps font-semibold text-sm xl:text-xl 2xl:text-3xl mb-4 xl:mb-4 2xl:mb-3 mx-10">
-          {winnerNames.join(' & ')}
-        </h2>
-        <h2 className="text-ttr-white font-smallCaps font-semibold text-sm xl:text-xl 2xl:text-xl mb-4 xl:mb-4 2xl:mb-3">
-          Congratulations!
-        </h2>
-        <div className="flex flex-row flex-nowrap">
-          <div className="flex-none xl:mr-4">
+    <div className="fixed top-0 left-0 bottom-0 right-0 w-full h-screen z-50 bg-black bg-opacity-20 flex flex-row justify-center place-items-center">
+      <div className="relative w-screen max-h-screen bg-gray-900 rounded-md md:w-auto lg:h-auto xl:rounded-lg p-1 lg:p-2 xl:p-5 flex flex-col items-center">
+        <div className="w-full p-1 lg:contents">
+          <h2 className="text-ttr-white font-smallCaps font-semibold place-self-start text-sm text-center lg:text-left xl:text-xl 2xl:text-2xl lg:mb-4 xl:mb-4 2xl:mb-3">
+            Game concluded!
+          </h2>
+          <div className="flex flex-row w-full content-between lg:contents">
+            <h2 className="text-ttr-white font-smallCaps font-semibold text-sm xl:text-xl 2xl:text-lg lg:mb-2 xl:mb-4 xl:-mt-8 2xl:mb-3">
+              {winnerNames.length > 1
+                ? 'And the winners are...'
+                : 'And the winner is...'}
+            </h2>
+            <h2 className="text-ttr-white whitespace-nowrap font-smallCaps font-semibold text-sm flex-grow text-center truncate lg:text-lg xl:text-xl 2xl:text-3xl lg:mb-2 xl:mb-4 2xl:mb-3 mx-10">
+              {winnerNames.join(' & ')}
+            </h2>
+            <h2 className="text-ttr-white font-smallCaps font-semibold text-sm xl:text-xl 2xl:text-xl lg:mb-4 xl:mb-4 2xl:mb-3">
+              Congratulations!
+            </h2>
+          </div>
+        </div>
+        <div className="flex flex-row flex-nowrap gap-1 lg:gap-2 xl:gap-3">
+          <div className="flex-none">
             <GameBoard
               activeCities={activeCities}
               setNextPlayer={setNextPlayer}
@@ -296,12 +306,15 @@ export function FinalScoreBoard({
               displayOnly={true}
             ></GameBoard>
           </div>
-          <div className="flex-auto flex flex-col justify-items-stretch gap-2">
+          <div
+            className="flex-auto flex flex-col justify-items-stretch gap-2 overflow-y-auto rounded-sm no-scroll-bar"
+            id="finalScoreCards"
+          >
             {playerCards}
           </div>
         </div>
         <button
-          className="absolute block text-ttr-white focus:outline-none border-2 rounded-md px-4 xl:text-lg xl:px-10 xl:-top-3 xl:right-5 mt-3 xl:mt-8 bg-green-600 border-green-800 hover:bg-green-500"
+          className="absolute block text-ttr-white focus:outline-none border-2 rounded-md -top-2 right-1 text-sm px-2 lg:-top-1 lg:right-2 lg:px-4 xl:text-lg xl:px-10 xl:-top-3 xl:right-5 mt-3 xl:mt-8 bg-green-600 border-green-800 hover:bg-green-500"
           onClick={() => dispatch(setAppToMain())}
         >
           Done

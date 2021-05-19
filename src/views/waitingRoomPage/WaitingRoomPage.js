@@ -5,10 +5,12 @@ import {
   dealStarterHand,
   fillRoster,
 } from '../../state/game/actions';
+import { selectGame } from '../../state/game/selector';
+import { selectPlayers } from '../../state/players/selector';
 
 export function WaitingRoomPage({ localPlayerId, setLocalPlayerId }) {
-  const game = useSelector((state) => state.game);
-  const players = useSelector((state) => state.players);
+  const game = useSelector(selectGame);
+  const players = useSelector(selectPlayers);
 
   const getStarterHands = (playerCount) => {
     let arrayOfHands = [];
@@ -26,8 +28,6 @@ export function WaitingRoomPage({ localPlayerId, setLocalPlayerId }) {
   };
 
   const dispatch = useDispatch();
-
-  // TODO not really sure how to handle this part.
 
   const gameStartHandler = () => {
     const arrayOfStarterHands = getStarterHands(players.length);
