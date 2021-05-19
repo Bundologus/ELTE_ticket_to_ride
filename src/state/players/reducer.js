@@ -1,5 +1,4 @@
 import Graph from 'graph-data-structure';
-import { ticketToRideData } from '../../assets/ticket-to-ride-data';
 import { testPlayers } from '../../domain/playerType';
 import { DEAL_STARTER_HAND } from '../game/actions';
 import {
@@ -10,8 +9,10 @@ import {
   DRAW_ROUTES_FIRST_ROUND,
 } from './actions';
 
-const initialState = testPlayers.slice(0, 2);
-//const initialState = testPlayers;
+// TODO remove
+const initialState = testPlayers.slice(0, 5);
+const startingCartCount = 4;
+// TODO end
 
 export function playersReducer(state = initialState, action) {
   const { type, payload } = action;
@@ -100,7 +101,7 @@ function putStarterHand(state, { arrayOfHands }) {
       }
     }
     newPlayer.longRouteCard = longRouteCard;
-    newPlayer.carts = 45;
+    newPlayer.carts = startingCartCount;
     return newPlayer;
   });
 }
@@ -269,7 +270,7 @@ function putConnection(state, { playerId, usedTrainColors, connection }) {
               `${routeCard.to}`,
             );
           } catch (error) {
-            console.trace('Could not find path.');
+            console.log('Could not find path.');
           }
 
           if (cityPath.length > 0) {
@@ -312,7 +313,7 @@ function putConnection(state, { playerId, usedTrainColors, connection }) {
         try {
           cityPath = graph.shortestPath(`${newCard.from}`, `${newCard.to}`);
         } catch (error) {
-          console.trace('Could not find path.');
+          console.log('Could not find path.');
         }
 
         if (cityPath.length > 0) {

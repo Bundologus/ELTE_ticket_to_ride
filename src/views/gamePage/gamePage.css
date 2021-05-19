@@ -10,6 +10,11 @@
   box-sizing: content-box;
 }
 
+#finalScoreCards {
+  height: 299.012848px;
+  scrollbar-color: transparent transparent;
+}
+
 .built-border {
   border-width: 2.5px;
   border-color: #00000055 #00000055 #ffffff55 #ffffff55;
@@ -20,6 +25,7 @@
 }
 
 @media (min-width: 1024px) {
+  /* LG */
   .built-border {
     border-width: 3px;
   }
@@ -28,30 +34,51 @@
     width: 576px;
     height: 383.588887px;
   }
+
+  #finalScoreCards {
+    height: 383.588887px;
+  }
 }
 
 @media (min-width: 1280px) {
+  /* XL */
   .board {
     width: 750px;
+    height: 499.464668px;
+  }
+
+  #finalScoreCards {
     height: 499.464668px;
   }
 }
 
 @media (min-width: 1536px) {
+  /* 2XL */
   .board {
     width: 965px;
     height: 642.64454px;
   }
+
+  #finalScoreCards {
+    height: 642.64454px;
+  }
+
   #board-backdrop {
     max-height: 828px;
   }
 }
 
 @media (min-width: 2048px) {
+  /* 3XL */
   .board {
     width: 1172px;
     height: 780.496788px;
   }
+
+  #finalScoreCards {
+    height: 780.496788px;
+  }
+
   #board-backdrop {
     max-height: 1000px;
   }

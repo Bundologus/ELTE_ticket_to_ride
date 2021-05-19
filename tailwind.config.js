@@ -64,6 +64,12 @@ module.exports = {
       lineHeight: {
         custom: '2.85rem',
       },
+      maxHeight: {
+        lg: '480px',
+        xl: '624px',
+        '2xl': '804px',
+        '3xl': '976px',
+      },
       minWidth: {
         '1/5': '20%',
       },

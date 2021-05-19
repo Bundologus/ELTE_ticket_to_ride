@@ -244,7 +244,7 @@ export function GameBoard({
           <div
             key={y + '-' + x}
             className={
-              `absolute w-2.5 h-3.5 lg:w-3 lg:h-4.5 xl:w-4 xl:h-6 2xl:w-5 2xl:h-7.5 3xl:w-4 3xl:h-10 built-border bg-player-${connection.ownerColor}` +
+              `absolute w-2.5 h-3.5 lg:w-3 lg:h-4.5 xl:w-4 xl:h-6 2xl:w-5 2xl:h-7.5 3xl:w-5 3xl:h-9 built-border bg-player-${connection.ownerColor}` +
               hoverStyle
             }
             style={style}
@@ -271,14 +271,14 @@ export function GameBoard({
       return (
         <label
           key={'radioSelect-' + color}
-          className="mr-3 inline-flex items-center"
+          className="inline-flex items-center mr-1 lg:mr-3"
         >
           <input
             type="radio"
             name="colorSelect"
             value={color}
             className={classNames(
-              `mr-1 -mb-0.5 bg-ttr-${color} checked:bg-ttr-${color} focus:bg-ttr-${color} focus:ring-ttr-${color} text-ttr-${color}`,
+              `mr-1 -mb-0.5 bg-ttr-${color} checked:bg-ttr-${color} focus:bg-ttr-${color} focus:ring-ttr-${color} text-ttr-${color} w-3 h-3 xl:w-4 xl:h-4`,
               {
                 'checked:radio-dark focus:ring-offset-black':
                   color === CART_COLOR_WHITE,
@@ -292,7 +292,7 @@ export function GameBoard({
             }}
             checked={isChecked}
           />
-          <p className="pt-1">{color}</p>
+          <p className="pt-1 text-xs xl:text-sm">{color}</p>
         </label>
       );
     });
@@ -330,7 +330,7 @@ export function GameBoard({
           return (
             <div
               key={'buildColorCard-' + locomotiveCardCount + ind}
-              className={`inline-block bg-ttr-${color} w-8 h-5 mx-1 rounded-sm`}
+              className={`inline-block bg-ttr-${color} rounded-sm w-5 h-3 mx-0.5 lg:w-6 lg:h-4 xl:mx-1 xl:w-8 xl:h-5`}
             ></div>
           );
         });
@@ -339,7 +339,7 @@ export function GameBoard({
           <button
             key={'locCount-' + locomotiveCardCount}
             className={classNames(
-              'block ml-4 my-2 p-1.5 px-4 rounded-md bg-ttr-white bg-opacity-20 hover:bg-opacity-40',
+              'block bg-ttr-white bg-opacity-20 hover:bg-opacity-40 rounded-md ml-3 my-1 p-0.5 px-2 xl:ml-4 xl:my-2 xl:p-1.5 xl:px-4',
               {
                 'bg-opacity-40':
                   locomotiveCardCount === selectedLocomotiveCount,
@@ -351,11 +351,11 @@ export function GameBoard({
             }}
           >
             <div className="flex flex-row flex-nowrap items-center">
-              <span className="font-number text-sm">
+              <span className="font-number text-xs lg:text-sm">
                 {locomotiveCardCount}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="inline ml-2 w-8 h-4"
+                  className="inline ml-1.5 w-6 h-3 lg:ml-2 lg:w-8 lg:h-4"
                   viewBox="0 0 36 23"
                   fill="currentColor"
                 >
@@ -364,7 +364,9 @@ export function GameBoard({
                   <path d="M4 4a1 1.3 0 00-1 1h1V14.5h-1.5v-1h-.5v3h.5v-1h1.5L4 16a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0h1a2.5 2.5 0 014.9 0H24a2.5 2.5 0 014.9 0h2.1a1 1 0 001-1v-.5h1.5v1h.5v-3h-.5v1h-1.5L32 9a1 1.3 0 00-1-1h-4v-4l1-1v-1h-4v1l1 1v4h-3v-1a1 1 0 00-2 0v1H14V5A1 1 0 0013 4H4z" />
                 </svg>
               </span>
-              <span className="text-sm ml-3 mr-4">|</span>
+              <span className="text-xs mx-2 lg:text-sm lg:ml-3 lg:mr-4 xl:text-base">
+                |
+              </span>
               {colorDivArray}
             </div>
           </button>
@@ -375,25 +377,27 @@ export function GameBoard({
     return (
       <form
         onSubmit={(e) => confirmBuildHandler(e)}
-        className="bg-gray-900 text-ttr-white font-regular p-4 pt-2 rounded-md xl:rounded-lg xl:p-6 xl:pt-3"
+        className="bg-gray-900 text-ttr-white font-regular rounded-md p-3 pt-2 lg:p-4 lg:pt-2 xl:rounded-lg xl:p-6 xl:pt-3"
       >
-        <h2 className="font-smallCaps font-semibold text-base xl:text-lg 2xl:text-2xl">
+        <h2 className="font-smallCaps font-semibold text-base -mb-1 xl:text-lg 2xl:text-2xl">
           Building connection between {selectedConnection.fromCity} and{' '}
           {connection.toCity}
         </h2>
-        <p className="font-smallCaps opacity-60 mb-2 xl:mb-4 2xl:mb-3 text-sm xl:text-base 2xl:text-lg">
+        <p className="font-smallCaps opacity-60 mb-1 xl:mb-4 2xl:mb-3 text-sm xl:text-base 2xl:text-lg">
           Color: {selectedConnection.color}
           <span className="ml-4">|</span>
           <span className="ml-4">
             Length: {selectedConnection.elements.length}
           </span>
         </p>
-        <h3>Select the train cards you want to build with!</h3>
-        <label htmlFor="chosenColor" className="text-sm">
+        <h3 className="text-sm xl:text-base">
+          Select the train cards you want to build with!
+        </h3>
+        <label htmlFor="chosenColor" className="text-xs xl:text-sm">
           <span className="font-number">1)</span> Select a color:
         </label>
         <div className="ml-4">{colorRadioButtons}</div>
-        <label htmlFor="locomotivesUsed" className="text-sm">
+        <label htmlFor="locomotivesUsed" className="text-xs xl:text-sm">
           <span className="font-number">2)</span> Select the number of
           locomotives to use:
         </label>
@@ -402,7 +406,7 @@ export function GameBoard({
           <button
             type="submit"
             className={classNames(
-              'mx-auto block focus:outline-none border-2 rounded-md px-4 mt-5 xl:mt-8 xl:text-lg xl:px-6',
+              'mx-auto block focus:outline-none border-2 rounded-md w-18 mt-3 text-sm lg:mt-5 xl:w-24 xl:mt-6 xl:text-base 2xl:text-lg',
               {
                 'bg-green-600 border-green-800 hover:bg-green-500':
                   selectedTrainColor !== 'null' && selectedLocomotiveCount >= 0,
@@ -415,7 +419,7 @@ export function GameBoard({
           </button>
           <button
             type="button"
-            className="mx-auto block focus:outline-none bg-yellow-600 hover:bg-yellow-500 border-yellow-800 border-2 rounded-md px-4 mt-5 xl:mt-8 xl:text-lg xl:px-6"
+            className="mx-auto block focus:outline-none bg-yellow-600 hover:bg-yellow-500 border-yellow-800 border-2 rounded-md w-18 text-sm mt-3 lg:mt-5 xl:w-24 xl:mt-6 xl:text-base 2xl:text-lg"
             onClick={(e) => cancelBuildhandler(e)}
           >
             Cancel

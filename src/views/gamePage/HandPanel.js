@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { selectActivePlayer } from '../../state/players/selector';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectGame } from '../../state/game/selector';
-import { PLAYER_DONE } from '../../constants/gameConstants';
+import { CART_COLOR_BLACK, PLAYER_DONE } from '../../constants/gameConstants';
 import { nextPlayer } from '../../state/game/actions';
 
 export function HandPanel({
@@ -155,7 +155,13 @@ export function HandPanel({
           </div>
         </div>
         <div
-          className="bg-gray-800 bg-opacity-30 overflow-y-auto rounded-md p-0.5 pt-1 pb-0 lg:p-2 lg:pb-1"
+          className={classNames(
+            'bg-opacity-30 overflow-y-auto rounded-md p-0.5 pt-1 pb-0 lg:p-2 lg:pb-1',
+            {
+              'bg-gray-800': activePlayer.color !== CART_COLOR_BLACK,
+              'bg-white': activePlayer.color === CART_COLOR_BLACK,
+            },
+          )}
           id="routecard-box"
         >
           <button
