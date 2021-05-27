@@ -1,23 +1,54 @@
 import Graph from 'graph-data-structure';
-import { testPlayers } from '../../domain/playerType';
-import { DEAL_STARTER_HAND } from '../game/actions';
+import { PLAYER_COLORS } from '../../constants/playerConstants';
+import { CREATE_GAME, DEAL_STARTER_HAND } from '../game/actions';
 import {
   DRAW_FROM_ROSTER,
   DRAW_FROM_DECK,
   DRAW_ROUTE_CARDS,
   BUILD_CONNECTION,
   DRAW_ROUTES_FIRST_ROUND,
+  PLAYER_JOIN,
 } from './actions';
 
-// TODO remove
-const initialState = testPlayers.slice(0, 2);
+const playerTemplate = {
+  id: -1,
+  name: '',
+  color: '',
+  score: 0,
+  playerFirstRound: true,
+  carts: 0,
+  trainCards: {
+    black: 0,
+    blue: 0,
+    green: 0,
+    orange: 0,
+    pink: 0,
+    red: 0,
+    white: 0,
+    yellow: 0,
+    locomotive: 0,
+  },
+  routeCards: [],
+  longRouteCard: null,
+  builtConnections: [],
+  longestPath: null,
+};
+//const initialState = testPlayers.slice(0, 2);
+const initialState = [];
 const startingCartCount = 45;
-// TODO end
 
 export function playersReducer(state = initialState, action) {
   const { type, payload } = action;
   let newState;
   switch (type) {
+    case CREATE_GAME: {
+      newState = putNewPlayer([], payload.playerName);
+      break;
+    }
+    case PLAYER_JOIN: {
+      newState = putNewPlayer(state, payload.playerName);
+      break;
+    }
     case DEAL_STARTER_HAND: {
       newState = putStarterHand(state, payload);
       break;
@@ -50,6 +81,18 @@ export function playersReducer(state = initialState, action) {
   }
 
   return newState;
+}
+
+function putNewPlayer(state, playerName) {
+  const playerCount = state.length;
+
+  const newPlayer = {
+    ...playerTemplate,
+    id: playerCount,
+    name: playerName,
+    color: PLAYER_COLORS[playerCount],
+  };
+  return [...state, newPlayer];
 }
 
 function putStarterHand(state, { arrayOfHands }) {

@@ -1,17 +1,10 @@
 import { useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import {
-  createGame,
-  dealStarterHand,
-  fillRoster,
-  startGame,
-} from '../../state/game/actions';
-import { setAppToGame, setAppToWait } from '../../state/app/actions';
-import { selectPlayers } from '../../state/players/selector';
-import { selectGame } from '../../state/game/selector';
+import { createGame } from '../../state/game/actions';
+import { setAppToWait } from '../../state/app/actions';
 
-export function LandingPage({ setLocalPlayerId }) {
+export function LandingPage({ setLocalPlayerId, setGameId }) {
   const [hostNameOk, setHostNameOk] = useState(true);
   const [playerNameOk, setPlayerNameOk] = useState(true);
   const [gameIdOk, setGameIdOk] = useState(true);
@@ -23,54 +16,39 @@ export function LandingPage({ setLocalPlayerId }) {
 
   const dispatch = useDispatch();
 
-  // TODO remove these for phase 3
-  const players = useSelector(selectPlayers);
-  const game = useSelector(selectGame);
-
-  if (game.gameId === '') {
-    dispatch(createGame('', 5));
-  }
-  const getStarterHands = (playerCount) => {
-    let arrayOfHands = [];
-    let reverseDeck = [...game.trainCardDeck];
-    reverseDeck.reverse();
-
-    for (let i = 0; i < playerCount; ++i) {
-      arrayOfHands.push({
-        trainCards: reverseDeck.slice(4 * i, 4 * (i + 1)),
-        longRouteCard: game.longRouteDeck[game.longRouteDeck.length - (i + 1)],
-      });
-    }
-
-    return arrayOfHands;
-  };
-
-  // TODO end of TODO
-
   const createGameHandler = (e) => {
     e.preventDefault();
 
     if (hostNameRef.current.value !== '') {
       setLocalPlayerId(0);
 
-      // TODO remove this for phase 3let arrayOfHands = [];
+      dispatch(
+        createGame(playerCountRef.current.value, hostNameRef.current.value),
+      );
 
-      const arrayOfStarterHands = getStarterHands(players.length);
-      dispatch(dealStarterHand(arrayOfStarterHands));
-
-      dispatch(fillRoster());
-      dispatch(startGame(game.gameId));
-      dispatch(setAppToGame());
-
-      //TODO end of TODO
+      dispatch(setAppToWait());
     }
   };
 
   const joinGameHandler = (e) => {
     e.preventDefault();
-    // setAppState(WAITING_FOR_PLAYERS);
-    // TODO join game action
-    console.log('joining should happen');
+
+    /**
+     * ? start loading animation
+     *
+     * TODO check gameId with server
+     * TODO if ok:
+     *    setGameId(gameIdRef);
+     * TODO send playerName & gameId to server (dispatch(PLAYER_JOIN?))
+     * TODO wait for response
+     * TODO sync state
+     * TODO find local player id by matching name and response
+     * TODO set localPlayerId
+     *
+     * ? stop loading animation
+     */
+
+    dispatch(setAppToWait());
   };
 
   return (

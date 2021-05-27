@@ -8,7 +8,9 @@ import { useSelector } from 'react-redux';
 import { selectApp } from '../../state/app/selector';
 
 export function Layout() {
-  const [localPlayerId, setLocalPlayerId] = useState(0);
+  const [localPlayerId, setLocalPlayerId] = useState(-1);
+  const [gameId, setGameId] = useState('');
+
   /* const [appState, setAppState] = useState(MAIN_PAGE); */
   /* const [appState, setAppState] = useState(WAITING_FOR_PLAYERS); */
   /* const [appState, setAppState] = useState(IN_GAME); */
@@ -16,16 +18,22 @@ export function Layout() {
   /* const [maxPlayers, setPlayerCount] = useState('3');
   const [gameID, setGameID] = useState(''); */
   /* const [playerList, setPlayerList] = useState(testPlayers.slice(1, 5)); */
-  /* const [localPlayer, setLocalPlayer] = useState(testPlayers[0]); */
 
   const appState = useSelector(selectApp);
 
-  let content = <LandingPage setLocalPlayerId={setLocalPlayerId}></LandingPage>;
+  let content = (
+    <LandingPage
+      setLocalPlayerId={setLocalPlayerId}
+      setGameId={setGameId}
+    ></LandingPage>
+  );
   if (appState.state === WAITING_FOR_PLAYERS) {
     content = (
       <WaitingRoomPage
         localPlayerId={localPlayerId}
         setLocalPlayerId={setLocalPlayerId}
+        gameId={gameId}
+        setGameId={setGameId}
       ></WaitingRoomPage>
     );
   } else if (appState.state === IN_GAME) {

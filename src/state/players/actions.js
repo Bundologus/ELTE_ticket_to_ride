@@ -1,8 +1,19 @@
+export const PLAYER_JOIN = 'PLAYER_JOIN';
 export const DRAW_FROM_ROSTER = 'DRAW_FROM_ROSTER';
 export const DRAW_FROM_DECK = 'DRAW_FROM_DECK';
 export const DRAW_ROUTE_CARDS = 'DRAW_ROUTE_CARDS';
 export const DRAW_ROUTES_FIRST_ROUND = 'DRAW_ROUTES_FIRST_ROUND';
 export const BUILD_CONNECTION = 'BUILD_CONNECTION';
+
+export function playerJoin(playerName, gameId) {
+  return {
+    type: PLAYER_JOIN,
+    payload: {
+      playerName,
+      gameId,
+    },
+  };
+}
 
 export function drawFromRoster(playerId, playerName, cardColor, position) {
   return {

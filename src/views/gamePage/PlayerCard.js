@@ -32,14 +32,14 @@ export function PlayerCard({ player }) {
     <div
       key={`playerCard-${player.id}`}
       className={classNames(
-        `relative bg-player-${player.color} text-ttr-white shadow-md rounded-br-lg -ml-4 p-1 pl-3.5 pt-0.5 lg:rounded-br-xl lg:py-1.5 lg:pr-1.5 xl:rounded-br-2xl 3xl:py-2 3xl:pr-2 3xl:pl-4 3xl:rounded-br-3xl`,
+        `relative bg-player-${player.color} row-span-1 col-span-1 text-ttr-white shadow-md rounded-br-lg p-1 pl-3.5 pt-0.5 left-0 -ml-4 right-0 lg:rounded-br-xl lg:py-1.5 lg:pr-1.5 xl:rounded-br-2xl 3xl:py-2 3xl:pr-2 3xl:pl-4 3xl:rounded-br-3xl`,
         {
           'border-ttr-white border xl:border-2 2xl:border-4':
             player.id === activePlayer.id,
         },
       )}
     >
-      <h2 className="font-smallCaps font-semibold filter drop-shadow-md text-xs truncate lg:text-base xl:text-lg 2xl:text-2xl 2xl:mb-1 3xl:text-3xl">
+      <h2 className="font-smallCaps font-semibold filter drop-shadow-md text-xs truncate lg:text-base xl:text-lg 2xl:text-2xl 2xl:mb-1 3xl:text-3xl pr-3.5 xl:pr-5">
         {player.name}
       </h2>
       <p

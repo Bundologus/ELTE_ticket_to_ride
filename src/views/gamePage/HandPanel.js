@@ -1,7 +1,10 @@
 import { PlayerType } from '../../domain/playerType';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { selectActivePlayer } from '../../state/players/selector';
+import {
+  selectActivePlayer,
+  selectPlayers,
+} from '../../state/players/selector';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectGame } from '../../state/game/selector';
 import { CART_COLOR_BLACK, PLAYER_DONE } from '../../constants/gameConstants';
@@ -12,8 +15,13 @@ export function HandPanel({
   setActiveCities,
   setHoverCities,
   setConnectionHover,
+  localPlayerId,
 }) {
-  const activePlayer = useSelector(selectActivePlayer);
+  /* const activePlayer = useSelector(selectActivePlayer); */
+  const players = useSelector(selectPlayers);
+  const activePlayer = players.find((player) => {
+    return player.id === localPlayerId;
+  });
   const game = useSelector(selectGame);
 
   const dispatch = useDispatch();

@@ -43,7 +43,6 @@ const initialTrainDeck = (() => {
 })();
 
 // TODO remove
-const startingPlayerCount = 2;
 const shuffleData = [
   /*0*/ 0,
   /*1*/ 1,
@@ -181,7 +180,7 @@ export function gameReducer(state = initialState, action) {
   let newState;
   switch (type) {
     case CREATE_GAME: {
-      newState = initNewGame(state);
+      newState = initNewGame(state, payload);
       break;
     }
     case START_GAME: {
@@ -288,10 +287,10 @@ export function gameReducer(state = initialState, action) {
   return newState;
 }
 
-function initNewGame(state) {
+function initNewGame(state, { maxPlayerCount }) {
   return {
     ...initialState,
-    maxPlayers: startingPlayerCount,
+    maxPlayers: maxPlayerCount,
     activePlayerId: 0,
     gameId: uuidv4(),
     gameState: GAME_WAITING,

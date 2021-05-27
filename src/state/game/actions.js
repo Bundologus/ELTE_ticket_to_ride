@@ -6,12 +6,12 @@ export const DEAL_STARTER_HAND = 'DEAL_STARTER_HAND';
 export const FILL_ROSTER = 'FILL_ROSTER';
 export const SET_DETERM_SHUFFLE = 'SET_DETERM_SHUFFLE';
 
-export function createGame(hostPlayer, maxPlayers) {
+export function createGame(maxPlayerCount, playerName) {
   return {
     type: CREATE_GAME,
     payload: {
-      hostPlayer,
-      maxPlayers,
+      maxPlayerCount,
+      playerName,
     },
   };
 }

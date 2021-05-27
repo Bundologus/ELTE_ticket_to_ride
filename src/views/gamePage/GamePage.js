@@ -12,7 +12,10 @@ import {
   drawRouteCards,
   drawRoutesFirstRound,
 } from '../../state/players/actions';
-import { selectActivePlayer } from '../../state/players/selector';
+import {
+  selectActivePlayer,
+  selectPlayers,
+} from '../../state/players/selector';
 import {
   CART_COLOR_LOCOMOTIVE,
   GAME_ENDED,
@@ -23,8 +26,9 @@ import { fillRoster, nextPlayer } from '../../state/game/actions';
 import { selectGame } from '../../state/game/selector';
 import { FinalScoreBoard } from './FinalScoreBoard';
 
-export function GamePage({ localPlayerId, setLocalPlayerId }) {
+export function GamePage({ localPlayerId }) {
   const game = useSelector(selectGame);
+  const players = useSelector(selectPlayers);
   const activePlayer = useSelector(selectActivePlayer);
   const actionLog = game.actionLog;
 
@@ -75,7 +79,7 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
   };
 
   function drawFromRosterHandler(color, position) {
-    if (!activePlayer.playerFirstRound) {
+    if (!activePlayer.playerFirstRound && activePlayer.id === localPlayerId) {
       dispatch(
         drawFromRoster(activePlayer.id, activePlayer.name, color, position),
       );
@@ -90,7 +94,7 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
   }
 
   function showDrawnFromTrainDeck() {
-    if (!activePlayer.playerFirstRound) {
+    if (!activePlayer.playerFirstRound && activePlayer.id === localPlayerId) {
       setDrawnCarts(game.trainCardDeck.slice(-2));
       setDrawingCarts(true);
     }
@@ -188,11 +192,11 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
     const isFirstRound = activePlayer.playerFirstRound;
 
     const available =
+      activePlayer.id === localPlayerId &&
       !isFirstRound &&
       ((!isLocomotive &&
         (gameState === PLAYER_BEGIN || gameState === PLAYER_DRAW_TRAIN)) ||
         (isLocomotive && gameState === PLAYER_BEGIN));
-    // TODO && activePlayer.id === localPlayerId
 
     return (
       <button
@@ -269,15 +273,22 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
     );
   });
 
-  const actionLogList = actionLog.map((logEntry, leid) => {
+  const actionLogList = actionLog.map((logEntry, leId) => {
+    const bgColor =
+      logEntry.id >= 0
+        ? `bg-player-${players[logEntry.id].color}`
+        : 'bg-gray-500';
     return (
       <li
-        key={'log-' + leid}
+        key={'log-' + leId}
         className={classNames(
-          'text-3xs lg:text-2xs xl:text-xs 2xl:text-sm 3xl:text-base',
-          { 'font-bold': activePlayer.id === logEntry.id },
+          `text-3xs lg:text-2xs xl:text-xs 2xl:text-sm 3xl:text-base`,
+          { 'font-bold': localPlayerId === logEntry.id },
         )}
       >
+        <div
+          className={`inline-block rounded-full w-1.5 h-1.5 xl:w-2 xl:h-2 3xl:w-3 3xl:h-3 mr-1 ${bgColor} drop-shadow-xl`}
+        ></div>
         <i>{logEntry.name}</i>&nbsp;
         {logEntry.text}
       </li>
@@ -301,7 +312,7 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
             ></GameBoard>
           </div>
           <div className="contents" id="score-board">
-            <div className="row-start-1 col-start-1 col-span-1 row-span-4 grid grid-rows-5 text-ttr-white filter drop-shadow-md p-0">
+            <div className="row-start-1 col-start-1 col-span-1 row-span-4 grid grid-rows-5 grid-cols-1 text-ttr-white filter drop-shadow-md p-0">
               <ScoreBoard></ScoreBoard>
             </div>
           </div>
@@ -323,13 +334,21 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
                   <div
                     className={classNames(
                       'absolute -top-1 -right-1 h-2.5 w-2.5 bg-red-800 border-2 border-b-0 border-red-800 rounded-full focus:outline-none lg:hidden animate-ping',
-                      { hidden: !activePlayer.playerFirstRound },
+                      {
+                        hidden:
+                          !activePlayer.playerFirstRound ||
+                          activePlayer.id !== localPlayerId,
+                      },
                     )}
                   />
                   <div
                     className={classNames(
                       'absolute -top-1 -right-1 h-2.5 w-2.5 bg-red-800 border-2 border-b-0 border-red-800 rounded-full focus:outline-none lg:hidden',
-                      { hidden: !activePlayer.playerFirstRound },
+                      {
+                        hidden:
+                          !activePlayer.playerFirstRound ||
+                          activePlayer.id !== localPlayerId,
+                      },
                     )}
                   />
                 </button>
@@ -338,12 +357,19 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
                     'relative filter drop-shadow-md rounded-md border-b-2 xl:border-b-4 border-yellow-200 bg-yellow-500 text-ttr-white focus:outline-none w-12 h-12 p-1 lg:w-16 lg:h-20 lg:p-2 xl:h-28 xl:w-22 xl:p-1 2xl:h-36 2xl:w-28 2xl:px-2 3xl:h-40 3xl:w-32 3xl:p-2.5',
                     {
                       'transform transition-transform hover:-translate-y-1 lg:hover:-translate-y-2':
-                        game.gameState === PLAYER_BEGIN,
-                      'cursor-not-allowed': game.gameState !== PLAYER_BEGIN,
+                        game.gameState === PLAYER_BEGIN &&
+                        activePlayer.id === localPlayerId,
+                      'cursor-not-allowed':
+                        game.gameState !== PLAYER_BEGIN ||
+                        activePlayer.id !== localPlayerId,
                     },
                   )}
                   onClick={() => {
-                    if (game.gameState === PLAYER_BEGIN) showDrawnRoutes();
+                    if (
+                      game.gameState === PLAYER_BEGIN &&
+                      activePlayer.id === localPlayerId
+                    )
+                      showDrawnRoutes();
                   }}
                 >
                   <svg
@@ -353,7 +379,8 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
                       {
                         'animate-bounce':
                           activePlayer.playerFirstRound &&
-                          game.gameState === PLAYER_BEGIN,
+                          game.gameState === PLAYER_BEGIN &&
+                          activePlayer.id === localPlayerId,
                       },
                     )}
                     viewBox="0 0 26 26"
@@ -369,14 +396,19 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
                     {
                       'transform transition-transform hover:-translate-y-1 lg:hover:-translate-y-2':
                         game.gameState === PLAYER_BEGIN &&
-                        !activePlayer.playerFirstRound,
+                        !activePlayer.playerFirstRound &&
+                        activePlayer.id === localPlayerId,
                       'cursor-not-allowed':
                         game.gameState !== PLAYER_BEGIN ||
-                        activePlayer.playerFirstRound,
+                        activePlayer.playerFirstRound ||
+                        activePlayer.id !== localPlayerId,
                     },
                   )}
                   onClick={() => {
-                    if (game.gameState === PLAYER_BEGIN)
+                    if (
+                      game.gameState === PLAYER_BEGIN &&
+                      activePlayer.id === localPlayerId
+                    )
                       showDrawnFromTrainDeck();
                   }}
                 >
@@ -396,7 +428,7 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
             </div>
           </div>
           <div className="contents" id="action-log">
-            <div className="row-start-5 col-start-1 col-span-1 row-span-1 text-ttr-white filter drop-shadow-md bg-gray-600 flex flex-col flex-nowrap flex-1 rounded-r-md -mx-4 p-1 pl-3.5 pt-0.5 lg:mr-0 lg:rounded-r-lg lg:py-1.5 lg:pr-1.5 3xl:py-2 3xl:pr-2 3xl:pl-4">
+            <div className="row-start-5 col-start-1 col-span-1 row-span-1 text-ttr-white filter drop-shadow-md bg-gray-550 flex flex-col flex-nowrap flex-1 rounded-r-md -mx-4 p-1 pl-3.5 pt-0.5 lg:mr-0 lg:rounded-r-lg lg:py-1.5 lg:pr-1.5 3xl:py-2 3xl:pr-2 3xl:pl-4">
               <h3 className="flex-initial font-smallCaps font-semibold filter drop-shadow-md text-xs truncate lg:text-base xl:text-lg 2xl:text-2xl 3xl:text-3xl">
                 Action log
               </h3>
@@ -413,6 +445,7 @@ export function GamePage({ localPlayerId, setLocalPlayerId }) {
               setActiveCities={setActiveCitiesHandler}
               setHoverCities={setHoverCities}
               setConnectionHover={setConnectionHover}
+              localPlayerId={localPlayerId}
             ></HandPanel>
           </div>
         </div>
