@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { createGame } from '../../state/game/actions';
+import { setUpGame } from '../../state/game/actions';
 import { setAppToWait } from '../../state/app/actions';
 
 export function LandingPage({ setLocalPlayerId, setGameId }) {
@@ -23,7 +23,7 @@ export function LandingPage({ setLocalPlayerId, setGameId }) {
       setLocalPlayerId(0);
 
       dispatch(
-        createGame(playerCountRef.current.value, hostNameRef.current.value),
+        setUpGame(playerCountRef.current.value, hostNameRef.current.value),
       );
 
       dispatch(setAppToWait());

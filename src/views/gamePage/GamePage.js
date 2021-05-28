@@ -7,6 +7,7 @@ import { PlayerListType, PlayerType } from '../../domain/playerType';
 import { ScoreBoard } from './ScoreBoard';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  drawCardFromRoster,
   drawFromDeck,
   drawFromRoster,
   drawRouteCards,
@@ -81,9 +82,8 @@ export function GamePage({ localPlayerId }) {
   function drawFromRosterHandler(color, position) {
     if (!activePlayer.playerFirstRound && activePlayer.id === localPlayerId) {
       dispatch(
-        drawFromRoster(activePlayer.id, activePlayer.name, color, position),
+        drawCardFromRoster(activePlayer.id, activePlayer.name, color, position),
       );
-      dispatch(fillRoster());
 
       if (
         game.gameState === PLAYER_DRAW_TRAIN ||

@@ -1,3 +1,5 @@
+import { fillRoster, reshuffleDiscardPile } from '../game/actions';
+
 export const PLAYER_JOIN = 'PLAYER_JOIN';
 export const DRAW_FROM_ROSTER = 'DRAW_FROM_ROSTER';
 export const DRAW_FROM_DECK = 'DRAW_FROM_DECK';
@@ -89,4 +91,37 @@ export function buildConnection(
       connection,
     },
   };
+}
+
+/******************* THUNKS *******************/
+
+export function drawCardFromRoster(playerId, playerName, cardColor, position) {
+  return (dispatch, getState) => {
+    reshuffleDeckIfNecessary(dispatch, getState);
+
+    dispatch(drawFromRoster(playerId, playerName, cardColor, position));
+
+    setTimeout(() => {
+      dispatch(fillRoster());
+    }, 200);
+  };
+}
+
+export function drawCardsFromDeck(playerId, playerName, cardColors) {
+  return (dispatch, getState) => {
+    reshuffleDeckIfNecessary(dispatch, getState);
+
+    dispatch(drawFromDeck(playerId, playerName, cardColors));
+  };
+}
+
+function reshuffleDeckIfNecessary(dispatch, getState) {
+  const stateTree = getState();
+  const gameState = stateTree.game;
+
+  const remainingDeckSize = gameState.trainCardDeck.length;
+
+  if (remainingDeckSize < 5) {
+    dispatch(reshuffleDiscardPile());
+  }
 }
