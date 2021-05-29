@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { setUpGame } from '../../state/game/actions';
 import { setAppToWait } from '../../state/app/actions';
+import { joinToGame } from '../../state/players/actions';
 
 export function LandingPage({ setLocalPlayerId, setGameId }) {
   const [hostNameOk, setHostNameOk] = useState(true);
@@ -25,13 +26,13 @@ export function LandingPage({ setLocalPlayerId, setGameId }) {
       dispatch(
         setUpGame(playerCountRef.current.value, hostNameRef.current.value),
       );
-
-      dispatch(setAppToWait());
     }
   };
 
   const joinGameHandler = (e) => {
     e.preventDefault();
+
+    dispatch(joinToGame(gameIdRef, playerNameRef));
 
     /**
      * ? start loading animation

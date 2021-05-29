@@ -1,4 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
+/* import { v4 as uuidv4 } from 'uuid'; */
+import { setAppToMain, setAppToWait } from '../app/actions';
+import { sendCreateRoom, sendSyncState } from '../messages/actions';
 
 export const CREATE_GAME = 'CREATE_GAME';
 export const START_GAME = 'START_GAME';
@@ -7,6 +9,7 @@ export const START_LAST_ROUND = 'START_LAST_ROUND';
 export const DEAL_STARTER_HAND = 'DEAL_STARTER_HAND';
 export const FILL_ROSTER = 'FILL_ROSTER';
 export const REFILL_TRAIN_DECK = 'REFILL_TRAIN_DECK';
+export const SYNC_ROOM_STATE = 'SYNC_ROOM_STATE';
 
 export function createGame(
   maxPlayerCount,
@@ -71,24 +74,53 @@ export function refillTrainDeck(reshuffledDiscardPile) {
   };
 }
 
+export function syncRoomState(state) {
+  return {
+    type: SYNC_ROOM_STATE,
+    payload: { state },
+  };
+}
+
 /******************* THUNKS *******************/
 
 export function setUpGame(maxPlayerCount, playerName) {
   return (dispatch, getState) => {
     const stateTree = getState();
     const game = stateTree.game;
-    const gameId = uuidv4();
+    /* const gameId = uuidv4(); */
+    console.log('Creating room');
 
-    dispatch(
-      createGame(
-        maxPlayerCount,
-        playerName,
-        gameId,
-        shuffle(game.trainCardDeck),
-        shuffle(game.routeDeck),
-        shuffle(game.longRouteDeck),
-      ),
-    );
+    const failHandler = () => {
+      dispatch(setAppToMain());
+      alert('We could not create a game room. Please try again later.');
+    };
+
+    const successHandler = ({ roomId }) => {
+      dispatch(
+        createGame(
+          maxPlayerCount,
+          playerName,
+          roomId,
+          shuffle(game.trainCardDeck),
+          shuffle(game.routeDeck),
+          shuffle(game.longRouteDeck),
+        ),
+      );
+
+      const state = getState();
+      dispatch(
+        sendSyncState(
+          roomId,
+          state,
+          () => {
+            dispatch(setAppToWait());
+          },
+          failHandler,
+        ),
+      ); // ? could send retry count
+    };
+
+    dispatch(sendCreateRoom(maxPlayerCount, successHandler, failHandler));
   };
 }
 
@@ -102,6 +134,7 @@ export function reshuffleDiscardPile() {
     dispatch(refillTrainDeck(shuffledDiscardPile));
   };
 }
+
 /****************** UTILITY ******************/
 
 function shuffle(iterable) {

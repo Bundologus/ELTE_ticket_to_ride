@@ -1,4 +1,10 @@
-import { fillRoster, reshuffleDiscardPile } from '../game/actions';
+import { setAppToWait } from '../app/actions';
+import {
+  fillRoster,
+  reshuffleDiscardPile,
+  syncRoomState,
+} from '../game/actions';
+import { sendJoinRoom, sendSyncAction } from '../messages/actions';
 
 export const PLAYER_JOIN = 'PLAYER_JOIN';
 export const DRAW_FROM_ROSTER = 'DRAW_FROM_ROSTER';
@@ -112,6 +118,23 @@ export function drawCardsFromDeck(playerId, playerName, cardColors) {
     reshuffleDeckIfNecessary(dispatch, getState);
 
     dispatch(drawFromDeck(playerId, playerName, cardColors));
+  };
+}
+
+export function joinToGame(gameId, playerName) {
+  return (dispatch) => {
+    dispatch(
+      sendJoinRoom(gameId, (payload) => {
+        dispatch(syncRoomState(payload.state));
+        const joinAction = playerJoin(playerName, gameId);
+        dispatch(
+          sendSyncAction(gameId, joinAction, () => {
+            dispatch(joinAction);
+            dispatch(setAppToWait());
+          }),
+        );
+      }),
+    );
   };
 }
 

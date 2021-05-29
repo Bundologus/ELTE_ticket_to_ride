@@ -1,6 +1,10 @@
 import Graph from 'graph-data-structure';
 import { PLAYER_COLORS } from '../../constants/playerConstants';
-import { CREATE_GAME, DEAL_STARTER_HAND } from '../game/actions';
+import {
+  CREATE_GAME,
+  DEAL_STARTER_HAND,
+  SYNC_ROOM_STATE,
+} from '../game/actions';
 import {
   DRAW_FROM_ROSTER,
   DRAW_FROM_DECK,
@@ -72,6 +76,10 @@ export function playersReducer(state = initialState, action) {
     }
     case BUILD_CONNECTION: {
       newState = putConnection(state, payload);
+      break;
+    }
+    case SYNC_ROOM_STATE: {
+      newState = { ...payload.players };
       break;
     }
     default: {

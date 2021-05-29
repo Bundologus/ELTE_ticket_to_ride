@@ -7,6 +7,7 @@ import {
   DEAL_STARTER_HAND,
   FILL_ROSTER,
   REFILL_TRAIN_DECK,
+  SYNC_ROOM_STATE,
 } from './actions';
 import {
   GAME_WAITING,
@@ -165,6 +166,10 @@ export function gameReducer(state = initialState, action) {
     }
     case REFILL_TRAIN_DECK: {
       newState = combineTrainDeck(state, payload);
+      break;
+    }
+    case SYNC_ROOM_STATE: {
+      newState = { ...payload.game };
       break;
     }
     default: {
