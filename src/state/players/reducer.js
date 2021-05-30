@@ -35,7 +35,7 @@ const playerTemplate = {
 };
 //const initialState = testPlayers.slice(0, 2);
 const initialState = [];
-const startingCartCount = 45;
+const startingCartCount = 4;
 
 export function playersReducer(state = initialState, action) {
   const { type, payload } = action;

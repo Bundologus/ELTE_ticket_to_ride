@@ -33,7 +33,7 @@ export function sendJoinRoom(
 export function sendLeaveRoom(
   roomId,
   onSuccess = () => {
-    console.error(`Left room ${roomId}.`);
+    console.log(`Left room ${roomId}.`);
   },
   onFailure = () => {
     console.error(`Leaving room ${roomId} failed.`);

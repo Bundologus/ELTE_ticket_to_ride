@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAppToMain } from '../../state/app/actions';
+import { setAppToMainAction } from '../../state/app/actions';
+import { endGame } from '../../state/game/actions';
 import { selectCities } from '../../state/game/selector';
 import { selectPlayersWithFinalScore } from '../../state/players/selector';
 import { GameBoard } from './GameBoard';
@@ -319,7 +320,8 @@ export function FinalScoreBoard({
           className="absolute block text-ttr-white focus:outline-none border-2 rounded-md -top-2 right-1 text-sm px-2 lg:-top-1 lg:right-2 lg:px-4 xl:text-lg xl:px-10 xl:-top-3 xl:right-5 mt-3 xl:mt-8 bg-green-600 border-green-800 hover:bg-green-500"
           onClick={(e) => {
             e.preventDefault();
-            dispatch(setAppToMain());
+            dispatch(endGame());
+            dispatch(setAppToMainAction());
           }}
         >
           Done

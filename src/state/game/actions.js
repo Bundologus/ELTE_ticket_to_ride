@@ -2,6 +2,7 @@
 import { setAppToGame, setAppToMain, setAppToWait } from '../app/actions';
 import {
   sendCreateRoom,
+  sendLeaveRoom,
   sendSyncState,
   syncAndDispatchAction,
 } from '../messages/actions';
@@ -191,6 +192,14 @@ export function startLastRound(playerId) {
 export function fillRoster() {
   return (dispatch) => {
     dispatch(syncAndDispatchAction(fillRosterAction()));
+  };
+}
+
+export function endGame() {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    dispatch(sendLeaveRoom(state.game.gameId));
   };
 }
 
