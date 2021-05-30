@@ -1,25 +1,48 @@
 import Graph from 'graph-data-structure';
-import { testPlayers } from '../../domain/playerType';
-import { DEAL_STARTER_HAND } from '../game/actions';
+import { PLAYER_COLORS } from '../../constants/playerConstants';
+import { SYNC_ROOM_STATE } from '../game/actions';
 import {
   DRAW_FROM_ROSTER,
   DRAW_FROM_DECK,
   DRAW_ROUTE_CARDS,
   BUILD_CONNECTION,
   DRAW_ROUTES_FIRST_ROUND,
+  PLAYER_JOIN,
 } from './actions';
 
-// TODO remove
-const initialState = testPlayers.slice(0, 5);
+const playerTemplate = {
+  id: -1,
+  name: '',
+  color: '',
+  score: 0,
+  playerFirstRound: true,
+  carts: 0,
+  trainCards: {
+    black: 0,
+    blue: 0,
+    green: 0,
+    orange: 0,
+    pink: 0,
+    red: 0,
+    white: 0,
+    yellow: 0,
+    locomotive: 0,
+  },
+  routeCards: [],
+  longRouteCard: null,
+  builtConnections: [],
+  longestPath: null,
+};
+//const initialState = testPlayers.slice(0, 2);
+const initialState = [];
 const startingCartCount = 4;
-// TODO end
 
 export function playersReducer(state = initialState, action) {
   const { type, payload } = action;
   let newState;
   switch (type) {
-    case DEAL_STARTER_HAND: {
-      newState = putStarterHand(state, payload);
+    case PLAYER_JOIN: {
+      newState = putNewPlayer(state, payload.playerName, payload.starterHand);
       break;
     }
     case DRAW_FROM_ROSTER: {
@@ -43,6 +66,10 @@ export function playersReducer(state = initialState, action) {
       newState = putConnection(state, payload);
       break;
     }
+    case SYNC_ROOM_STATE: {
+      newState = [...payload.players];
+      break;
+    }
     default: {
       newState = state;
       break;
@@ -52,58 +79,28 @@ export function playersReducer(state = initialState, action) {
   return newState;
 }
 
-function putStarterHand(state, { arrayOfHands }) {
-  return state.map((player, ind) => {
-    let newPlayer = { ...player };
+function putNewPlayer(state, playerName, starterHand) {
+  const playerCount = state.length;
 
-    const { trainCards, longRouteCard } = arrayOfHands[ind];
+  let newPlayer = {
+    ...playerTemplate,
+    id: playerCount,
+    name: playerName,
+    color: PLAYER_COLORS[playerCount],
+  };
 
-    for (const cardColor of trainCards) {
-      switch (cardColor) {
-        case 'black': {
-          ++newPlayer.trainCards.black;
-          break;
-        }
-        case 'blue': {
-          ++newPlayer.trainCards.blue;
-          break;
-        }
-        case 'green': {
-          ++newPlayer.trainCards.green;
-          break;
-        }
-        case 'orange': {
-          ++newPlayer.trainCards.orange;
-          break;
-        }
-        case 'pink': {
-          ++newPlayer.trainCards.pink;
-          break;
-        }
-        case 'red': {
-          ++newPlayer.trainCards.red;
-          break;
-        }
-        case 'white': {
-          ++newPlayer.trainCards.white;
-          break;
-        }
-        case 'yellow': {
-          ++newPlayer.trainCards.yellow;
-          break;
-        }
-        case 'locomotive': {
-          ++newPlayer.trainCards.locomotive;
-          break;
-        }
-        default:
-          break;
-      }
-    }
-    newPlayer.longRouteCard = longRouteCard;
-    newPlayer.carts = startingCartCount;
-    return newPlayer;
-  });
+  const { trainCards, longRouteCard } = starterHand;
+
+  for (const cardColor of trainCards) {
+    ++newPlayer.trainCards[cardColor];
+  }
+
+  newPlayer.longRouteCard = longRouteCard;
+  newPlayer.carts = startingCartCount;
+
+  let newState = [...state];
+  newState.push(newPlayer);
+  return newState;
 }
 
 function putTrainCard(state, playerId, cardColors) {

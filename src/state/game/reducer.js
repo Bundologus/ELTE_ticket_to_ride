@@ -1,13 +1,12 @@
-import { v4 as uuidv4 } from 'uuid';
 import { ticketToRideData } from '../../assets/ticket-to-ride-data';
 import {
   CREATE_GAME,
   START_GAME,
   NEXT_PLAYER,
   START_LAST_ROUND,
-  DEAL_STARTER_HAND,
   FILL_ROSTER,
-  SET_DETERM_SHUFFLE,
+  REFILL_TRAIN_DECK,
+  SYNC_ROOM_STATE,
 } from './actions';
 import {
   GAME_WAITING,
@@ -23,6 +22,7 @@ import {
   DRAW_FROM_DECK,
   DRAW_FROM_ROSTER,
   DRAW_ROUTES_FIRST_ROUND,
+  PLAYER_JOIN,
 } from '../players/actions';
 
 const initialTrainDeck = (() => {
@@ -42,124 +42,8 @@ const initialTrainDeck = (() => {
   return baseArr;
 })();
 
-// TODO remove
-const startingPlayerCount = 5;
-const shuffleData = [
-  /*0*/ 0,
-  /*1*/ 1,
-  /*2*/ 0,
-  /*3*/ 2,
-  /*4*/ 1,
-  /*5*/ 4,
-  /*6*/ 4,
-  /*7*/ 3,
-  /*8*/ 6,
-  /*9*/ 1,
-  /*10*/ 7,
-  /*11*/ 4,
-  /*12*/ 5,
-  /*13*/ 0,
-  /*14*/ 13,
-  /*15*/ 3,
-  /*16*/ 4,
-  /*17*/ 9,
-  /*18*/ 11,
-  /*19*/ 4,
-  /*20*/ 7,
-  /*21*/ 19,
-  /*22*/ 3,
-  /*23*/ 22,
-  /*24*/ 1,
-  /*25*/ 3,
-  /*26*/ 5,
-  /*27*/ 23,
-  /*28*/ 13,
-  /*29*/ 15,
-  /*30*/ 21,
-  /*31*/ 24,
-  /*32*/ 3,
-  /*33*/ 23,
-  /*34*/ 29,
-  /*35*/ 3,
-  /*36*/ 29,
-  /*37*/ 26,
-  /*38*/ 17,
-  /*39*/ 14,
-  /*40*/ 39,
-  /*41*/ 40,
-  /*42*/ 24,
-  /*43*/ 37,
-  /*44*/ 32,
-  /*45*/ 4,
-  /*46*/ 40,
-  /*47*/ 44,
-  /*48*/ 9,
-  /*49*/ 26,
-  /*50*/ 34,
-  /*51*/ 2,
-  /*52*/ 33,
-  /*53*/ 29,
-  /*54*/ 28,
-  /*55*/ 10,
-  /*56*/ 18,
-  /*57*/ 46,
-  /*58*/ 54,
-  /*59*/ 33,
-  /*60*/ 29,
-  /*61*/ 34,
-  /*62*/ 12,
-  /*63*/ 56,
-  /*64*/ 60,
-  /*65*/ 14,
-  /*66*/ 10,
-  /*67*/ 58,
-  /*68*/ 0,
-  /*69*/ 34,
-  /*70*/ 27,
-  /*71*/ 51,
-  /*72*/ 2,
-  /*73*/ 62,
-  /*74*/ 53,
-  /*75*/ 0,
-  /*76*/ 28,
-  /*77*/ 43,
-  /*78*/ 8,
-  /*79*/ 22,
-  /*80*/ 64,
-  /*81*/ 61,
-  /*82*/ 41,
-  /*83*/ 36,
-  /*84*/ 74,
-  /*85*/ 30,
-  /*86*/ 10,
-  /*87*/ 23,
-  /*88*/ 49,
-  /*89*/ 64,
-  /*90*/ 43,
-  /*91*/ 30,
-  /*92*/ 72,
-  /*93*/ 71,
-  /*94*/ 3,
-  /*95*/ 47,
-  /*96*/ 34,
-  /*97*/ 48,
-  /*98*/ 57,
-  /*99*/ 85,
-  /*100*/ 39,
-  /*101*/ 98,
-  /*102*/ 40,
-  /*103*/ 73,
-  /*104*/ 54,
-  /*105*/ 59,
-  /*106*/ 22,
-  /*107*/ 86,
-  /*108*/ 34,
-  /*109*/ 97,
-];
-// TODO end
-
 const initialState = {
-  maxPlayers: 5,
+  maxPlayers: 2,
   activePlayerId: 0,
   gameId: '',
   gameState: GAME_WAITING,
@@ -173,7 +57,6 @@ const initialState = {
   trainDiscardPile: [],
   trainCardRoster: [],
   actionLog: [],
-  determShuffle: false,
 };
 
 export function gameReducer(state = initialState, action) {
@@ -181,7 +64,7 @@ export function gameReducer(state = initialState, action) {
   let newState;
   switch (type) {
     case CREATE_GAME: {
-      newState = initNewGame(state);
+      newState = initNewGame(payload);
       break;
     }
     case START_GAME: {
@@ -189,12 +72,13 @@ export function gameReducer(state = initialState, action) {
       newState = logAction(newState, '', '-1', `Game started.`);
       break;
     }
-    case DEAL_STARTER_HAND: {
+    case PLAYER_JOIN: {
       newState = { ...state };
-      for (const hand of payload.arrayOfHands) {
-        newState = popFromDeck(newState, hand.trainCards);
-        newState = popFromLongRouteDeck(newState, hand.longRouteCard);
-      }
+      newState = popFromDeck(newState, payload.starterHand.trainCards);
+      newState = popFromLongRouteDeck(
+        newState,
+        payload.starterHand.longRouteCard,
+      );
       break;
     }
     case DRAW_FROM_ROSTER: {
@@ -208,7 +92,7 @@ export function gameReducer(state = initialState, action) {
       break;
     }
     case FILL_ROSTER: {
-      newState = fillRosterFromDeck(state);
+      newState = fillRosterFromDeck(state, payload);
       break;
     }
     case DRAW_FROM_DECK: {
@@ -227,7 +111,7 @@ export function gameReducer(state = initialState, action) {
       break;
     }
     case NEXT_PLAYER: {
-      newState = setNextPlayer(state);
+      newState = setNextPlayer(state, payload);
       break;
     }
     case DRAW_ROUTE_CARDS: {
@@ -275,8 +159,12 @@ export function gameReducer(state = initialState, action) {
       );
       break;
     }
-    case SET_DETERM_SHUFFLE: {
-      newState = switchShuffleDeterminism(state, payload);
+    case REFILL_TRAIN_DECK: {
+      newState = combineTrainDeck(state, payload);
+      break;
+    }
+    case SYNC_ROOM_STATE: {
+      newState = { ...payload.game };
       break;
     }
     default: {
@@ -288,19 +176,24 @@ export function gameReducer(state = initialState, action) {
   return newState;
 }
 
-function initNewGame(state) {
+function initNewGame({
+  maxPlayerCount,
+  gameId,
+  shuffledTrainDeck,
+  shuffledRouteDeck,
+  shuffledLongRouteDeck,
+}) {
   return {
     ...initialState,
-    maxPlayers: startingPlayerCount,
+    maxPlayers: maxPlayerCount,
     activePlayerId: 0,
-    gameId: uuidv4(),
+    gameId: gameId,
     gameState: GAME_WAITING,
     lastRound: false,
     finishingPlayerId: null,
-    routeDeck: shuffle(ticketToRideData.routes, state.determShuffle),
-    longRouteDeck: shuffle(ticketToRideData.longRoutes, state.determShuffle),
-    trainCardDeck: shuffle(initialTrainDeck, state.determShuffle),
-    determShuffle: state.determShuffle,
+    routeDeck: shuffledRouteDeck,
+    longRouteDeck: shuffledLongRouteDeck,
+    trainCardDeck: shuffledTrainDeck,
   };
 }
 
@@ -320,7 +213,7 @@ function setLastRound(state, { playerId }) {
   };
 }
 
-function setNextPlayer(state) {
+function setNextPlayer(state, { nextPlayerId }) {
   if (
     state.lastRound &&
     Number(state.activePlayerId) === Number(state.finishingPlayerId)
@@ -333,24 +226,13 @@ function setNextPlayer(state) {
     return {
       ...state,
       gameState: PLAYER_BEGIN,
-      activePlayerId: getNextPlayer(state),
+      activePlayerId: nextPlayerId,
     };
   }
 }
 
-function getNextPlayer(state) {
-  if (state.activePlayerId + 1 >= state.maxPlayers) return 0;
-  else return state.activePlayerId + 1;
-}
-
 function popFromDeck(state, cardColors) {
   let tempDeck = [...state.trainCardDeck];
-  let tempDiscard = state.trainDiscardPile;
-
-  if (tempDeck.length <= cardColors.length) {
-    tempDeck = [...shuffle(tempDiscard), ...tempDeck];
-    tempDiscard = [];
-  }
 
   for (const color of cardColors) {
     let topCard = tempDeck.pop();
@@ -364,7 +246,6 @@ function popFromDeck(state, cardColors) {
   return {
     ...state,
     trainCardDeck: tempDeck,
-    trainDiscardPile: tempDiscard,
     gameState: PLAYER_DONE,
   };
 }
@@ -407,14 +288,10 @@ function popFromRoster(state, cardColor, position) {
 function fillRosterFromDeck(state) {
   let tempRoster = [...state.trainCardRoster];
   let tempDeck = [...state.trainCardDeck];
-  let tempDiscard = state.trainDiscardPile;
+  let tempDiscard = [...state.trainDiscardPile];
   let totalTrainCount;
 
   do {
-    if (tempDeck.length < 5 && tempDiscard.length > 0) {
-      tempDeck = [...shuffle(tempDiscard), ...tempDeck];
-    }
-
     while (tempRoster.length < 5 && tempDeck.length > 0) {
       tempRoster.push(tempDeck.pop());
     }
@@ -427,7 +304,7 @@ function fillRosterFromDeck(state) {
       }
     }, 0);
 
-    if (totalTrainCount >= 3) {
+    if (totalTrainCount >= 3 && tempDeck.length >= 5) {
       tempDiscard = [...tempDiscard, ...tempRoster];
       tempRoster = [];
     }
@@ -494,38 +371,10 @@ function logAction(state, name, id, text) {
   };
 }
 
-function shuffle(iterable, deterministic) {
-  let shuffled = JSON.parse(JSON.stringify(iterable));
-  let max = shuffled.length,
-    last,
-    randId;
-
-  if (deterministic) {
-    while (max) {
-      --max;
-      randId = shuffleData[max];
-
-      last = shuffled[max];
-      shuffled[max] = shuffled[randId];
-      shuffled[randId] = last;
-    }
-  } else {
-    while (max) {
-      randId = Math.floor(Math.random() * max);
-      --max;
-
-      last = shuffled[max];
-      shuffled[max] = shuffled[randId];
-      shuffled[randId] = last;
-    }
-  }
-
-  return shuffled;
-}
-
-function switchShuffleDeterminism(state, { newValue }) {
+function combineTrainDeck(state, { reshuffledDiscardPile }) {
   return {
     ...state,
-    determShuffle: !state.determShuffle,
+    trainCardDeck: [...reshuffledDiscardPile, ...state.trainCardDeck],
+    trainDiscardPile: [],
   };
 }

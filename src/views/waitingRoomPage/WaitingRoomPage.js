@@ -1,18 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { setAppToGame, setAppToMain } from '../../state/app/actions';
-import {
-  startGame,
-  dealStarterHand,
-  fillRoster,
-} from '../../state/game/actions';
+import { setAppToMain } from '../../state/app/actions';
+import { startGameSequence } from '../../state/game/actions';
 import { selectGame } from '../../state/game/selector';
 import { selectPlayers } from '../../state/players/selector';
 
-export function WaitingRoomPage({ localPlayerId, setLocalPlayerId }) {
+export function WaitingRoomPage({ localPlayerId }) {
   const game = useSelector(selectGame);
   const players = useSelector(selectPlayers);
+  const localPlayer = players[localPlayerId];
 
-  const getStarterHands = (playerCount) => {
+  /* const getStarterHands = (playerCount) => {
     let arrayOfHands = [];
     let reverseDeck = [...game.trainCardDeck];
     reverseDeck.reverse();
@@ -25,17 +22,46 @@ export function WaitingRoomPage({ localPlayerId, setLocalPlayerId }) {
     }
 
     return arrayOfHands;
-  };
+  }; */
 
   const dispatch = useDispatch();
 
   const gameStartHandler = () => {
-    const arrayOfStarterHands = getStarterHands(players.length);
+    /* const arrayOfStarterHands = getStarterHands(players.length);
     dispatch(dealStarterHand(arrayOfStarterHands));
 
     dispatch(fillRoster());
     dispatch(startGame(game.gameId));
-    dispatch(setAppToGame());
+    dispatch(setAppToGame()); */
+
+    dispatch(startGameSequence(game.gameId));
+  };
+
+  const getPlayerBadges = () => {
+    let badges = [];
+    for (let i = 0; i < game.maxPlayers; i++) {
+      if (i < players.length) {
+        badges.push(
+          <div
+            key={'badge-' + i}
+            className={`bg-player-${players[i].color} text-ttr-white rounded-md font-smallCaps font-bold truncate text-xs lg:text-lg 2xl:text-xl 3xl:text-2xl p-0.5 px-1.5 lg:p-1 lg:px-2 2xl:p-2 3xl:p-2.5`}
+          >
+            {players[i].name}
+          </div>,
+        );
+      } else {
+        badges.push(
+          <div
+            key={'badge-' + i}
+            className="bg-gray-500 text-ttr-white rounded-md font-smallCaps font-bold truncate text-xs  lg:text-lg 2xl:text-xl 3xl:text-2xl p-0.5 px-1.5 lg:p-1 lg:px-2 2xl:p-2 3xl:p-2.5"
+          >
+            ...
+          </div>,
+        );
+      }
+    }
+
+    return badges;
   };
 
   return (
@@ -43,7 +69,7 @@ export function WaitingRoomPage({ localPlayerId, setLocalPlayerId }) {
       <div className="h-full flex flex-col justify-center content-evenly lg:content-center p-4">
         <div className="block mx-auto rounded-md border-2 border-yellow-400 border-opacity-100 bg-yellow-200 bg-opacity-80 p-2 md:p-6">
           <h1 className="block text-lg text-center mb-1 mt-2 lg:mb-8 lg:mt-0 lg:text-2xl">
-            Wellcome to the Waiting Room, {players[0].name}!
+            Wellcome to the Waiting Room, {localPlayer.name}!
           </h1>
           <p className="block text-center lg:text-lg lg:mb-1">
             Your game's id is:
@@ -52,8 +78,13 @@ export function WaitingRoomPage({ localPlayerId, setLocalPlayerId }) {
             {game.gameId}
           </p>
           <p className="block text-center lg:text-xl">
-            Waiting for the rest of the players...
+            Waiting for the rest of the players:
           </p>
+          <div
+            className={`grid grid-cols-${game.maxPlayers} gap-x-1 lg:gap-x-2 3xl:gap-x-4 mt-1 md:mt-2`}
+          >
+            {getPlayerBadges()}
+          </div>
         </div>
         <div className="flex align-middle justify-center mx-auto">
           <button

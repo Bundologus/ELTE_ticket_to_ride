@@ -1,7 +1,7 @@
 import { PlayerType } from '../../domain/playerType';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { selectActivePlayer } from '../../state/players/selector';
+import { selectPlayers } from '../../state/players/selector';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectGame } from '../../state/game/selector';
 import { CART_COLOR_BLACK, PLAYER_DONE } from '../../constants/gameConstants';
@@ -12,8 +12,13 @@ export function HandPanel({
   setActiveCities,
   setHoverCities,
   setConnectionHover,
+  localPlayerId,
 }) {
-  const activePlayer = useSelector(selectActivePlayer);
+  /* const activePlayer = useSelector(selectActivePlayer); */
+  const players = useSelector(selectPlayers);
+  const activePlayer = players.find((player) => {
+    return player.id === localPlayerId;
+  });
   const game = useSelector(selectGame);
 
   const dispatch = useDispatch();
@@ -111,7 +116,6 @@ export function HandPanel({
           },
         )}
         onClick={() => {
-          setActiveCities(null);
           setHoverCities(new Set([]));
           dispatch(nextPlayer());
         }}
@@ -211,6 +215,16 @@ export function HandPanel({
                   : 'bg-gray-200')
               }
             >
+              {activePlayer.longRouteCard.finished ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="absolute top-0 right-0 h-4 w-6 lg:h-7 lg:w-7 2xl:h-9 2xl:w-9 text-green-700"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M 10 21 Q 14 10 21 3 Q 13 9 10 15 Q 8 13 3 11 Q 7 14 10 21 z" />
+                </svg>
+              ) : null}
               {activePlayer.longRouteCard.value}
             </p>
           </button>
