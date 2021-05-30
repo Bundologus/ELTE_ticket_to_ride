@@ -1,7 +1,6 @@
 import io from 'socket.io-client';
 
-/* const SERVER_PATH = 'http://webprogramozas.inf.elte.hu:3031/'; */
-const SERVER_PATH = 'http://192.168.0.106:3031/';
+const SERVER_PATH = 'http://webprogramozas.inf.elte.hu:3031/';
 
 let socket;
 

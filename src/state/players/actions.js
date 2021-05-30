@@ -130,35 +130,6 @@ export function drawCardsFromDeck(playerId, playerName, cardColors) {
 
 export function joinToGame(gameId, playerName, setLocalPlayerId) {
   return (dispatch, getState) => {
-    /* const successHandler = (payload) => {
-      dispatch(loadSyncedState(JSON.parse(payload.state)));
-      const starterHand = getStarterHand(getState);
-      const joinAction = playerJoin(playerName, gameId, starterHand);
-
-      dispatch(
-        sendSyncAction(gameId, joinAction, () => {
-          dispatch(joinAction);
-          let state = getState();
-          const newestPlayer = state.players[state.players.length - 1];
-          setLocalPlayerId(newestPlayer.id);
-          dispatch(setAppToWait());
-
-          if (Number(state.game.maxPlayers) === state.players.length) {
-            dispatch(startGameSequence());
-          } else {
-            state = getState();
-            dispatch(
-              sendSyncState(gameId, state, () => {
-                console.log('state synced');
-              }),
-            );
-          }
-        }),
-      );
-    };
-
-    dispatch(sendJoinRoom(gameId, successHandler)); */
-
     dispatch(
       sendJoinRoom(gameId, (payload) => {
         dispatch(loadSyncedState(JSON.parse(payload.state)));

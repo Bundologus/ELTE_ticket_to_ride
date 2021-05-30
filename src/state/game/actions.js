@@ -91,7 +91,6 @@ export function setUpGame(maxPlayerCount, playerName) {
   return (dispatch, getState) => {
     const stateTree = getState();
     const game = stateTree.game;
-    /* const gameId = uuidv4(); */
 
     const failHandler = () => {
       dispatch(setAppToMain());
