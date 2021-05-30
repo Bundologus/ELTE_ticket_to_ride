@@ -1,10 +1,7 @@
 import { PlayerType } from '../../domain/playerType';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {
-  selectActivePlayer,
-  selectPlayers,
-} from '../../state/players/selector';
+import { selectPlayers } from '../../state/players/selector';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectGame } from '../../state/game/selector';
 import { CART_COLOR_BLACK, PLAYER_DONE } from '../../constants/gameConstants';
@@ -119,7 +116,6 @@ export function HandPanel({
           },
         )}
         onClick={() => {
-          setActiveCities(null);
           setHoverCities(new Set([]));
           dispatch(nextPlayer());
         }}

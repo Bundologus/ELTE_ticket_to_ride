@@ -48,7 +48,7 @@ export function GamePage({ localPlayerId }) {
   const dispatch = useDispatch();
 
   const setNextPlayerHandler = () => {
-    setActiveCitiesHandler(null);
+    //setActiveCitiesHandler(null);
     dispatch(nextPlayer());
   };
 
@@ -307,6 +307,7 @@ export function GamePage({ localPlayerId }) {
               setNextPlayer={setNextPlayerHandler}
               hoverCities={Array.from(hoverCities)}
               connectionHover={connectionHover}
+              localPlayerId={localPlayerId}
               setConnectionHover={setConnectionHover}
             ></GameBoard>
           </div>
@@ -513,6 +514,7 @@ export function GamePage({ localPlayerId }) {
               setHoverCities={setHoverCities}
               connectionHover={connectionHover}
               setConnectionHover={setConnectionHover}
+              localPlayerId={localPlayerId}
             ></FinalScoreBoard>
           ) : null}
         </div>

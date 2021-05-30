@@ -1,14 +1,13 @@
-import { setAppToWait } from '../app/actions';
+import { setAppToWaitAction } from '../app/actions';
 import {
   fillRoster,
   getStarterHand,
   reshuffleDiscardPile,
+  loadSyncedState,
   startGameSequence,
-  syncRoomState,
 } from '../game/actions';
 import {
   sendJoinRoom,
-  sendSyncAction,
   sendSyncState,
   syncAndDispatchAction,
 } from '../messages/actions';
@@ -131,10 +130,11 @@ export function drawCardsFromDeck(playerId, playerName, cardColors) {
 
 export function joinToGame(gameId, playerName, setLocalPlayerId) {
   return (dispatch, getState) => {
-    const successHandler = (payload) => {
-      dispatch(syncRoomState(JSON.parse(payload.state)));
+    /* const successHandler = (payload) => {
+      dispatch(loadSyncedState(JSON.parse(payload.state)));
       const starterHand = getStarterHand(getState);
       const joinAction = playerJoin(playerName, gameId, starterHand);
+
       dispatch(
         sendSyncAction(gameId, joinAction, () => {
           dispatch(joinAction);
@@ -157,7 +157,32 @@ export function joinToGame(gameId, playerName, setLocalPlayerId) {
       );
     };
 
-    dispatch(sendJoinRoom(gameId, successHandler));
+    dispatch(sendJoinRoom(gameId, successHandler)); */
+
+    dispatch(
+      sendJoinRoom(gameId, (payload) => {
+        dispatch(loadSyncedState(JSON.parse(payload.state)));
+        const starterHand = getStarterHand(getState);
+        dispatch(playerJoin(playerName, gameId, starterHand));
+        let state = getState();
+        const newestPlayer = state.players[state.players.length - 1];
+        setLocalPlayerId(newestPlayer.id);
+
+        const successHandler = () => {
+          if (Number(state.game.maxPlayers) === state.players.length) {
+            dispatch(startGameSequence());
+          } else {
+            dispatch(setAppToWaitAction());
+          }
+        };
+
+        dispatch(
+          sendSyncState(gameId, state, successHandler, () => {
+            alert('Could not join to room.');
+          }),
+        );
+      }),
+    );
   };
 }
 

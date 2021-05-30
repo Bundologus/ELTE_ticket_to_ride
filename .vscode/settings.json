@@ -3,7 +3,6 @@
   "editor.wordWrap": "bounded",
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
-  "files.autoSave": "onWindowChange",
   "html.format.wrapLineLength": 160,
   "editor.wordWrapColumn": 160
 }

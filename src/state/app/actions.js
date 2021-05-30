@@ -4,19 +4,19 @@ export const APP_TO_MAIN = 'APP_TO_MAIN';
 export const APP_TO_WAIT = 'APP_TO_WAIT';
 export const APP_TO_GAME = 'APP_TO_GAME';
 
-function setAppToMainAction() {
+export function setAppToMainAction() {
   return {
     type: APP_TO_MAIN,
   };
 }
 
-function setAppToWaitAction() {
+export function setAppToWaitAction() {
   return {
     type: APP_TO_WAIT,
   };
 }
 
-function setAppToGameAction() {
+export function setAppToGameAction() {
   return {
     type: APP_TO_GAME,
   };

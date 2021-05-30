@@ -6,6 +6,7 @@ import { gameReducer } from './game/reducer';
 import {
   setupActionSyncListener,
   setupLeaveListener,
+  setupStateSyncListener,
 } from './messages/actions';
 import { playersReducer } from './players/reducer';
 
@@ -20,3 +21,4 @@ export const store = createStore(
 
 store.dispatch(setupLeaveListener());
 store.dispatch(setupActionSyncListener());
+store.dispatch(setupStateSyncListener());

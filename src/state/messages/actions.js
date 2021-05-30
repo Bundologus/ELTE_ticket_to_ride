@@ -1,4 +1,5 @@
 import { messageChannel } from '../../api/initialize';
+import { loadSyncedState } from '../game/actions';
 
 /******************** EMITTERS ********************/
 
@@ -93,7 +94,7 @@ export function setupActionSyncListener() {
 export function setupStateSyncListener() {
   return (dispatch) => {
     messageChannel.onStateSync((payload) => {
-      dispatch();
+      dispatch(loadSyncedState(payload.state));
     });
   };
 }

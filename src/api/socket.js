@@ -24,7 +24,6 @@ export class TicketToRideChannel {
   }
 
   joinRoom(roomId, responseHandler = (message) => defaultHandler('join-room')) {
-    console.log(roomId);
     socket.emit('join-room', roomId, responseHandler);
   }
 

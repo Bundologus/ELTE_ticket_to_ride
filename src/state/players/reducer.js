@@ -1,6 +1,6 @@
 import Graph from 'graph-data-structure';
 import { PLAYER_COLORS } from '../../constants/playerConstants';
-import { CREATE_GAME, SYNC_ROOM_STATE } from '../game/actions';
+import { SYNC_ROOM_STATE } from '../game/actions';
 import {
   DRAW_FROM_ROSTER,
   DRAW_FROM_DECK,

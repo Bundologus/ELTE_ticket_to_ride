@@ -3,7 +3,10 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { selectGame } from '../../state/game/selector';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectActivePlayer } from '../../state/players/selector';
+import {
+  selectActivePlayer,
+  selectPlayers,
+} from '../../state/players/selector';
 import { useState } from 'react';
 import {
   CART_COLOR_BLACK,
@@ -22,10 +25,19 @@ export function GameBoard({
   hoverCities,
   connectionHover,
   setConnectionHover,
+  localPlayerId,
   displayOnly = false,
 }) {
   const gameData = useSelector(selectGame);
   const activePlayer = useSelector(selectActivePlayer);
+  const players = useSelector(selectPlayers);
+  let localPlayer = players.find((player) => {
+    return Number(player.id) === Number(localPlayerId);
+  });
+
+  if (!localPlayer) {
+    localPlayer = players[0];
+  }
   const [isBuilding, setIsBuilding] = useState(false);
   const [selectedConnection, setSelectedConnection] = useState(
     gameData.connections[0],
@@ -43,6 +55,7 @@ export function GameBoard({
       gameData.gameState === PLAYER_BEGIN &&
       !activePlayer.playerFirstRound &&
       activePlayer.carts >= connection.elements.length &&
+      Number(activePlayer.id) === Number(localPlayerId) &&
       !displayOnly
     ) {
       setSelectedConnection(connection);
@@ -136,14 +149,14 @@ export function GameBoard({
     const hoverCityArray = Array.from(hoverCities);
     const hoverStyle =
       activeCities.includes(city.id) || hoverCityArray.includes(city.id)
-        ? ` w-2 h-2 border-2 3xl:border-4 shadow-glow-${activePlayer.color}-sm lg:shadow-glow-${activePlayer.color} lg:w-3 lg:h-3 2xl:w-4 2xl:h-4 3xl:w-5 3xl:h-5`
+        ? ` w-2 h-2 border-2 3xl:border-4 shadow-glow-${localPlayer.color}-sm lg:shadow-glow-${localPlayer.color} lg:w-3 lg:h-3 2xl:w-4 2xl:h-4 3xl:w-5 3xl:h-5`
         : '';
     const style = { top: city.y + '%', left: city.x + '%' };
     return (
       <div
         key={'city-' + city.id}
         className={
-          `absolute rounded-full w-0 h-0 border-player-${activePlayer.color} bg-white box-content transform -translate-y-1/2 -translate-x-1/2 transition-all` +
+          `absolute rounded-full w-0 h-0 border-player-${localPlayer.color} bg-white box-content transform -translate-y-1/2 -translate-x-1/2 transition-all` +
           hoverStyle
         }
         style={style}
@@ -160,9 +173,10 @@ export function GameBoard({
       const canBuild =
         getColorOptions(connection).length > 0 &&
         activePlayer.trainCards.locomotive >= connection.locomotive &&
-        activePlayer.carts >= connection.elements.length;
+        activePlayer.carts >= connection.elements.length &&
+        Number(activePlayer.id) === Number(localPlayerId);
       const hoverStyle = connectionHover.includes(connection.id)
-        ? ` border-2 shadow-glow-${activePlayer.color}-sm lg:shadow-glow-${activePlayer.color}`
+        ? ` border-2 shadow-glow-${localPlayer.color}-sm lg:shadow-glow-${localPlayer.color}`
         : '';
       const trackElements = connection.elements.map(({ x, y, rotation }) => {
         const style = rotation
@@ -190,7 +204,7 @@ export function GameBoard({
             <button
               key={y + '-' + x}
               className={classNames(
-                `absolute w-2 h-4 lg:w-2.5 lg:h-5 xl:w-3 xl:h-7 2xl:w-3.5 2xl:h-8 3xl:w-4 3xl:h-10 transform focus:outline-none transition-all border-player-${activePlayer.color}` +
+                `absolute w-2 h-4 lg:w-2.5 lg:h-5 xl:w-3 xl:h-7 2xl:w-3.5 2xl:h-8 3xl:w-4 3xl:h-10 transform focus:outline-none transition-all border-player-${localPlayer.color}` +
                   hoverStyle,
                 {
                   'cursor-not-allowed':

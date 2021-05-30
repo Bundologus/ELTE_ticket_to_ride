@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAppToMain } from '../../state/app/actions';
-import { createGame } from '../../state/game/actions';
 import { selectCities } from '../../state/game/selector';
 import { selectPlayersWithFinalScore } from '../../state/players/selector';
 import { GameBoard } from './GameBoard';
@@ -13,6 +12,7 @@ export function FinalScoreBoard({
   setHoverCities,
   connectionHover,
   setConnectionHover,
+  localPlayerId,
 }) {
   const [players, longestPathLength] = useSelector(selectPlayersWithFinalScore);
   const cities = useSelector(selectCities);
@@ -304,6 +304,7 @@ export function FinalScoreBoard({
               hoverCities={hoverCities}
               connectionHover={connectionHover}
               setConnectionHover={setConnectionHover}
+              localPlayerId={localPlayerId}
               displayOnly={true}
             ></GameBoard>
           </div>

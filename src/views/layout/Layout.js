@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { selectApp } from '../../state/app/selector';
 
 export function Layout() {
-  const [localPlayerId, setLocalPlayerId] = useState(-1);
+  const [localPlayerId, setLocalPlayerId] = useState(0);
   const [gameId, setGameId] = useState('');
 
   /* const [appState, setAppState] = useState(MAIN_PAGE); */

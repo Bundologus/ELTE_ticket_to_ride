@@ -2,7 +2,6 @@
 import { setAppToGame, setAppToMain, setAppToWait } from '../app/actions';
 import {
   sendCreateRoom,
-  sendSyncAction,
   sendSyncState,
   syncAndDispatchAction,
 } from '../messages/actions';
@@ -78,7 +77,7 @@ function refillTrainDeckAction(reshuffledDiscardPile) {
   };
 }
 
-export function syncRoomState(newState) {
+export function loadSyncedState(newState) {
   return {
     type: SYNC_ROOM_STATE,
     payload: { ...newState },
@@ -165,17 +164,9 @@ export function nextPlayer() {
       nextPlayerId = playerIds[currentPlayerIndex + 1];
     }
 
-    console.log(playerIds);
-    console.log(currentPlayerIndex);
-    console.log(nextPlayerId);
-
     const action = nextPlayerAction(nextPlayerId);
 
-    dispatch(
-      sendSyncAction(stateTree.game.gameId, action, () => {
-        dispatch(action);
-      }),
-    );
+    dispatch(syncAndDispatchAction(action));
   };
 }
 
