@@ -4,7 +4,6 @@ import {
   START_GAME,
   NEXT_PLAYER,
   START_LAST_ROUND,
-  DEAL_STARTER_HAND,
   FILL_ROSTER,
   REFILL_TRAIN_DECK,
   SYNC_ROOM_STATE,
@@ -23,6 +22,7 @@ import {
   DRAW_FROM_DECK,
   DRAW_FROM_ROSTER,
   DRAW_ROUTES_FIRST_ROUND,
+  PLAYER_JOIN,
 } from '../players/actions';
 
 const initialTrainDeck = (() => {
@@ -64,13 +64,7 @@ export function gameReducer(state = initialState, action) {
   let newState;
   switch (type) {
     case CREATE_GAME: {
-      newState = initNewGame(
-        payload.maxPlayerCount,
-        payload.gameId,
-        payload.shuffledTrainDeck,
-        payload.shuffledRouteDeck,
-        payload.shuffledLongRouteDeck,
-      );
+      newState = initNewGame(payload);
       break;
     }
     case START_GAME: {
@@ -78,12 +72,13 @@ export function gameReducer(state = initialState, action) {
       newState = logAction(newState, '', '-1', `Game started.`);
       break;
     }
-    case DEAL_STARTER_HAND: {
+    case PLAYER_JOIN: {
       newState = { ...state };
-      for (const hand of payload.arrayOfHands) {
-        newState = popFromDeck(newState, hand.trainCards);
-        newState = popFromLongRouteDeck(newState, hand.longRouteCard);
-      }
+      newState = popFromDeck(newState, payload.starterHand.trainCards);
+      newState = popFromLongRouteDeck(
+        newState,
+        payload.starterHand.longRouteCard,
+      );
       break;
     }
     case DRAW_FROM_ROSTER: {
@@ -116,7 +111,7 @@ export function gameReducer(state = initialState, action) {
       break;
     }
     case NEXT_PLAYER: {
-      newState = setNextPlayer(state);
+      newState = setNextPlayer(state, payload);
       break;
     }
     case DRAW_ROUTE_CARDS: {
@@ -181,13 +176,13 @@ export function gameReducer(state = initialState, action) {
   return newState;
 }
 
-function initNewGame(
+function initNewGame({
   maxPlayerCount,
   gameId,
   shuffledTrainDeck,
   shuffledRouteDeck,
   shuffledLongRouteDeck,
-) {
+}) {
   return {
     ...initialState,
     maxPlayers: maxPlayerCount,
@@ -218,7 +213,7 @@ function setLastRound(state, { playerId }) {
   };
 }
 
-function setNextPlayer(state) {
+function setNextPlayer(state, { nextPlayerId }) {
   if (
     state.lastRound &&
     Number(state.activePlayerId) === Number(state.finishingPlayerId)
@@ -231,14 +226,9 @@ function setNextPlayer(state) {
     return {
       ...state,
       gameState: PLAYER_BEGIN,
-      activePlayerId: getNextPlayer(state),
+      activePlayerId: nextPlayerId,
     };
   }
-}
-
-function getNextPlayer(state) {
-  if (state.activePlayerId + 1 >= state.maxPlayers) return 0;
-  else return state.activePlayerId + 1;
 }
 
 function popFromDeck(state, cardColors) {

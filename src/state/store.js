@@ -3,7 +3,10 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { appReducer } from './app/reducer';
 import { gameReducer } from './game/reducer';
-import { setupActionSyncListener, setupJoinListener } from './messages/actions';
+import {
+  setupActionSyncListener,
+  setupLeaveListener,
+} from './messages/actions';
 import { playersReducer } from './players/reducer';
 
 export const store = createStore(
@@ -15,5 +18,5 @@ export const store = createStore(
   composeWithDevTools(applyMiddleware(thunk)),
 );
 
-store.dispatch(setupJoinListener());
+store.dispatch(setupLeaveListener());
 store.dispatch(setupActionSyncListener());

@@ -31,7 +31,9 @@ export function sendJoinRoom(
 
 export function sendLeaveRoom(
   roomId,
-  onSuccess,
+  onSuccess = () => {
+    console.error(`Left room ${roomId}.`);
+  },
   onFailure = () => {
     console.error(`Leaving room ${roomId} failed.`);
   },
@@ -57,23 +59,25 @@ export function sendSyncAction(
   action,
   onSuccess,
   onFailure = () => {
-    alert('Could not join that room.');
+    alert('Communication with server failed.');
   },
 ) {
-  messageChannel.syncAction(
-    roomId,
-    action,
-    true,
-    responseHandler(onSuccess, onFailure),
-  );
+  return () => {
+    messageChannel.syncAction(
+      roomId,
+      action,
+      true,
+      responseHandler(onSuccess, onFailure),
+    );
+  };
 }
 
 /******************** LISTENERS ********************/
 
-export function setupJoinListener() {
-  return (dispatch) => {
-    messageChannel.onJoined((payload, socketId) => {
-      console.log(payload.socketId);
+export function setupLeaveListener() {
+  return () => {
+    messageChannel.onPlayerLeft((payload) => {
+      console.log('player with socket id' + payload.socketId + 'left.');
     });
   };
 }
@@ -82,6 +86,14 @@ export function setupActionSyncListener() {
   return (dispatch) => {
     messageChannel.onActionSync((payload) => {
       dispatch(payload.action);
+    });
+  };
+}
+
+export function setupStateSyncListener() {
+  return (dispatch) => {
+    messageChannel.onStateSync((payload) => {
+      dispatch();
     });
   };
 }
@@ -99,5 +111,20 @@ function responseHandler(onSuccess, onFailure) {
     } else {
       console.error(`Unexpected response status: >>${payload.status}<<`);
     }
+  };
+}
+
+/******************** THUNKS ********************/
+
+export function syncAndDispatchAction(action) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const roomId = state.game.gameId;
+
+    dispatch(
+      sendSyncAction(roomId, action, () => {
+        dispatch(action);
+      }),
+    );
   };
 }

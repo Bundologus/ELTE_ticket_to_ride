@@ -2,10 +2,9 @@ import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { setUpGame } from '../../state/game/actions';
-import { setAppToWait } from '../../state/app/actions';
 import { joinToGame } from '../../state/players/actions';
 
-export function LandingPage({ setLocalPlayerId, setGameId }) {
+export function LandingPage({ setLocalPlayerId }) {
   const [hostNameOk, setHostNameOk] = useState(true);
   const [playerNameOk, setPlayerNameOk] = useState(true);
   const [gameIdOk, setGameIdOk] = useState(true);
@@ -32,24 +31,13 @@ export function LandingPage({ setLocalPlayerId, setGameId }) {
   const joinGameHandler = (e) => {
     e.preventDefault();
 
-    dispatch(joinToGame(gameIdRef, playerNameRef));
-
-    /**
-     * ? start loading animation
-     *
-     * TODO check gameId with server
-     * TODO if ok:
-     *    setGameId(gameIdRef);
-     * TODO send playerName & gameId to server (dispatch(PLAYER_JOIN?))
-     * TODO wait for response
-     * TODO sync state
-     * TODO find local player id by matching name and response
-     * TODO set localPlayerId
-     *
-     * ? stop loading animation
-     */
-
-    dispatch(setAppToWait());
+    dispatch(
+      joinToGame(
+        gameIdRef.current.value,
+        playerNameRef.current.value,
+        setLocalPlayerId,
+      ),
+    );
   };
 
   return (

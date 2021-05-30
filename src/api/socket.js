@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 
 /* const SERVER_PATH = 'http://webprogramozas.inf.elte.hu:3031/'; */
-const SERVER_PATH = 'http://localhost:3031/';
+const SERVER_PATH = 'http://192.168.0.106:3031/';
 
 let socket;
 
@@ -20,11 +20,11 @@ export class TicketToRideChannel {
     responseHandler = (message) => defaultHandler('create-room'),
   ) {
     this.isHost = true;
-    console.log(responseHandler);
     socket.emit('create-room', maxPlayerCount, responseHandler);
   }
 
   joinRoom(roomId, responseHandler = (message) => defaultHandler('join-room')) {
+    console.log(roomId);
     socket.emit('join-room', roomId, responseHandler);
   }
 
@@ -61,34 +61,8 @@ export class TicketToRideChannel {
 
   /******************** LISTENERS ********************/
 
-  onJoined(handler) {
-    const listener = (receivedMessage) => {
-      console.log(`player-joined received`);
-
-      if (this.isHost) {
-        handler(receivedMessage, socket.id);
-      }
-    };
-
-    socket.on('player-joined', listener);
-    return () => socket.off('player-joined', listener);
-  }
-
-  onRoomIsFull(handler) {
-    const listener = (receivedMessage) => {
-      console.log(`room-is-full received`);
-
-      handler(receivedMessage);
-    };
-
-    socket.on('room-is-full', listener);
-    return () => socket.off('room-is-full', listener);
-  }
-
   onStateSync(handler) {
     const listener = (receivedMessage) => {
-      console.log('state-changed received');
-
       handler(receivedMessage);
     };
 
@@ -98,13 +72,20 @@ export class TicketToRideChannel {
 
   onActionSync(handler) {
     const listener = (receivedMessage) => {
-      console.log('action-sent received');
-
       handler(receivedMessage);
     };
 
     socket.on('action-sent', listener);
     return () => socket.off('action-sent', listener);
+  }
+
+  onPlayerLeft(handler) {
+    const listener = (receivedMessage) => {
+      handler(receivedMessage);
+    };
+
+    socket.on('player-left', listener);
+    return () => socket.off('player-left', listener);
   }
 }
 

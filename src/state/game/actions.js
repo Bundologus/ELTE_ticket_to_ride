@@ -1,6 +1,12 @@
 /* import { v4 as uuidv4 } from 'uuid'; */
-import { setAppToMain, setAppToWait } from '../app/actions';
-import { sendCreateRoom, sendSyncState } from '../messages/actions';
+import { setAppToGame, setAppToMain, setAppToWait } from '../app/actions';
+import {
+  sendCreateRoom,
+  sendSyncAction,
+  sendSyncState,
+  syncAndDispatchAction,
+} from '../messages/actions';
+import { playerJoin } from '../players/actions';
 
 export const CREATE_GAME = 'CREATE_GAME';
 export const START_GAME = 'START_GAME';
@@ -13,7 +19,6 @@ export const SYNC_ROOM_STATE = 'SYNC_ROOM_STATE';
 
 export function createGame(
   maxPlayerCount,
-  playerName,
   gameId,
   shuffledTrainDeck,
   shuffledRouteDeck,
@@ -23,7 +28,6 @@ export function createGame(
     type: CREATE_GAME,
     payload: {
       maxPlayerCount,
-      playerName,
       gameId,
       shuffledTrainDeck,
       shuffledRouteDeck,
@@ -32,52 +36,52 @@ export function createGame(
   };
 }
 
-export function startGame(gameId) {
+function startGameAction() {
   return {
     type: START_GAME,
     payload: null,
   };
 }
 
-export function nextPlayer() {
+function nextPlayerAction(nextPlayerId) {
   return {
     type: NEXT_PLAYER,
-    payload: null,
+    payload: { nextPlayerId },
   };
 }
 
-export function startLastRound(playerId) {
+function startLastRoundAction(playerId) {
   return {
     type: START_LAST_ROUND,
     payload: { playerId },
   };
 }
 
-export function dealStarterHand(arrayOfHands) {
+export function dealStarterHand(playerId, starterHand) {
   return {
     type: DEAL_STARTER_HAND,
-    payload: { arrayOfHands },
+    payload: { playerId, starterHand },
   };
 }
 
-export function fillRoster() {
+function fillRosterAction() {
   return {
     type: FILL_ROSTER,
     payload: null,
   };
 }
 
-export function refillTrainDeck(reshuffledDiscardPile) {
+function refillTrainDeckAction(reshuffledDiscardPile) {
   return {
     type: REFILL_TRAIN_DECK,
     payload: { reshuffledDiscardPile },
   };
 }
 
-export function syncRoomState(state) {
+export function syncRoomState(newState) {
   return {
     type: SYNC_ROOM_STATE,
-    payload: { state },
+    payload: { ...newState },
   };
 }
 
@@ -88,7 +92,6 @@ export function setUpGame(maxPlayerCount, playerName) {
     const stateTree = getState();
     const game = stateTree.game;
     /* const gameId = uuidv4(); */
-    console.log('Creating room');
 
     const failHandler = () => {
       dispatch(setAppToMain());
@@ -99,7 +102,6 @@ export function setUpGame(maxPlayerCount, playerName) {
       dispatch(
         createGame(
           maxPlayerCount,
-          playerName,
           roomId,
           shuffle(game.trainCardDeck),
           shuffle(game.routeDeck),
@@ -107,7 +109,11 @@ export function setUpGame(maxPlayerCount, playerName) {
         ),
       );
 
+      const starterHand = getStarterHand(getState);
+      dispatch(playerJoin(playerName, roomId, starterHand));
+
       const state = getState();
+
       dispatch(
         sendSyncState(
           roomId,
@@ -124,6 +130,14 @@ export function setUpGame(maxPlayerCount, playerName) {
   };
 }
 
+export function startGameSequence(gameId) {
+  return (dispatch) => {
+    dispatch(fillRoster());
+    dispatch(startGame(gameId));
+    dispatch(setAppToGame());
+  };
+}
+
 export function reshuffleDiscardPile() {
   return (dispatch, getState) => {
     const stateTree = getState();
@@ -132,6 +146,60 @@ export function reshuffleDiscardPile() {
     const shuffledDiscardPile = shuffle(gameData.trainDiscardPile);
 
     dispatch(refillTrainDeck(shuffledDiscardPile));
+  };
+}
+
+export function nextPlayer() {
+  return (dispatch, getState) => {
+    const stateTree = getState();
+    const playerIds = stateTree.players.map((player) => {
+      return player.id;
+    });
+
+    const currentPlayerIndex = playerIds.indexOf(stateTree.game.activePlayerId);
+    let nextPlayerId;
+
+    if (currentPlayerIndex === playerIds.length - 1) {
+      nextPlayerId = playerIds[0];
+    } else {
+      nextPlayerId = playerIds[currentPlayerIndex + 1];
+    }
+
+    console.log(playerIds);
+    console.log(currentPlayerIndex);
+    console.log(nextPlayerId);
+
+    const action = nextPlayerAction(nextPlayerId);
+
+    dispatch(
+      sendSyncAction(stateTree.game.gameId, action, () => {
+        dispatch(action);
+      }),
+    );
+  };
+}
+
+export function startGame() {
+  return (dispatch) => {
+    dispatch(syncAndDispatchAction(startGameAction()));
+  };
+}
+
+export function refillTrainDeck(shuffledDiscardPile) {
+  return (dispatch) => {
+    dispatch(syncAndDispatchAction(refillTrainDeckAction(shuffledDiscardPile)));
+  };
+}
+
+export function startLastRound(playerId) {
+  return (dispatch) => {
+    dispatch(syncAndDispatchAction(startLastRoundAction(playerId)));
+  };
+}
+
+export function fillRoster() {
+  return (dispatch) => {
+    dispatch(syncAndDispatchAction(fillRosterAction()));
   };
 }
 
@@ -153,4 +221,16 @@ function shuffle(iterable) {
   }
 
   return shuffled;
+}
+
+export function getStarterHand(getState) {
+  const stateTree = getState();
+  const game = stateTree.game;
+  let reverseDeck = [...game.trainCardDeck];
+  reverseDeck.reverse();
+
+  return {
+    trainCards: reverseDeck.slice(0, 4),
+    longRouteCard: game.longRouteDeck[game.longRouteDeck.length - 1],
+  };
 }

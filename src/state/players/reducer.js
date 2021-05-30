@@ -1,10 +1,6 @@
 import Graph from 'graph-data-structure';
 import { PLAYER_COLORS } from '../../constants/playerConstants';
-import {
-  CREATE_GAME,
-  DEAL_STARTER_HAND,
-  SYNC_ROOM_STATE,
-} from '../game/actions';
+import { CREATE_GAME, SYNC_ROOM_STATE } from '../game/actions';
 import {
   DRAW_FROM_ROSTER,
   DRAW_FROM_DECK,
@@ -45,16 +41,8 @@ export function playersReducer(state = initialState, action) {
   const { type, payload } = action;
   let newState;
   switch (type) {
-    case CREATE_GAME: {
-      newState = putNewPlayer([], payload.playerName);
-      break;
-    }
     case PLAYER_JOIN: {
-      newState = putNewPlayer(state, payload.playerName);
-      break;
-    }
-    case DEAL_STARTER_HAND: {
-      newState = putStarterHand(state, payload);
+      newState = putNewPlayer(state, payload.playerName, payload.starterHand);
       break;
     }
     case DRAW_FROM_ROSTER: {
@@ -79,7 +67,7 @@ export function playersReducer(state = initialState, action) {
       break;
     }
     case SYNC_ROOM_STATE: {
-      newState = { ...payload.players };
+      newState = [...payload.players];
       break;
     }
     default: {
@@ -91,70 +79,28 @@ export function playersReducer(state = initialState, action) {
   return newState;
 }
 
-function putNewPlayer(state, playerName) {
+function putNewPlayer(state, playerName, starterHand) {
   const playerCount = state.length;
 
-  const newPlayer = {
+  let newPlayer = {
     ...playerTemplate,
     id: playerCount,
     name: playerName,
     color: PLAYER_COLORS[playerCount],
   };
-  return [...state, newPlayer];
-}
 
-function putStarterHand(state, { arrayOfHands }) {
-  return state.map((player, ind) => {
-    let newPlayer = { ...player };
+  const { trainCards, longRouteCard } = starterHand;
 
-    const { trainCards, longRouteCard } = arrayOfHands[ind];
+  for (const cardColor of trainCards) {
+    ++newPlayer.trainCards[cardColor];
+  }
 
-    for (const cardColor of trainCards) {
-      switch (cardColor) {
-        case 'black': {
-          ++newPlayer.trainCards.black;
-          break;
-        }
-        case 'blue': {
-          ++newPlayer.trainCards.blue;
-          break;
-        }
-        case 'green': {
-          ++newPlayer.trainCards.green;
-          break;
-        }
-        case 'orange': {
-          ++newPlayer.trainCards.orange;
-          break;
-        }
-        case 'pink': {
-          ++newPlayer.trainCards.pink;
-          break;
-        }
-        case 'red': {
-          ++newPlayer.trainCards.red;
-          break;
-        }
-        case 'white': {
-          ++newPlayer.trainCards.white;
-          break;
-        }
-        case 'yellow': {
-          ++newPlayer.trainCards.yellow;
-          break;
-        }
-        case 'locomotive': {
-          ++newPlayer.trainCards.locomotive;
-          break;
-        }
-        default:
-          break;
-      }
-    }
-    newPlayer.longRouteCard = longRouteCard;
-    newPlayer.carts = startingCartCount;
-    return newPlayer;
-  });
+  newPlayer.longRouteCard = longRouteCard;
+  newPlayer.carts = startingCartCount;
+
+  let newState = [...state];
+  newState.push(newPlayer);
+  return newState;
 }
 
 function putTrainCard(state, playerId, cardColors) {

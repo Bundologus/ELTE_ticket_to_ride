@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   drawCardFromRoster,
   drawFromDeck,
-  drawFromRoster,
   drawRouteCards,
   drawRoutesFirstRound,
 } from '../../state/players/actions';
@@ -23,7 +22,7 @@ import {
   PLAYER_BEGIN,
   PLAYER_DRAW_TRAIN,
 } from '../../constants/gameConstants';
-import { fillRoster, nextPlayer } from '../../state/game/actions';
+import { nextPlayer } from '../../state/game/actions';
 import { selectGame } from '../../state/game/selector';
 import { FinalScoreBoard } from './FinalScoreBoard';
 
@@ -421,7 +420,7 @@ export function GamePage({ localPlayerId }) {
                     <path d="M3 20l11.43-11.43-.71-.7 1.42-1.43-2.14-2.18c1.2-1.19 3.09-1.19 4.27 0l3.6 3.61-1.42 1.41h2.84l.71.71-3.55 3.59-.71-.71v-2.88l-1.47 1.42-.71-.71-11.43 11.43-2.13-2.13z" />
                   </svg>
                 </button>
-                <div className="h-12 lg:h-20 xl:h-28 2xl:h-36 3xl:h-40">
+                <div className="h-12 lg:h-20 xl:h-28 2xl:h-36 3xl:h-40 flex-grow">
                   {rosterCards}
                 </div>
               </div>

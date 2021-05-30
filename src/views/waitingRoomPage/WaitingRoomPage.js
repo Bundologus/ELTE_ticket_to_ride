@@ -1,31 +1,15 @@
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAppToGame, setAppToMain } from '../../state/app/actions';
-import {
-  startGame,
-  dealStarterHand,
-  fillRoster,
-} from '../../state/game/actions';
+import { setAppToMain } from '../../state/app/actions';
+import { startGameSequence } from '../../state/game/actions';
 import { selectGame } from '../../state/game/selector';
 import { selectPlayers } from '../../state/players/selector';
 
-export function WaitingRoomPage({
-  localPlayerId,
-  setLocalPlayerId,
-  gameId,
-  setGameId,
-}) {
+export function WaitingRoomPage({ localPlayerId }) {
   const game = useSelector(selectGame);
   const players = useSelector(selectPlayers);
   const localPlayer = players[localPlayerId];
 
-  useEffect(() => {
-    if (localPlayerId < 0) {
-      setLocalPlayerId(players.length - 1);
-    }
-  });
-
-  const getStarterHands = (playerCount) => {
+  /* const getStarterHands = (playerCount) => {
     let arrayOfHands = [];
     let reverseDeck = [...game.trainCardDeck];
     reverseDeck.reverse();
@@ -38,17 +22,19 @@ export function WaitingRoomPage({
     }
 
     return arrayOfHands;
-  };
+  }; */
 
   const dispatch = useDispatch();
 
   const gameStartHandler = () => {
-    const arrayOfStarterHands = getStarterHands(players.length);
+    /* const arrayOfStarterHands = getStarterHands(players.length);
     dispatch(dealStarterHand(arrayOfStarterHands));
 
     dispatch(fillRoster());
     dispatch(startGame(game.gameId));
-    dispatch(setAppToGame());
+    dispatch(setAppToGame()); */
+
+    dispatch(startGameSequence(game.gameId));
   };
 
   const getPlayerBadges = () => {

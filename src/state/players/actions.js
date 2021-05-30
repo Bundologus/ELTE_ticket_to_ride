@@ -1,10 +1,17 @@
 import { setAppToWait } from '../app/actions';
 import {
   fillRoster,
+  getStarterHand,
   reshuffleDiscardPile,
+  startGameSequence,
   syncRoomState,
 } from '../game/actions';
-import { sendJoinRoom, sendSyncAction } from '../messages/actions';
+import {
+  sendJoinRoom,
+  sendSyncAction,
+  sendSyncState,
+  syncAndDispatchAction,
+} from '../messages/actions';
 
 export const PLAYER_JOIN = 'PLAYER_JOIN';
 export const DRAW_FROM_ROSTER = 'DRAW_FROM_ROSTER';
@@ -13,17 +20,18 @@ export const DRAW_ROUTE_CARDS = 'DRAW_ROUTE_CARDS';
 export const DRAW_ROUTES_FIRST_ROUND = 'DRAW_ROUTES_FIRST_ROUND';
 export const BUILD_CONNECTION = 'BUILD_CONNECTION';
 
-export function playerJoin(playerName, gameId) {
+export function playerJoin(playerName, gameId, starterHand) {
   return {
     type: PLAYER_JOIN,
     payload: {
       playerName,
       gameId,
+      starterHand,
     },
   };
 }
 
-export function drawFromRoster(playerId, playerName, cardColor, position) {
+function drawFromRosterAction(playerId, playerName, cardColor, position) {
   return {
     type: DRAW_FROM_ROSTER,
     payload: {
@@ -35,7 +43,7 @@ export function drawFromRoster(playerId, playerName, cardColor, position) {
   };
 }
 
-export function drawFromDeck(playerId, playerName, cardColors) {
+function drawFromDeckAction(playerId, playerName, cardColors) {
   return {
     type: DRAW_FROM_DECK,
     payload: {
@@ -46,7 +54,7 @@ export function drawFromDeck(playerId, playerName, cardColors) {
   };
 }
 
-export function drawRouteCards(
+function drawRouteCardsAction(
   playerId,
   playerName,
   selectedRouteCards,
@@ -63,7 +71,7 @@ export function drawRouteCards(
   };
 }
 
-export function drawRoutesFirstRound(
+function drawRoutesFirstRoundAction(
   playerId,
   playerName,
   selectedRouteCards,
@@ -80,7 +88,7 @@ export function drawRoutesFirstRound(
   };
 }
 
-export function buildConnection(
+function buildConnectionAction(
   playerId,
   playerName,
   playerColor,
@@ -121,22 +129,121 @@ export function drawCardsFromDeck(playerId, playerName, cardColors) {
   };
 }
 
-export function joinToGame(gameId, playerName) {
+export function joinToGame(gameId, playerName, setLocalPlayerId) {
+  return (dispatch, getState) => {
+    const successHandler = (payload) => {
+      dispatch(syncRoomState(JSON.parse(payload.state)));
+      const starterHand = getStarterHand(getState);
+      const joinAction = playerJoin(playerName, gameId, starterHand);
+      dispatch(
+        sendSyncAction(gameId, joinAction, () => {
+          dispatch(joinAction);
+          let state = getState();
+          const newestPlayer = state.players[state.players.length - 1];
+          setLocalPlayerId(newestPlayer.id);
+          dispatch(setAppToWait());
+
+          if (Number(state.game.maxPlayers) === state.players.length) {
+            dispatch(startGameSequence());
+          } else {
+            state = getState();
+            dispatch(
+              sendSyncState(gameId, state, () => {
+                console.log('state synced');
+              }),
+            );
+          }
+        }),
+      );
+    };
+
+    dispatch(sendJoinRoom(gameId, successHandler));
+  };
+}
+
+export function drawFromRoster(playerId, playerName, cardColor, position) {
   return (dispatch) => {
     dispatch(
-      sendJoinRoom(gameId, (payload) => {
-        dispatch(syncRoomState(payload.state));
-        const joinAction = playerJoin(playerName, gameId);
-        dispatch(
-          sendSyncAction(gameId, joinAction, () => {
-            dispatch(joinAction);
-            dispatch(setAppToWait());
-          }),
-        );
-      }),
+      syncAndDispatchAction(
+        drawFromRosterAction(playerId, playerName, cardColor, position),
+      ),
     );
   };
 }
+
+export function drawFromDeck(playerId, playerName, cardColors) {
+  return (dispatch) => {
+    dispatch(
+      syncAndDispatchAction(
+        drawFromDeckAction(playerId, playerName, cardColors),
+      ),
+    );
+  };
+}
+
+export function drawRouteCards(
+  playerId,
+  playerName,
+  selectedRouteCards,
+  droppedRouteCards,
+) {
+  return (dispatch) => {
+    dispatch(
+      syncAndDispatchAction(
+        drawRouteCardsAction(
+          playerId,
+          playerName,
+          selectedRouteCards,
+          droppedRouteCards,
+        ),
+      ),
+    );
+  };
+}
+
+export function drawRoutesFirstRound(
+  playerId,
+  playerName,
+  selectedRouteCards,
+  droppedRouteCards,
+) {
+  return (dispatch) => {
+    dispatch(
+      syncAndDispatchAction(
+        drawRoutesFirstRoundAction(
+          playerId,
+          playerName,
+          selectedRouteCards,
+          droppedRouteCards,
+        ),
+      ),
+    );
+  };
+}
+
+export function buildConnection(
+  playerId,
+  playerName,
+  playerColor,
+  usedTrainColors,
+  connection,
+) {
+  return (dispatch) => {
+    dispatch(
+      syncAndDispatchAction(
+        buildConnectionAction(
+          playerId,
+          playerName,
+          playerColor,
+          usedTrainColors,
+          connection,
+        ),
+      ),
+    );
+  };
+}
+
+/******************* UTILITY *******************/
 
 function reshuffleDeckIfNecessary(dispatch, getState) {
   const stateTree = getState();
