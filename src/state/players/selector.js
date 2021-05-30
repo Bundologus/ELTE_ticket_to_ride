@@ -13,10 +13,6 @@ export function selectActivePlayer(state) {
 
 export function selectPlayersWithScore(state) {
   const players = selectPlayers(state);
-  /*   const longestChainLength = players.reduce((currentLongestChain, player) => {
-    if (player.longestChain > currentLongestChain) return player.longestChain;
-    else return currentLongestChain;
-  }, 0); */
 
   return players.map((player) => {
     const trainCardCount = Object.values(player.trainCards).reduce(

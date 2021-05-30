@@ -33,7 +33,6 @@ const playerTemplate = {
   builtConnections: [],
   longestPath: null,
 };
-//const initialState = testPlayers.slice(0, 2);
 const initialState = [];
 const startingCartCount = 4;
 
